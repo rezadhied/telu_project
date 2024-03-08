@@ -41,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
           child: Column(
             children: <Widget>[
               Flexible(
-                  flex: 6,
+                  flex: 7,
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 2),
@@ -102,7 +102,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   )),
               Flexible(
-                flex: 3,
+                flex: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -112,7 +112,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           child: Text(
                             'Tel-U Project',
                             style: GoogleFonts.inter(
-                              fontSize: 36,
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF3D3C42),
                             ),
@@ -122,7 +122,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             child: Text(
                           'Discover your dream project or help \ncreate one.',
                           style: GoogleFonts.inter(
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.w300,
                           ),
                           textAlign: TextAlign.center,
