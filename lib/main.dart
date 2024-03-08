@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -133,40 +134,40 @@ class _WelcomePageState extends State<WelcomePage> {
                       margin: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.red,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(6)),
-                                    ),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0, 10, 0, 10)),
-                                onPressed: () {},
-                                child: const Text('Get Started'),
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             width: double.infinity,
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.red,
-                                side: const BorderSide(color: Colors.red),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(6)),
-                                ),
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.red,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(6)),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10)),
                               onPressed: () {},
-                              child: const Text('Already Have an Account'),
+                              child: const Text('Get Started'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.red,
+                                  side: const BorderSide(color: Colors.red),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(6)),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                ),
+                                onPressed: () {},
+                                child: const Text('Already Have an Account'),
+                              ),
                             ),
                           ),
                         ],
