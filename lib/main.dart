@@ -112,7 +112,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           child: Text(
                             'Tel-U Project',
                             style: GoogleFonts.inter(
-                              fontSize: 32,
+                              fontSize: 35,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF3D3C42),
                             ),
@@ -122,7 +122,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             child: Text(
                           'Discover your dream project or help \ncreate one.',
                           style: GoogleFonts.inter(
-                            fontSize: 13,
+                            fontSize: 15,
                             fontWeight: FontWeight.w300,
                           ),
                           textAlign: TextAlign.center,
