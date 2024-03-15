@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/welcome_screen.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Telyu Project',
-      home: WelcomePage(),
+      home: MyProject(),
     );
   }
 }
