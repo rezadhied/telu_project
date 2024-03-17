@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Telyu Project',
-      home: MyProject(),
+      home: WelcomePage(),
     );
   }
 }
