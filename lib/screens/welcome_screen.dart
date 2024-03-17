@@ -16,6 +16,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.fromLTRB(30, 0, 30, 50),
