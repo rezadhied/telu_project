@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/home_screen.dart';
+import 'package:telu_project/screens/user_profile.dart';
 
 class InviteStudent extends StatefulWidget {
   const InviteStudent({Key? key});
@@ -32,27 +34,44 @@ class _InviteStudentState extends State<InviteStudent> {
     {
       'firstName': 'Muhammad',
       'lastName': 'Zaky Fathurahim',
-      'role': 'Backend Developer'
+      'role': 'Backend Developer',
+      'profilePath': 'assets/images/stiv.png'
     },
     {
       'firstName': 'Muhammad',
-      'lastName': 'Zaky Fathurahim',
-      'role': 'Backend Developer'
+      'lastName': 'Raihan Fasya',
+      'role': 'UI/UX Designer',
+      'profilePath': 'assets/images/rei.png'
     },
     {
       'firstName': 'Muhammad',
-      'lastName': 'Zaky Fathurahim',
-      'role': 'Backend Developer'
+      'lastName': 'Reza adhie darmawan',
+      'role': 'Frontend Developer',
+      'profilePath': 'assets/images/reja.jpg'
     },
     {
       'firstName': 'Muhammad',
-      'lastName': 'Zaky Fathurahim',
-      'role': 'Backend Developer'
+      'lastName': 'Hasnan Hunaini',
+      'role': 'Turu Developer',
+      'profilePath': 'assets/images/kebab.png'
     },
     {
-      'firstName': 'Muhammad',
-      'lastName': 'Zaky Fathurahim',
-      'role': 'Backend Developer'
+      'firstName': 'Muhammad Naufal',
+      'lastName': 'Zaki Kemana?',
+      'role': 'Ngilang Developer',
+      'profilePath': 'assets/images/nopal.png'
+    },
+    {
+      'firstName': 'Surya',
+      'lastName': 'Aulia',
+      'role': 'Ngilang Developer',
+      'profilePath': 'assets/images/suep.jpg'
+    },
+    {
+      'firstName': 'Japran',
+      'lastName': 'Aulia Zafran',
+      'role': 'Ngilang Developer',
+      'profilePath': 'assets/images/japrannn.png'
     }
   ];
 
@@ -94,34 +113,44 @@ class _InviteStudentState extends State<InviteStudent> {
                         Icons.arrow_back,
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          'Invite Student',
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: 18,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        'Invite Student',
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          color: AppColors.black,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                     Align(
                       alignment: Alignment.topCenter,
-                      child: Text(
-                        'Send',
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: selectedStudent != null
-                              ? AppColors.tertiary
-                              : AppColors.black.withOpacity(0.30),
+                      child: InkWell(
+                        onTap: () {
+                          selectedStudent != null
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => const HomePage()),
+                                  ),
+                                )
+                              : null;
+                        },
+                        child: Text(
+                          'Send',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: selectedStudent != null
+                                ? AppColors.tertiary
+                                : AppColors.black.withOpacity(0.30),
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
@@ -259,43 +288,55 @@ class _InviteStudentState extends State<InviteStudent> {
                               border: Border.all(
                                 color: AppColors.black.withOpacity(0.30),
                               ),
+                              color: AppColors.whiteAlternative,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape
-                                                .circle, // Mengatur bentuk container menjadi lingkaran
-                                            border: Border.all(
-                                              color: Colors
-                                                  .black, // Opsional: Tambahkan border jika diperlukan
-                                              width: 2,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => UserProfile(
+                                          userData: selectedStudent,
+                                        )),
+                                  ),
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(14),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Colors.black,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            child: ClipOval(
+                                              child: Image.asset(
+                                                selectedStudent!['profilePath']
+                                                    .toString(),
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.fill,
+                                              ),
                                             ),
                                           ),
-                                          child: ClipOval(
-                                            child: Image.asset(
-                                              'assets/images/rei.png',
-                                              width: 50,
-                                              height: 50,
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 15),
-                                        SizedBox(
-                                          width: 200,
-                                          child: selectedStudent != null
-                                              ? Expanded(
-                                                  child: Text(
+                                          SizedBox(width: 15),
+                                          Container(
+                                            width: 200,
+                                            child: selectedStudent != null
+                                                ? Text(
                                                     "${selectedStudent!['firstName']} ${selectedStudent?['lastName']}" ??
                                                         'No Student Selected',
                                                     style: GoogleFonts.inter(
@@ -304,32 +345,32 @@ class _InviteStudentState extends State<InviteStudent> {
                                                     ),
                                                     overflow:
                                                         TextOverflow.ellipsis,
+                                                    maxLines: 3,
+                                                  )
+                                                : Text(
+                                                    'No Student Selected',
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 16,
+                                                      color: AppColors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: null,
                                                   ),
-                                                )
-                                              : Text(
-                                                  'No Student Selected',
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 16,
-                                                    color: AppColors.black,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: null,
-                                                ),
-                                        ),
-                                      ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                      borderRadius: BorderRadius.circular(90),
-                                      onTap: () {
-                                        setState(() {
-                                          selectedStudent = null;
-                                        });
-                                      },
-                                      child: const Icon(Icons.close))
-                                ],
+                                    InkWell(
+                                        borderRadius: BorderRadius.circular(90),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedStudent = null;
+                                          });
+                                        },
+                                        child: Icon(Icons.close))
+                                  ],
+                                ),
                               ),
                             )),
                       ],
@@ -394,7 +435,6 @@ class _InviteStudentState extends State<InviteStudent> {
                                     color: AppColors.black.withOpacity(0.30),
                                   ),
                                 ),
-                                // Perbesar padding vertikal
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20,
                                   vertical: 20,
@@ -412,8 +452,11 @@ class _InviteStudentState extends State<InviteStudent> {
                     } else {
                       return selectedStudent == null
                           ? Container(
-                              margin: EdgeInsets.fromLTRB(15,
-                                  index == 0 ? 0 : 10, 15, index == 4 ? 20 : 0),
+                              margin: EdgeInsets.fromLTRB(
+                                  15,
+                                  index == 0 ? 0 : 10,
+                                  15,
+                                  index == searchedStudents.length ? 20 : 0),
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
@@ -426,24 +469,22 @@ class _InviteStudentState extends State<InviteStudent> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 15),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         width: 50,
                                         height: 50,
                                         decoration: BoxDecoration(
-                                          shape: BoxShape
-                                              .circle, // Mengatur bentuk container menjadi lingkaran
+                                          shape: BoxShape.circle,
                                           border: Border.all(
-                                            color: Colors
-                                                .black, // Opsional: Tambahkan border jika diperlukan
+                                            color: Colors.black,
                                             width: 2,
                                           ),
                                         ),
                                         child: ClipOval(
                                           child: Image.asset(
-                                            'assets/images/rei.png',
+                                            searchedStudents[index]
+                                                ['profilePath'],
                                             width: 50,
                                             height: 50,
                                             fit: BoxFit.fill,
@@ -452,32 +493,16 @@ class _InviteStudentState extends State<InviteStudent> {
                                       ),
                                       const SizedBox(width: 30),
                                       Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
+                                        child: Text(
+                                          searchedStudents[index]['firstName'] +
+                                              " " +
                                               searchedStudents[index]
-                                                      ['firstName'] +
-                                                  " " +
-                                                  searchedStudents[index]
-                                                      ['lastName'],
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 16,
-                                                  color: AppColors.black),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              'Role: ' +
-                                                  searchedStudents[index]
-                                                      ['role'],
-                                              style: GoogleFonts.inter(
-                                                fontSize: 14,
-                                                color: AppColors.black
-                                                    .withOpacity(0.60),
-                                              ),
-                                            ),
-                                          ],
+                                                  ['lastName'],
+                                          style: GoogleFonts.inter(
+                                              fontSize: 16,
+                                              color: AppColors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
                                         ),
                                       ),
                                     ],
@@ -485,11 +510,10 @@ class _InviteStudentState extends State<InviteStudent> {
                                 ),
                               ),
                             )
-                          : const SizedBox(); // Jika selectedStudent == null, kembalikan widget kosong
+                          : null;
                     }
                   },
-                  childCount:
-                      searchedStudents.length + 1, // Tambah 1 untuk kolom pesan
+                  childCount: searchedStudents.length + 1,
                 ),
               ),
             ],

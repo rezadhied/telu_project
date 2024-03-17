@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/invite_student.dart';
+import 'package:telu_project/screens/user_profile.dart';
 
 class Project extends StatelessWidget {
   final Map<String, dynamic> projectData;
@@ -131,7 +132,8 @@ class Project extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Project Member' ' (${projectData['member'].length}/10)',
+                            'Project Member'
+                            ' (${projectData['member'].length}/10)',
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -167,9 +169,21 @@ class Project extends StatelessWidget {
                                     0,
                                     index == 0 ? 0 : 10,
                                     0,
-                                    index == 4 ? 20 : 0),
+                                    index == projectData['member'].length
+                                        ? 20
+                                        : 0),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: ((context) => UserProfile(
+                                              userData: projectData['member']
+                                                  [index],
+                                            )),
+                                      ),
+                                    );
+                                  },
                                   borderRadius: BorderRadius.circular(14),
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -192,7 +206,8 @@ class Project extends StatelessWidget {
                                           ),
                                           child: ClipOval(
                                             child: Image.asset(
-                                              'assets/images/rei.png',
+                                              projectData['member'][index]
+                                                  ['profilePath'],
                                               width: 50,
                                               height: 50,
                                               fit: BoxFit.fill,

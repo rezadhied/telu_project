@@ -37,8 +37,9 @@ class _WelcomePageState extends State<WelcomePage> {
                           CarouselSlider(
                             items: [
                               'assets/images/loginImage1.jpg',
-                              'assets/images/loginImage2.png',
                               'assets/images/loginImage3.png',
+                              'assets/images/wibu.jpg',
+                              'assets/images/loginImage2.png',
                             ].map((String imagepath) {
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width,
@@ -64,7 +65,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             right: 0,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [0, 1, 2].map((index) {
+                              children: [0, 1, 2, 3].map((index) {
                                 return Container(
                                   width: 8.0,
                                   height: 8.0,
@@ -130,7 +131,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10)),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const RegisterOption()));
+                                    builder: (context) =>
+                                        const RegisterOption()));
                               },
                               child: const Text('Get Started'),
                             ),
@@ -153,7 +155,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 ),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const Signin()));
+                                      builder: (context) => const Signin()));
                                 },
                                 child: const Text('Already Have an Account'),
                               ),

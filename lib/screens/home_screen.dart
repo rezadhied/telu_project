@@ -11,9 +11,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   List<Map<String, String>> projectList = [
-    {'title': 'Proyek Bandara Internasional Soekarno-Hatta', 'status': 'Open Request', 'capacity' : '1/4'},
-    {'title': 'Proyek Tol Trans-Jawa', 'status': 'Open Request', 'capacity' : '2/4'},
-    {'title': 'Proyek Jembatan Suramadu', 'status': 'Open Request', 'capacity' : '3/4'},
+    {
+      'title': 'Proyek Bandara Internasional Soekarno-Hatta',
+      'status': 'Open Request',
+      'capacity': '1/4'
+    },
+    {
+      'title': 'Proyek Tol Trans-Jawa',
+      'status': 'Open Request',
+      'capacity': '2/4'
+    },
+    {
+      'title': 'Proyek Jembatan Suramadu',
+      'status': 'Open Request',
+      'capacity': '3/4'
+    },
   ];
 
   @override
@@ -82,7 +94,8 @@ class _HomePage extends State<HomePage> {
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
                                     'By: Jonathan Maulana',
-                                    style: GoogleFonts.inter(color: Colors.black),
+                                    style:
+                                        GoogleFonts.inter(color: Colors.black),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
@@ -97,7 +110,8 @@ class _HomePage extends State<HomePage> {
                                 SizedBox(
                                   width: 100,
                                   child: Text('Deskripsi',
-                                      style: GoogleFonts.inter(color: Colors.grey),
+                                      style:
+                                          GoogleFonts.inter(color: Colors.grey),
                                       textAlign: TextAlign.start),
                                 ),
                                 const SizedBox(width: 8),
@@ -107,7 +121,8 @@ class _HomePage extends State<HomePage> {
                                     height: 100,
                                     child: Text(
                                       'YOLO (You Only Look Once) adalah sebuah algoritma deteksi objek real-time untuk pengolahan citra dan video. Tujuan dari algoritma ini adalah untuk mendeteksi dan mengklasifikasikan objek dalam suatu gambar secara akurat dan efisien.',
-                                      style: GoogleFonts.inter(color: Colors.black),
+                                      style: GoogleFonts.inter(
+                                          color: Colors.black),
                                       textAlign: TextAlign.left,
                                     ),
                                   ),
@@ -122,7 +137,8 @@ class _HomePage extends State<HomePage> {
                                 SizedBox(
                                   width: 100,
                                   child: Text('Project End',
-                                      style: GoogleFonts.inter(color: Colors.grey),
+                                      style:
+                                          GoogleFonts.inter(color: Colors.grey),
                                       textAlign: TextAlign.left),
                                 ),
                                 const SizedBox(width: 8),
@@ -130,7 +146,8 @@ class _HomePage extends State<HomePage> {
                                   width: 300,
                                   child: Text(
                                     '5 Desember 2024',
-                                    style: GoogleFonts.inter(color: Colors.black),
+                                    style:
+                                        GoogleFonts.inter(color: Colors.black),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -160,8 +177,8 @@ class _HomePage extends State<HomePage> {
               (BuildContext context, int index) {
                 return Container(
                   margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.grey, width: 1),
                     borderRadius: BorderRadius.circular(14),

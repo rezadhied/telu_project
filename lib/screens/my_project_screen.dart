@@ -29,27 +29,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'Japran',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -60,27 +77,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -92,27 +126,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -123,27 +174,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -154,27 +222,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -185,27 +270,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -216,27 +318,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -247,27 +366,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -278,27 +414,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -309,27 +462,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -340,27 +510,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -371,27 +558,44 @@ class _MyProjectState extends State<MyProject> {
         {
           'firstName': 'Muhammad',
           'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'role': 'Backend Developer',
+          'profilePath': 'assets/images/stiv.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Raihan Fasya',
+          'role': 'UI/UX Designer',
+          'profilePath': 'assets/images/rei.png'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Reza adhie darmawan',
+          'role': 'Frontend Developer',
+          'profilePath': 'assets/images/reja.jpg'
         },
         {
           'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'lastName': 'Hasnan Hunaini',
+          'role': 'Turu Developer',
+          'profilePath': 'assets/images/kebab.png'
         },
         {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer'
+          'firstName': 'Muhammad Naufal',
+          'lastName': 'Zaki Kemana?',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/nopal.png'
+        },
+        {
+          'firstName': 'Surya',
+          'lastName': 'Aulia',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/suep.jpg'
+        },
+        {
+          'firstName': 'japrannn',
+          'lastName': 'Aulia Zafran',
+          'role': 'Ngilang Developer',
+          'profilePath': 'assets/images/japrannn.png'
         }
       ]
     },
@@ -418,7 +622,7 @@ class _MyProjectState extends State<MyProject> {
           slivers: [
             SliverAppBar(
               title: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   'My Project',
                   style: GoogleFonts.inter(
