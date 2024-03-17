@@ -144,7 +144,9 @@ class Project extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: ((context) => const InviteStudent()),
+                                  builder: ((context) => InviteStudent(
+                                        projectTitle: projectData['title'],
+                                      )),
                                 ),
                               );
                             },

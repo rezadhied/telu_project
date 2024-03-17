@@ -7,7 +7,8 @@ import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/user_profile.dart';
 
 class InviteStudent extends StatefulWidget {
-  const InviteStudent({Key? key});
+  final projectTitle;
+  const InviteStudent({Key? key, this.projectTitle});
 
   @override
   State<InviteStudent> createState() => _InviteStudentState();
@@ -172,7 +173,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. ',
+                          widget.projectTitle,
                           style: GoogleFonts.inter(
                             fontSize: 18,
                             color: AppColors.black,
