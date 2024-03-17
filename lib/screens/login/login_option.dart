@@ -2,20 +2,23 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/login/register.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 
-class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+class LoginOption extends StatefulWidget {
+  const LoginOption({super.key});
 
   @override
-  State<WelcomePage> createState() => _WelcomePageState();
+  State<LoginOption> createState() => _LoginOptionState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _LoginOptionState extends State<LoginOption> {
   int _current = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.fromLTRB(30, 0, 30, 50),
@@ -118,19 +121,23 @@ class _WelcomePageState extends State<WelcomePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  foregroundColor: AppColors.white,
-                                  backgroundColor: AppColors.primary,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(6)),
-                                  ),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                                foregroundColor: AppColors.black,
+                                side: const BorderSide(
+                                  color: AppColors.black,
+                                ),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                ),
+                                padding:const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                backgroundColor: AppColors.white, // Set background color to transparent
+                              ),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const MyProject()));
+                                  builder: (context) =>
+                                      const Register(isStudent: true),
+                                ));
                               },
-                              child: const Text('Get Started'),
+                              child: const Text('Join as Student'),
                             ),
                           ),
                           Padding(
@@ -139,18 +146,23 @@ class _WelcomePageState extends State<WelcomePage> {
                               width: double.infinity,
                               child: OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppColors.primary,
-                                  side: const BorderSide(
-                                      color: AppColors.primary),
+                                  foregroundColor: AppColors.black,
+                                  side:
+                                      const BorderSide(color: AppColors.black),
                                   shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(6)),
                                   ),
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  backgroundColor: AppColors.white,
                                 ),
-                                onPressed: () {},
-                                child: const Text('Already Have an Account'),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Register(isStudent: false)));
+                                },
+                                child: const Text('Join as Lecturer'),
                               ),
                             ),
                           ),
