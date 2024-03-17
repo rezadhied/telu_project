@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -128,7 +129,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                       const EdgeInsets.fromLTRB(0, 10, 0, 10)),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const MyProject()));
+                                    builder: (context) => const HomePage()));
                               },
                               child: const Text('Get Started'),
                             ),
