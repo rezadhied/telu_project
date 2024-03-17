@@ -1,30 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 
-class TextFieldComponent extends StatelessWidget {
-  final String hintText;
+class ButtonComponent extends StatelessWidget {
+  final String buttonText;
+  final Widget targetPage;
 
-  const TextFieldComponent({super.key, required this.hintText});
+  const ButtonComponent({
+    Key? key,
+    required this.buttonText,
+    required this.targetPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 20, 20, 0),
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.black.withOpacity(0.2)), // Add black border decoration
-        borderRadius: BorderRadius.circular(15), // Add border radius
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: hintText,
-          border: InputBorder.none, // Remove default border
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12), // Add content padding
+      margin: const EdgeInsets.only(top: 20),
+      child: SizedBox(
+        height: 50,
+        width: double.infinity,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.white,
+            backgroundColor: AppColors.primary,
+            side: const BorderSide(color: AppColors.black),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => targetPage,
+              ),
+            );
+          },
+          child: Text(
+            buttonText,
+            style: GoogleFonts.inter(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
-        maxLines: 1, // Set maxLines to 1 to limit input to a single line
-        onChanged: (value) {
-          // Handle onChanged event
-        },
       ),
     );
   }

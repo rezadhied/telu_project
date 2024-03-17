@@ -1,24 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
-import 'package:telu_project/screens/login/register_lecturer.dart';
-import 'package:telu_project/screens/login/register_student.dart';
-import 'package:telu_project/screens/login/signin.dart';
+import 'package:telu_project/screens/login/register.dart';
+import 'package:telu_project/screens/login/register_option.dart';
+import 'package:telu_project/screens/my_project_screen.dart';
 
-class Register extends StatefulWidget {
-  final bool isStudent;
-
-  const Register({super.key, required this.isStudent});
+class Signin extends StatefulWidget {
+  const Signin({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Signin> createState() => _SigninState();
 }
 
-class _RegisterState extends State<Register> {
+class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +26,15 @@ class _RegisterState extends State<Register> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Start the journey.",
+                    "Welcome Back.",
                     style: GoogleFonts.inter(
                         fontSize: 32,
                         fontWeight: FontWeight.w800,
                         color: AppColors.blackAlternative),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: Text("Let’s create an account",
+                    margin: const EdgeInsets.only(bottom: 7),
+                    child: Text("Let’s sign you in",
                         textAlign: TextAlign.left,
                         style: GoogleFonts.inter(
                           fontSize: 24,
@@ -48,16 +44,15 @@ class _RegisterState extends State<Register> {
                   ),
                   const TextFieldComponent(hintText: "Username or Email"),
                   const TextFieldComponent(hintText: "Password"),
-                  const TextFieldComponent(hintText: "Confirm Password"),
-                  ButtonComponent(
-                    buttonText: 'Next',
-                    targetPage: widget.isStudent ? const RegisterStudent() : const RegisterLecturer(),
+                  const ButtonComponent(
+                    buttonText: 'Sign in',
+                    targetPage: MyProject()
                   ),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account? ',
+                      Text('Dont have a account yet? ',
                           style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
@@ -68,12 +63,12 @@ class _RegisterState extends State<Register> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  const Signin(), // Replace YourSignInPage with the page you want to navigate to
+                                  const RegisterOption(), // Replace YourSignInPage with the page you want to navigate to
                             ),
                           );
                         },
                         child: Text(
-                          'Sign in',
+                          'Create an account ',
                           style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,

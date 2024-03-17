@@ -9,7 +9,7 @@ class TextFieldComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+      margin: const EdgeInsets.fromLTRB(0, 15, 0, 5),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.black.withOpacity(0.2)), // Add black border decoration

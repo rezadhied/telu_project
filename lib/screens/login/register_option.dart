@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/login/register.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
 
-class LoginOption extends StatefulWidget {
-  const LoginOption({super.key});
+class RegisterOption extends StatefulWidget {
+  const RegisterOption({super.key});
 
   @override
-  State<LoginOption> createState() => _LoginOptionState();
+  State<RegisterOption> createState() => _RegisterOptionState();
 }
 
-class _LoginOptionState extends State<LoginOption> {
+class _RegisterOptionState extends State<RegisterOption> {
   int _current = 0;
 
   @override
