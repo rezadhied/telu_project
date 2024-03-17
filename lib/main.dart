@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/invite_student.dart';
 import 'package:telu_project/screens/welcome_screen.dart';
 
 void main() {

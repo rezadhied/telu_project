@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
@@ -404,7 +403,10 @@ class _MyProjectState extends State<MyProject> {
   void initState() {
     super.initState();
     selectedStatus = statusList[1];
-    filteredProjects = List.from(projectList);
+    filteredProjects = projectList.where((project) {
+      final statusMatches = project['status'] == selectedStatus;
+      return statusMatches;
+    }).toList();
   }
 
   @override
@@ -415,26 +417,40 @@ class _MyProjectState extends State<MyProject> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              title: Text(
-                'My Project',
-                style: GoogleFonts.inter(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primary,
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  'My Project',
+                  style: GoogleFonts.inter(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
               backgroundColor: AppColors.white,
               floating: true,
               pinned: true,
-              snap: true,
               elevation: 0,
             ),
             SliverToBoxAdapter(
               child: Container(
-                margin: const EdgeInsets.all(15),
+                margin: const EdgeInsets.fromLTRB(15, 25, 15, 15),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
                     Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Find Your Projects',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 5),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 0),
                       decoration: BoxDecoration(
@@ -446,7 +462,7 @@ class _MyProjectState extends State<MyProject> {
                         decoration: InputDecoration(
                           hintText: 'Search',
                           hintStyle: GoogleFonts.inter(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: AppColors.black,
                           ),
                           border: InputBorder.none,
@@ -457,14 +473,13 @@ class _MyProjectState extends State<MyProject> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 30),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Filter',
                         style: GoogleFonts.inter(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -472,7 +487,7 @@ class _MyProjectState extends State<MyProject> {
                       width: double.infinity,
                       margin: const EdgeInsets.only(top: 5),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 5),
+                          horizontal: 20, vertical: 0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
@@ -488,7 +503,7 @@ class _MyProjectState extends State<MyProject> {
                           });
                         },
                         style: GoogleFonts.inter(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: AppColors.black,
                         ),
                         iconSize: 24,
@@ -505,7 +520,7 @@ class _MyProjectState extends State<MyProject> {
                     ),
                     Container(
                       width: double.infinity,
-                      margin: const EdgeInsets.only(top: 30),
+                      margin: const EdgeInsets.only(top: 20),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 0),
                       child: InkWell(
@@ -540,7 +555,7 @@ class _MyProjectState extends State<MyProject> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 30),
+                      margin: const EdgeInsets.only(top: 20),
                       padding: const EdgeInsets.only(left: 20),
                       child: Align(
                           alignment: Alignment.centerLeft,
@@ -569,7 +584,7 @@ class _MyProjectState extends State<MyProject> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15,
+                    margin: EdgeInsets.fromLTRB(25, index == 0 ? 0 : 10, 25,
                         index == filteredProjects.length - 1 ? 20 : 0),
                     decoration: BoxDecoration(
                       border: Border.all(color: AppColors.grey, width: 1),
@@ -581,7 +596,7 @@ class _MyProjectState extends State<MyProject> {
                           context,
                           MaterialPageRoute(
                             builder: ((context) =>
-                                project(projectData: filteredProjects[index])),
+                                Project(projectData: filteredProjects[index])),
                           ),
                         );
                       },

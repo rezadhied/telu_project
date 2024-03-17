@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/invite_student.dart';
 
-class project extends StatelessWidget {
+class Project extends StatelessWidget {
   final Map<String, dynamic> projectData;
 
-  const project({super.key, required this.projectData});
+  const Project({super.key, required this.projectData});
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +25,15 @@ class project extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(
-                            context,
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(14),
-                        child: const Icon(
-                          Icons.arrow_back,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(
+                          context,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(14),
+                      child: const Icon(
+                        Icons.arrow_back,
                       ),
                     ),
                     Expanded(
@@ -69,17 +67,9 @@ class project extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                margin: const EdgeInsets.fromLTRB(15, 30, 15, 30),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.grey,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
+                margin: const EdgeInsets.fromLTRB(10, 15, 10, 5),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -151,20 +141,27 @@ class project extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) => const InviteStudent()),
+                                ),
+                              );
+                            },
                             borderRadius: BorderRadius.circular(14),
                             child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Icon(
+                              padding: const EdgeInsets.all(5),
+                              child: const Icon(
                                 Icons.person_add,
                               ),
                             ),
                           )
                         ],
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 10),
                       SizedBox(
-                        height: 200,
+                        height: 250,
                         child: ListView.builder(
                             itemCount: projectData['member'].length,
                             itemBuilder: (context, index) {
@@ -185,12 +182,24 @@ class project extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          width: 15,
-                                          height: 15,
+                                          width: 50,
+                                          height: 50,
                                           decoration: BoxDecoration(
-                                            color: AppColors.secondary,
-                                            borderRadius:
-                                                BorderRadius.circular(90),
+                                            shape: BoxShape
+                                                .circle, // Mengatur bentuk container menjadi lingkaran
+                                            border: Border.all(
+                                              color: Colors
+                                                  .black, // Opsional: Tambahkan border jika diperlukan
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              'assets/images/rei.png',
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 15),
