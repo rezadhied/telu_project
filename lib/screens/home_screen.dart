@@ -20,7 +20,7 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       body: CustomScrollView(
         slivers: [
@@ -40,7 +40,7 @@ class _HomePage extends State<HomePage> {
                 ),
                 Center(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     width: 450,
                     height: 250,
                     child: Container(
@@ -52,7 +52,7 @@ class _HomePage extends State<HomePage> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             )
                           ]),
                       child: Column(
@@ -63,7 +63,7 @@ class _HomePage extends State<HomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 300,
                                   height: 40,
                                   child: Text(
@@ -79,7 +79,7 @@ class _HomePage extends State<HomePage> {
                                 Container(
                                   width: 100,
                                   height: 40,
-                                  padding: EdgeInsets.only(right: 20),
+                                  padding: const EdgeInsets.only(right: 20),
                                   child: Text(
                                     'By: Jonathan Maulana',
                                     style: GoogleFonts.inter(color: Colors.black),
@@ -94,15 +94,15 @@ class _HomePage extends State<HomePage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   child: Text('Deskripsi',
                                       style: GoogleFonts.inter(color: Colors.grey),
                                       textAlign: TextAlign.start),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: 300,
                                     height: 100,
                                     child: Text(
@@ -119,14 +119,14 @@ class _HomePage extends State<HomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   child: Text('Project End',
                                       style: GoogleFonts.inter(color: Colors.grey),
                                       textAlign: TextAlign.left),
                                 ),
-                                SizedBox(width: 8),
-                                Container(
+                                const SizedBox(width: 8),
+                                SizedBox(
                                   width: 300,
                                   child: Text(
                                     '5 Desember 2024',

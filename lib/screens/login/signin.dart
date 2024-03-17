@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
-import 'package:telu_project/screens/login/register.dart';
 import 'package:telu_project/screens/login/register_option.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 

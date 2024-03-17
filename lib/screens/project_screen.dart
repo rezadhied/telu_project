@@ -52,10 +52,8 @@ class Project extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      child: const Icon(
-                        Icons.settings,
-                      ),
+                    const Icon(
+                      Icons.settings,
                     ),
                   ],
                 ),
@@ -133,8 +131,7 @@ class Project extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Project Member' +
-                                ' (${projectData['member'].length}/10)',
+                            'Project Member' ' (${projectData['member'].length}/10)',
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

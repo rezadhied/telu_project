@@ -290,8 +290,8 @@ class _InviteStudentState extends State<InviteStudent> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 15),
-                                        Container(
+                                        const SizedBox(width: 15),
+                                        SizedBox(
                                           width: 200,
                                           child: selectedStudent != null
                                               ? Expanded(
@@ -328,7 +328,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                           selectedStudent = null;
                                         });
                                       },
-                                      child: Icon(Icons.close))
+                                      child: const Icon(Icons.close))
                                 ],
                               ),
                             )),

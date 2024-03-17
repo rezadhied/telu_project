@@ -7,10 +7,10 @@ class ButtonComponent extends StatelessWidget {
   final Widget targetPage;
 
   const ButtonComponent({
-    Key? key,
+    super.key,
     required this.buttonText,
     required this.targetPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
