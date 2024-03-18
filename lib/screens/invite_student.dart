@@ -418,6 +418,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.black,
                                 ),
                               ),
                             ),
@@ -435,6 +436,18 @@ class _InviteStudentState extends State<InviteStudent> {
                                   borderSide: BorderSide(
                                     color: AppColors.black.withOpacity(0.30),
                                   ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      color: AppColors.black.withOpacity(0.30),
+                                    )), // your
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(
+                                    color: AppColors.black.withOpacity(0.30),
+                                  ), // Warna border saat fokus
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20,
@@ -458,6 +471,8 @@ class _InviteStudentState extends State<InviteStudent> {
                                   index == 0 ? 0 : 10,
                                   15,
                                   index == searchedStudents.length ? 20 : 0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
@@ -492,7 +507,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 30),
+                                      const SizedBox(width: 15),
                                       Expanded(
                                         child: Text(
                                           searchedStudents[index]['firstName'] +
