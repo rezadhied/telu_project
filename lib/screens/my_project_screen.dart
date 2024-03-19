@@ -616,6 +616,7 @@ class _MyProjectState extends State<MyProject> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: AppColors.white,
         body: CustomScrollView(

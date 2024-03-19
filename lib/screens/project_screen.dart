@@ -12,6 +12,7 @@ class Project extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: AppColors.white,
         appBar: PreferredSize(
@@ -26,15 +27,17 @@ class Project extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(
-                          context,
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(14),
-                      child: const Icon(
-                        Icons.arrow_back,
+                    Center(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(
+                            context,
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(14),
+                        child: const Icon(
+                          Icons.arrow_back,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -47,15 +50,17 @@ class Project extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontSize: 18,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ),
-                    const Icon(
-                      Icons.settings,
-                    ),
+                    const Center(
+                      child: Icon(
+                        Icons.settings,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -77,6 +82,7 @@ class Project extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color : AppColors.black
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -104,6 +110,7 @@ class Project extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color : AppColors.black
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -119,6 +126,7 @@ class Project extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color : AppColors.black
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -137,6 +145,7 @@ class Project extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color : AppColors.black
                             ),
                           ),
                           InkWell(
@@ -155,6 +164,7 @@ class Project extends StatelessWidget {
                               padding: const EdgeInsets.all(5),
                               child: const Icon(
                                 Icons.person_add,
+                                color: AppColors.quarternaryAlternative,
                               ),
                             ),
                           )
