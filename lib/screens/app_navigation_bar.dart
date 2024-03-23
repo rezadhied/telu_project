@@ -19,7 +19,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyProject(),
-    Center(child: Text("Requested", textAlign: TextAlign.center)),
+    Center(child: Text("Inbox", textAlign: TextAlign.center)),
     Center(child: Text("Profile", textAlign: TextAlign.center)),
   ];
 
@@ -55,8 +55,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
               label: 'My Project',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.mail),
-              label: 'Requested',
+              icon: Icon(Icons.inbox),
+              label: 'Inbox',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_rounded),
