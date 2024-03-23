@@ -52,7 +52,7 @@ class _HomePage extends State<HomePage> {
                 ),
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(12.0),
                     width: 450,
                     height: 250,
                     child: Container(
@@ -76,8 +76,8 @@ class _HomePage extends State<HomePage> {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: 300,
-                                  height: 40,
+                                  width: 250,
+                                  height: 50,
                                   child: Text(
                                     'YOLO - Tracking Truck With AI',
                                     style: GoogleFonts.inter(
@@ -89,7 +89,7 @@ class _HomePage extends State<HomePage> {
                                   ),
                                 ),
                                 Container(
-                                  width: 100,
+                                  width: 90,
                                   height: 40,
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
@@ -143,7 +143,7 @@ class _HomePage extends State<HomePage> {
                                 ),
                                 const SizedBox(width: 8),
                                 SizedBox(
-                                  width: 300,
+                                  width: 200,
                                   child: Text(
                                     '5 Desember 2024',
                                     style:
@@ -190,7 +190,7 @@ class _HomePage extends State<HomePage> {
                         width: 15,
                         height: 15,
                         decoration: BoxDecoration(
-                          color: AppColors.blackAlternative,
+                          color: AppColors.secondary,
                           borderRadius: BorderRadius.circular(90),
                         ),
                       ),
