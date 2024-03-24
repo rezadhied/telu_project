@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_fonts: 6.2.0
   carousel_slider: ^4.2.1
+  flutter_datetime_picker_plus: ^2.1.0
 
 dev_dependencies:
   flutter_test:
