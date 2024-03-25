@@ -54,12 +54,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   }
 
   void _handleSubmit() {
-    // Submit form logic
     if (_isInputComplete) {
-      // Your form submission logic here
-      // Example:
-      // Navigator.pop(context); // Close page
-      // You can add further logic to handle the form submission
+      
     }
   }
 

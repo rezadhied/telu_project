@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/request_detail.dart';
 import 'package:telu_project/screens/user_profile.dart';
 
 class AppNavigationBar extends StatefulWidget {
@@ -19,7 +20,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyProject(),
-    Center(child: Text("Requested", textAlign: TextAlign.center)),
+    RequestDetail(),
     Center(child: Text("Profile", textAlign: TextAlign.center)),
   ];
 
