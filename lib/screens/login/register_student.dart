@@ -5,6 +5,7 @@ import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/signin.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/app_navigation_bar.dart';
 
 class RegisterStudent extends StatefulWidget {
   const RegisterStudent({super.key});
@@ -49,7 +50,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                   const TextFieldComponent(hintText: "Major"),
                   const ButtonComponent(
                     buttonText: 'Sign Up',
-                    targetPage: MyProject(),
+                    targetPage: AppNavigationBar(isStudent : true),
                   ),
                   const Spacer(),
                   Row(

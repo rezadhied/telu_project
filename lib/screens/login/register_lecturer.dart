@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/app_navigation_bar.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/signin.dart';
@@ -49,7 +50,7 @@ class _RegisterLecturerState extends State<RegisterLecturer> {
                   const TextFieldComponent(hintText: "Major"),
                   const ButtonComponent(
                     buttonText: 'Sign Up',
-                    targetPage: MyProject(),
+                    targetPage: AppNavigationBar(isStudent : false),
                   ),
                   const Spacer(),
                   Row(
