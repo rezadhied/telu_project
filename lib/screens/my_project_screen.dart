@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/create_project_screen.dart';
 import 'package:telu_project/screens/project_screen.dart';
 
 class MyProject extends StatefulWidget {
@@ -730,7 +731,15 @@ class _MyProjectState extends State<MyProject> {
                           horizontal: 0, vertical: 0),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(14),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) =>
+                                CreateProjectPage()),
+                          ),
+                        );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 5),

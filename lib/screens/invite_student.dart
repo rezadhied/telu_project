@@ -89,6 +89,7 @@ class _InviteStudentState extends State<InviteStudent> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: AppColors.white,
         appBar: PreferredSize(

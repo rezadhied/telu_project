@@ -31,9 +31,6 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -43,7 +40,7 @@ class _HomePage extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'My Projects',
+                    'My Project',
                     style: GoogleFonts.inter(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
