@@ -54,9 +54,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   }
 
   void _handleSubmit() {
-    if (_isInputComplete) {
-      
-    }
+    if (_isInputComplete) {}
   }
 
   void _handleAddSkill() {
@@ -143,7 +141,9 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                         alignment: Alignment.topCenter,
                         child: InkWell(
                           onTap: () {
-                            _isInputComplete && _skills.isNotEmpty && _roles.isNotEmpty
+                            _isInputComplete &&
+                                    _skills.isNotEmpty &&
+                                    _roles.isNotEmpty
                                 ? Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -157,7 +157,9 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: _isInputComplete && _skills.isNotEmpty && _roles.isNotEmpty
+                              color: _isInputComplete &&
+                                      _skills.isNotEmpty &&
+                                      _roles.isNotEmpty
                                   ? AppColors.tertiary
                                   : AppColors.black.withOpacity(0.30),
                             ),
@@ -495,15 +497,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                           child: Chip(
                             label: Text(
                               '${entry.value}',
-                              style: TextStyle(
-                                  color: Colors
-                                      .white), 
+                              style: TextStyle(color: Colors.white),
                             ),
-                            backgroundColor: AppColors
-                                .tertiary, 
-                            deleteIcon: Icon(Icons.close,
-                                color: Colors
-                                    .white), 
+                            backgroundColor: AppColors.tertiary,
+                            deleteIcon: Icon(Icons.close, color: Colors.white),
                           ),
                         ),
                       )
@@ -598,15 +595,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                           child: Chip(
                             label: Text(
                               '${entry.value['name']} (${entry.value['quantity']})',
-                              style: TextStyle(
-                                  color: Colors
-                                      .white), 
+                              style: TextStyle(color: Colors.white),
                             ),
-                            backgroundColor: AppColors
-                                .quarternary, 
-                            deleteIcon: Icon(Icons.close,
-                                color: Colors
-                                    .white), 
+                            backgroundColor: AppColors.quarternary,
+                            deleteIcon: Icon(Icons.close, color: Colors.white),
                           ),
                         ),
                       )

@@ -125,10 +125,13 @@ class _RegisterOptionState extends State<RegisterOption> {
                                   color: AppColors.black,
                                 ),
                                 shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
                                 ),
-                                padding:const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                backgroundColor: AppColors.white, // Set background color to transparent
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                backgroundColor: AppColors
+                                    .white, // Set background color to transparent
                               ),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
