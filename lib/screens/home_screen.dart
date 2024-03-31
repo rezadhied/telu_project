@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +24,11 @@ class _HomePage extends State<HomePage> {
       'capacity': '2/4'
     },
     {
+      'title': 'Proyek Jembatan Baltimore',
+      'status': 'Open Request',
+      'capacity': '3/69'
+    },
+    {
       'title': 'Proyek Jembatan Suramadu',
       'status': 'Open Request',
       'capacity': '3/4'
@@ -29,33 +36,53 @@ class _HomePage extends State<HomePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<NavigationState>(context, listen: false).toggleNavBar(true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: CustomScrollView(
         slivers: [
+          SliverAppBar(
+            title: Container(
+                padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                margin: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'Welcome, ',
+                  style: GoogleFonts.inter(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                )),
+            backgroundColor: AppColors.white,
+            floating: false,
+            pinned: false,
+            elevation: 0,
+          ),
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'My Project',
-                    style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary),
-                  ),
-                ),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
-                    width: 450,
-                    height: 250,
+                    width: 350,
+                    height: 200,
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, AppColors.quarternary],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
@@ -65,40 +92,9 @@ class _HomePage extends State<HomePage> {
                             )
                           ]),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 250,
-                                  height: 50,
-                                  child: Text(
-                                    'YOLO - Tracking Truck With AI',
-                                    style: GoogleFonts.inter(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                Container(
-                                  width: 90,
-                                  height: 40,
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Text(
-                                    'By: Jonathan Maulana',
-                                    style:
-                                        GoogleFonts.inter(color: Colors.black),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                             child: Row(
@@ -106,23 +102,10 @@ class _HomePage extends State<HomePage> {
                               children: [
                                 SizedBox(
                                   width: 100,
-                                  child: Text('Deskripsi',
-                                      style:
-                                          GoogleFonts.inter(color: Colors.grey),
-                                      textAlign: TextAlign.start),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: SizedBox(
-                                    width: 300,
-                                    height: 100,
-                                    child: Text(
-                                      'YOLO (You Only Look Once) adalah sebuah algoritma deteksi objek real-time untuk pengolahan citra dan video. Tujuan dari algoritma ini adalah untuk mendeteksi dan mengklasifikasikan objek dalam suatu gambar secara akurat dan efisien.',
+                                  child: Text('Lecturer',
                                       style: GoogleFonts.inter(
-                                          color: Colors.black),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
+                                          color: AppColors.grey),
+                                      textAlign: TextAlign.start),
                                 ),
                               ],
                             ),
@@ -131,20 +114,51 @@ class _HomePage extends State<HomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                             child: Row(
                               children: [
+                                Expanded(
+                                  child: Text(
+                                    'Reza Adhie Dharmawan',
+                                    style: GoogleFonts.inter(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text('1 3 0 2 2 1 3 0 1 6',
+                                      style: GoogleFonts.inter(
+                                          color: AppColors.grey, fontSize: 16),
+                                      textAlign: TextAlign.start),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
+                            child: Row(
+                              children: [
                                 SizedBox(
                                   width: 100,
-                                  child: Text('Project End',
-                                      style:
-                                          GoogleFonts.inter(color: Colors.grey),
+                                  child: Text('Projects',
+                                      style: GoogleFonts.inter(
+                                          color: AppColors.grey),
                                       textAlign: TextAlign.left),
                                 ),
-                                const SizedBox(width: 8),
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    '5 Desember 2024',
-                                    style:
-                                        GoogleFonts.inter(color: Colors.black),
+                                    '3',
+                                    style: GoogleFonts.inter(
+                                        color: AppColors.white),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -157,7 +171,7 @@ class _HomePage extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                   child: Text(
                     'Latest Projects',
                     style: GoogleFonts.inter(
@@ -179,6 +193,16 @@ class _HomePage extends State<HomePage> {
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.grey, width: 1),
                     borderRadius: BorderRadius.circular(14),
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.white,
+                        AppColors.secondaryAlternative.withOpacity(0.1)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,9 +257,27 @@ class _HomePage extends State<HomePage> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const MyProject()));
+                            builder: (context) => const Scaffold(
+                                  body: Center(
+                                    child: Text('List Project'),
+                                  ),
+                                )));
                       },
-                      child: const Text('Find More'),
+                      child: ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            colors: [AppColors.primary, AppColors.quarternary],
+                          ).createShader(bounds);
+                        },
+                        child: const Text(
+                          'Find More',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
