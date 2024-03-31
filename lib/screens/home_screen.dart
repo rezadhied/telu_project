@@ -66,14 +66,9 @@ class _HomePage extends State<HomePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           gradient: const LinearGradient(
-                            colors: [
-                              AppColors.primary,
-                              AppColors.quarternary
-                            ], 
-                            begin: Alignment
-                                .topLeft, 
-                            end: Alignment
-                                .bottomRight, 
+                            colors: [AppColors.primary, AppColors.quarternary],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
                           boxShadow: [
                             BoxShadow(
@@ -163,7 +158,7 @@ class _HomePage extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                   child: Text(
                     'Latest Projects',
                     style: GoogleFonts.inter(
@@ -185,6 +180,13 @@ class _HomePage extends State<HomePage> {
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.grey, width: 1),
                     borderRadius: BorderRadius.circular(14),
+                    gradient: LinearGradient(
+            colors: [AppColors.white, AppColors.secondaryAlternative.withOpacity(0.1)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,7 +243,24 @@ class _HomePage extends State<HomePage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const MyProject()));
                       },
-                      child: const Text('Find More'),
+                      child: ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            colors: [
+                              AppColors.primary,
+                              AppColors.quarternary
+                            ], 
+                          ).createShader(bounds);
+                        },
+                        child: const Text(
+                          'Find More',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
