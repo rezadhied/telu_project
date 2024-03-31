@@ -65,7 +65,11 @@ class _HomePage extends State<HomePage> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, AppColors.quarternary],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
@@ -86,8 +90,8 @@ class _HomePage extends State<HomePage> {
                                 SizedBox(
                                   width: 100,
                                   child: Text('Lecturer',
-                                      style:
-                                          GoogleFonts.inter(color: Colors.grey),
+                                      style: GoogleFonts.inter(
+                                          color: AppColors.grey),
                                       textAlign: TextAlign.start),
                                 ),
                               ],
@@ -101,7 +105,7 @@ class _HomePage extends State<HomePage> {
                                   child: Text(
                                     'Reza Adhie Dharmawan',
                                     style: GoogleFonts.inter(
-                                      color: Colors.black,
+                                      color: AppColors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
                                     ),
@@ -119,7 +123,7 @@ class _HomePage extends State<HomePage> {
                                 Expanded(
                                   child: Text('1302213016',
                                       style: GoogleFonts.inter(
-                                          color: Colors.grey, fontSize: 16),
+                                          color: AppColors.grey, fontSize: 16),
                                       textAlign: TextAlign.start),
                                 ),
                               ],
@@ -132,16 +136,16 @@ class _HomePage extends State<HomePage> {
                                 SizedBox(
                                   width: 100,
                                   child: Text('Projects',
-                                      style:
-                                          GoogleFonts.inter(color: Colors.grey),
+                                      style: GoogleFonts.inter(
+                                          color: AppColors.grey),
                                       textAlign: TextAlign.left),
                                 ),
                                 SizedBox(
                                   width: 200,
                                   child: Text(
                                     '3',
-                                    style:
-                                        GoogleFonts.inter(color: Colors.black),
+                                    style: GoogleFonts.inter(
+                                        color: AppColors.white),
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -154,7 +158,7 @@ class _HomePage extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                   child: Text(
                     'Latest Projects',
                     style: GoogleFonts.inter(
@@ -176,6 +180,13 @@ class _HomePage extends State<HomePage> {
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.grey, width: 1),
                     borderRadius: BorderRadius.circular(14),
+                    gradient: LinearGradient(
+            colors: [AppColors.white, AppColors.secondaryAlternative.withOpacity(0.1)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp,
+          ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -232,7 +243,24 @@ class _HomePage extends State<HomePage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const MyProject()));
                       },
-                      child: const Text('Find More'),
+                      child: ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            colors: [
+                              AppColors.primary,
+                              AppColors.quarternary
+                            ], 
+                          ).createShader(bounds);
+                        },
+                        child: const Text(
+                          'Find More',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
