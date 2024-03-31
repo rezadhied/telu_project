@@ -4,6 +4,7 @@ import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
 import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/profile_user.dart';
 
 class AppNavigationBar extends StatefulWidget {
   final bool isStudent;
@@ -21,7 +22,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     HomePage(),
     MyProject(),
     RequestDetail(),
-    Center(child: Text("Profile", textAlign: TextAlign.center)),
+    ProfileApp(),
   ];
 
   void _onItemTapped(int index) {
