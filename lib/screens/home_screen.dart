@@ -36,22 +36,30 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: CustomScrollView(
         slivers: [
+          SliverAppBar(
+            title: Container(
+                padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                margin: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'Welcome, ',
+                  style: GoogleFonts.inter(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                )),
+            backgroundColor: AppColors.white,
+            floating: false,
+            pinned: false,
+            elevation: 0,
+          ),
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
-                  child: Text(
-                    'Welcome, ',
-                    style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary),
-                  ),
-                ),
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
@@ -176,12 +184,15 @@ class _HomePage extends State<HomePage> {
                     border: Border.all(color: AppColors.grey, width: 1),
                     borderRadius: BorderRadius.circular(14),
                     gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondaryAlternative.withOpacity(0.1)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp,
-          ),
+                      colors: [
+                        AppColors.white,
+                        AppColors.secondaryAlternative.withOpacity(0.1)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,16 +247,13 @@ class _HomePage extends State<HomePage> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const MyProject()));
+                            builder: (context) => MyProject()));
                       },
                       child: ShaderMask(
                         blendMode: BlendMode.srcIn,
                         shaderCallback: (Rect bounds) {
                           return LinearGradient(
-                            colors: [
-                              AppColors.primary,
-                              AppColors.quarternary
-                            ], 
+                            colors: [AppColors.primary, AppColors.quarternary],
                           ).createShader(bounds);
                         },
                         child: const Text(

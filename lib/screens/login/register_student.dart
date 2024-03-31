@@ -48,9 +48,39 @@ class _RegisterStudentState extends State<RegisterStudent> {
                   const TextFieldComponent(hintText: "Phone Number"),
                   const TextFieldComponent(hintText: "Faculty"),
                   const TextFieldComponent(hintText: "Major"),
-                  const ButtonComponent(
-                    buttonText: 'Sign Up',
-                    targetPage: AppNavigationBar(isStudent : true),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.white,
+                          backgroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.black),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AppNavigationBar(isStudent: true, ),
+                            ),
+                            (route) => false,
+                          );
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   const Spacer(),
                   Row(

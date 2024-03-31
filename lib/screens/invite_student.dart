@@ -95,6 +95,7 @@ class _InviteStudentState extends State<InviteStudent> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: AppBar(
+            surfaceTintColor: Colors.transparent,
             backgroundColor: AppColors.white,
             toolbarHeight: 200,
             flexibleSpace: SafeArea(
@@ -124,8 +125,8 @@ class _InviteStudentState extends State<InviteStudent> {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 18,
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w500,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
