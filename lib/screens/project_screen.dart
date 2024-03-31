@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/invite_student.dart';
 import 'package:telu_project/screens/user_profile.dart';
 import 'package:provider/provider.dart';
 
-class Project extends StatelessWidget {
+
+class Project extends StatefulWidget {
   final Map<String, dynamic> projectData;
 
-  const Project({super.key, required this.projectData});
+  const Project({Key? key, required this.projectData}) : super(key: key);
+
+  @override
+  State<Project> createState() => _ProjectState();
+}
+
+class _ProjectState extends State<Project> {
+
+  late Map<String, dynamic> projectData;
+
+  @override
+  void initState() {
+    super.initState();
+    projectData = widget.projectData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +31,8 @@ class Project extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: PopScope(
         canPop: true,
-        onPopInvoked: (bool didPop) {
-          print("pop");
-          Provider.of<NavigationState>(context, listen: true)
-              .toggleNavBar(true);
-        },
         child: Scaffold(
+          extendBody: true,
           backgroundColor: AppColors.white,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -40,8 +50,6 @@ class Project extends StatelessWidget {
                       Center(
                         child: InkWell(
                           onTap: () {
-                            Provider.of<NavigationState>(context, listen: false)
-                                .toggleNavBar(true);
                             Navigator.pop(
                               context,
                             );

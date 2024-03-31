@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/app_navigation_bar.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/register_option.dart';
+import 'package:provider/provider.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -46,7 +46,8 @@ class _SigninState extends State<Signin> {
                   const TextFieldComponent(hintText: "Password"),
                   const ButtonComponent(
                     buttonText: 'Sign in',
-                    targetPage: AppNavigationBar(isStudent: true)
+                    targetPage: AppNavigationBar(isStudent: true),
+                    isReplacementPush: true
                   ),
                   const Spacer(),
                   Row(
@@ -59,8 +60,6 @@ class _SigninState extends State<Signin> {
                               color: AppColors.blackAlternative)),
                       GestureDetector(
                         onTap: () {
-                          Provider.of<NavigationState>(context, listen: false)
-                              .toggleNavBar(true);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
