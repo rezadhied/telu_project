@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/app_navigation_bar.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/register_option.dart';
@@ -45,7 +46,7 @@ class _SigninState extends State<Signin> {
                   const TextFieldComponent(hintText: "Password"),
                   const ButtonComponent(
                     buttonText: 'Sign in',
-                    targetPage: MyProject()
+                    targetPage: AppNavigationBar(isStudent: true)
                   ),
                   const Spacer(),
                   Row(
