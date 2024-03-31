@@ -22,9 +22,19 @@ class _HomePage extends State<HomePage> {
       'capacity': '2/4'
     },
     {
+      'title': 'Proyek Jembatan Baltimore',
+      'status': 'Open Request',
+      'capacity': '3/69'
+    },
+    {
       'title': 'Proyek Jembatan Suramadu',
       'status': 'Open Request',
       'capacity': '3/4'
+    },
+    {
+      'title': 'Proyek Jembatan Danau Galau',
+      'status': 'Open Request',
+      'capacity': '0/4'
     },
   ];
 
@@ -38,9 +48,9 @@ class _HomePage extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
                   child: Text(
-                    'My Project',
+                    'Welcome, ',
                     style: GoogleFonts.inter(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -50,8 +60,8 @@ class _HomePage extends State<HomePage> {
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
-                    width: 450,
-                    height: 250,
+                    width: 350,
+                    height: 200,
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -65,18 +75,31 @@ class _HomePage extends State<HomePage> {
                             )
                           ]),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  width: 250,
-                                  height: 50,
+                                  width: 100,
+                                  child: Text('Lecturer',
+                                      style:
+                                          GoogleFonts.inter(color: Colors.grey),
+                                      textAlign: TextAlign.start),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                            child: Row(
+                              children: [
+                                Expanded(
                                   child: Text(
-                                    'YOLO - Tracking Truck With AI',
+                                    'Reza Adhie Dharmawan',
                                     style: GoogleFonts.inter(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -85,64 +108,38 @@ class _HomePage extends State<HomePage> {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                                Container(
-                                  width: 90,
-                                  height: 40,
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Text(
-                                    'By: Jonathan Maulana',
-                                    style:
-                                        GoogleFonts.inter(color: Colors.black),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: Text('Deskripsi',
-                                      style:
-                                          GoogleFonts.inter(color: Colors.grey),
-                                      textAlign: TextAlign.start),
-                                ),
-                                const SizedBox(width: 8),
                                 Expanded(
-                                  child: SizedBox(
-                                    width: 300,
-                                    height: 100,
-                                    child: Text(
-                                      'YOLO (You Only Look Once) adalah sebuah algoritma deteksi objek real-time untuk pengolahan citra dan video. Tujuan dari algoritma ini adalah untuk mendeteksi dan mengklasifikasikan objek dalam suatu gambar secara akurat dan efisien.',
+                                  child: Text('1302213016',
                                       style: GoogleFonts.inter(
-                                          color: Colors.black),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
+                                          color: Colors.grey, fontSize: 16),
+                                      textAlign: TextAlign.start),
                                 ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
                             child: Row(
                               children: [
                                 SizedBox(
                                   width: 100,
-                                  child: Text('Project End',
+                                  child: Text('Projects',
                                       style:
                                           GoogleFonts.inter(color: Colors.grey),
                                       textAlign: TextAlign.left),
                                 ),
-                                const SizedBox(width: 8),
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    '5 Desember 2024',
+                                    '3',
                                     style:
                                         GoogleFonts.inter(color: Colors.black),
                                     textAlign: TextAlign.left,
@@ -157,7 +154,7 @@ class _HomePage extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
                   child: Text(
                     'Latest Projects',
                     style: GoogleFonts.inter(
