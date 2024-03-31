@@ -100,6 +100,7 @@ class _InviteStudentState extends State<InviteStudent> {
             toolbarHeight: 200,
             flexibleSpace: SafeArea(
               child: Container(
+                margin: EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

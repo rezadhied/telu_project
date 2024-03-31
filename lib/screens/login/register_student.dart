@@ -64,13 +64,17 @@ class _RegisterStudentState extends State<RegisterStudent> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AppNavigationBar(isStudent: true, ),
-                            ),
-                            (route) => false,
-                          );
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((timeStamp) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const AppNavigationBar(
+                                  isStudent: true,
+                                ),
+                              ),
+                              (route) => false,
+                            );
+                          });
                         },
                         child: Text(
                           'Sign Up',

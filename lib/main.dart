@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:telu_project/screens/invite_student.dart';
 import 'package:telu_project/screens/login/welcome_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'navigation_state.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => NavigationState(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
