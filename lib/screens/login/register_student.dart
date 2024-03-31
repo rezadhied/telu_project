@@ -64,17 +64,27 @@ class _RegisterStudentState extends State<RegisterStudent> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                         ),
                         onPressed: () {
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((timeStamp) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => const AppNavigationBar(
-                                  isStudent: true,
-                                ),
-                              ),
-                              (route) => false,
-                            );
-                          });
+                          final snackBar = SnackBar(
+                            content: const Text('Yay! AKun telah dibuat'),
+                            action: SnackBarAction(
+                              label: 'Yay',
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AppNavigationBar(
+                                        isStudent: true,
+                                      ),
+                                    ),
+                                    (route) => false,
+                                  );
+                                });
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
                         child: Text(
                           'Sign Up',
