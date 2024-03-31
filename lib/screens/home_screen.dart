@@ -31,11 +31,6 @@ class _HomePage extends State<HomePage> {
       'status': 'Open Request',
       'capacity': '3/4'
     },
-    {
-      'title': 'Proyek Jembatan Danau Galau',
-      'status': 'Open Request',
-      'capacity': '0/4'
-    },
   ];
 
   @override
@@ -121,7 +116,7 @@ class _HomePage extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child: Text('1302213016',
+                                  child: Text('1 3 0 2 2 1 3 0 1 6',
                                       style: GoogleFonts.inter(
                                           color: AppColors.grey, fontSize: 16),
                                       textAlign: TextAlign.start),
