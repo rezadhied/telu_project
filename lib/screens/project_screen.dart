@@ -190,7 +190,7 @@ class Project extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: ((context) => UserProfile(
-                                              userData: projectData['member']
+                                              userData: projectData['kontolBesar']
                                                   [index],
                                             )),
                                       ),
