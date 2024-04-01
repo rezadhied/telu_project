@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'First Name',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'Last Name',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'NIM',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -129,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'No Handphone',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -146,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'Gender',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -163,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'Faculty',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -180,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: InputDecoration(
                     labelText: 'Major',
                     labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
+                      color: isEditing ? AppColors.grey : Colors.blue,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
