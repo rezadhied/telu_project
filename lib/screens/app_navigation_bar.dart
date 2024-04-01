@@ -4,6 +4,7 @@ import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
 import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/profile_user.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigationBar extends StatefulWidget {
@@ -22,8 +23,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyProject(),
-    Center(child: Text("Inbox", textAlign: TextAlign.center)),
-    Center(child: Text("Profile", textAlign: TextAlign.center)),
+    RequestDetail(),
+    ProfileApp(),
   ];
 
   void _onItemTapped(int index) {
