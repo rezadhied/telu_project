@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
@@ -50,9 +49,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
           );
         },
       ),
-      bottomNavigationBar: Consumer<NavigationState>(
-        builder: (context, navigationState, _) => navigationState.showNavBar
-            ? Container(
+      bottomNavigationBar: (
+        Container(
                 decoration: const BoxDecoration(
                   border: Border(
                     top: BorderSide(
@@ -88,8 +86,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                   selectedItemColor: AppColors.primary,
                   onTap: _onItemTapped,
                 ),
-              )
-            : const SizedBox(), // Ensure that a Widget is returned
+        )
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/create_project_screen.dart';
 import 'package:telu_project/screens/project_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:telu_project/screens/test.dart';
 
 class MyProject extends StatefulWidget {
   const MyProject({super.key});
@@ -824,19 +824,22 @@ class _MyProjectState extends State<MyProject> {
                                   Border.all(color: AppColors.grey, width: 1),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: InkWell(
+                            child: GestureDetector(
                               onTap: () {
-                                Provider.of<NavigationState>(context,
-                                        listen: false)
-                                    .toggleNavBar(false);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Project(
-                                        projectData: filteredProjects[index])));
+                                Navigator.of(context, rootNavigator: true).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => Project(
+                                            projectData:
+                                                filteredProjects[index])
+                                    )
+                                  );
                               },
-                              borderRadius: BorderRadius.circular(14),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

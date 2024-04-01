@@ -51,6 +51,7 @@ class _RegisterLecturerState extends State<RegisterLecturer> {
                   const ButtonComponent(
                     buttonText: 'Sign Up',
                     targetPage: AppNavigationBar(isStudent : false),
+                    isReplacementPush: true,
                   ),
                   const Spacer(),
                   Row(
