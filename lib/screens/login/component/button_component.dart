@@ -11,7 +11,7 @@ class ButtonComponent extends StatelessWidget {
       {super.key,
       required this.buttonText,
       required this.targetPage,
-      this.isReplacementPush = true});
+      this.isReplacementPush = false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,11 @@ class ButtonComponent extends StatelessWidget {
           ),
           onPressed: () {
             !isReplacementPush
-                ? () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => targetPage,
-                      ),
-                    )
+                ? Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => targetPage,
+                    ),
+                  )
                 : Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => targetPage),
                     (route) => false,
