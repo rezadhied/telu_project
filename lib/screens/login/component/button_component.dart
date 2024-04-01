@@ -5,14 +5,13 @@ import 'package:telu_project/colors.dart';
 class ButtonComponent extends StatelessWidget {
   final String buttonText;
   final Widget targetPage;
-  final bool isReplacementPush ;
+  final bool isReplacementPush;
 
-  const ButtonComponent({
-    super.key,
-    required this.buttonText,
-    required this.targetPage,
-    this.isReplacementPush = false
-  });
+  const ButtonComponent(
+      {super.key,
+      required this.buttonText,
+      required this.targetPage,
+      this.isReplacementPush = false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +31,16 @@ class ButtonComponent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           ),
           onPressed: () {
-            !isReplacementPush ? () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => targetPage,
-              ),
-            ) : Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => targetPage
-                  ),
-                  (route) => false,
-                );
+            !isReplacementPush
+                ? Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => targetPage,
+                    ),
+                  )
+                : Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => targetPage),
+                    (route) => false,
+                  );
           },
           child: Text(
             buttonText,
