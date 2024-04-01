@@ -139,21 +139,18 @@ class _HomePage extends State<HomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: Text('Projects',
-                                      style: GoogleFonts.inter(
-                                          color: AppColors.grey),
-                                      textAlign: TextAlign.left),
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: Text(
-                                    '3',
+                                Text('Projects',
                                     style: GoogleFonts.inter(
-                                        color: AppColors.white),
-                                    textAlign: TextAlign.left,
-                                  ),
+                                        color: AppColors.grey),
+                                    textAlign: TextAlign.left),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Text(
+                                  '3',
+                                  style:
+                                      GoogleFonts.inter(color: AppColors.white),
+                                  textAlign: TextAlign.left,
                                 ),
                               ],
                             ),

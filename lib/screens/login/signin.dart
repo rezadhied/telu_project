@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/app_navigation_bar.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/register_option.dart';
 import 'package:provider/provider.dart';
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -15,6 +20,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  String email = "mzakyf@telkomuniversity.ac.id";
+  String password = "123";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,13 +49,29 @@ class _SigninState extends State<Signin> {
                           color: AppColors.black,
                         )),
                   ),
-                  const TextFieldComponent(hintText: "Username or Email"),
-                  const TextFieldComponent(hintText: "Password"),
-                  const ButtonComponent(
-                    buttonText: 'Sign in',
-                    targetPage: AppNavigationBar(isStudent: true),
-                    isReplacementPush: true
+                  TextFieldComponent(
+                    hintText: "Username or Email",
+                    onChanged: (value) {
+                      setState(() {
+                        email = value;
+                      });
+                    },
                   ),
+                  TextFieldComponent(
+                    hintText: "Password",
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
+                  ),
+                  const ButtonComponent(
+                      buttonText: 'Sign in', targetPage: MyProject()),
+                  ElevatedButton(
+                      onPressed: () {
+                        _loginUser(email, password); // Call login function
+                      },
+                      child: Text('signin')),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -81,5 +104,57 @@ class _SigninState extends State<Signin> {
                 ],
               ))),
     );
+  }
+}
+
+void _loginUser(String email, String password) async {
+  try {
+    final Map<String, dynamic> responseData = await loginUser(email, password);
+    User user = User(
+      userID: responseData['user']['userID'] ?? 0,
+      firstName: responseData['user']['firstName'] ?? '',
+      lastName: responseData['user']['lastName'] ?? '',
+      phoneNumber: responseData['user']['phoneNumber'] ?? '',
+      photoProfileUrl: responseData['user']['photoProfileUrl'] ?? '',
+      photoProfileImage: responseData['user']['photoProfileImage'] ?? '',
+      email: responseData['user']['email'] ?? '',
+      gender: responseData['user']['gender'] ?? '',
+      lectureCode: responseData['user']['lectureCode'] ?? '',
+      facultyCode: responseData['user']['facultyCode'] ?? '',
+      facultyName: responseData['user']['facultyName'] ?? '',
+      majorCode: responseData['user']['majorCode'] ?? '',
+      majorName: responseData['user']['majorName'] ?? '',
+      kelas: responseData['user']['kelas'] ?? '',
+      role: responseData['user']['role'] ?? '',
+    );
+    await SessionManager().set("user", user);
+    print(user.toString());
+    User u = User.fromJson(await SessionManager().get("user"));
+    print(u.firstName);
+  } catch (e) {
+    print('Login failed: $e');
+  }
+}
+
+Future<Map<String, dynamic>> loginUser(String email, String password) async {
+  const String apiUrl = 'http://localhost:5000/login';
+
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json',
+  };
+
+  final Map<String, String> body = {
+    'email': email,
+    'password': password,
+  };
+
+  final response = await http.post(Uri.parse(apiUrl),
+      headers: headers, body: jsonEncode(body));
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return responseData;
+  } else {
+    throw Exception('Failed to login: ${response.body}');
   }
 }
