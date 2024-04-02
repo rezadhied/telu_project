@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/list_project.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -245,11 +246,7 @@ class _HomePage extends State<HomePage> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const Scaffold(
-                                  body: Center(
-                                    child: Text('List Project'),
-                                  ),
-                                )));
+                            builder: (context) => ListProject()));
                       },
                       child: ShaderMask(
                         blendMode: BlendMode.srcIn,

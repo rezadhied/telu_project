@@ -39,6 +39,9 @@ dependencies:
   flutter_datetime_picker_plus: ^2.1.0
   http: ^1.2.1
   flutter_session_manager: ^1.0.3
+  intl: any
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
