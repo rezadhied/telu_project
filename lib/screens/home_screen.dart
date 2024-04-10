@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -34,14 +33,6 @@ class _HomePage extends State<HomePage> {
       'capacity': '3/4'
     },
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<NavigationState>(context, listen: false).toggleNavBar(true);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

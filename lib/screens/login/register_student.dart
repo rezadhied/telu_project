@@ -130,3 +130,43 @@ class _RegisterStudentState extends State<RegisterStudent> {
     );
   }
 }
+
+
+ // Container(
+                  //   margin: const EdgeInsets.only(top: 20),
+                  //   child: SizedBox(
+                  //     height: 50,
+                  //     width: double.infinity,
+                  //     child: OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         foregroundColor: AppColors.white,
+                  //         backgroundColor: AppColors.primary,
+                  //         side: const BorderSide(color: AppColors.black),
+                  //         shape: const RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(12)),
+                  //         ),
+                  //         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //       ),
+                  //       onPressed: () {
+                  //         WidgetsBinding.instance
+                  //             .addPostFrameCallback((timeStamp) {
+                  //           Navigator.of(context).pushAndRemoveUntil(
+                  //             MaterialPageRoute(
+                  //               builder: (context) => const AppNavigationBar(
+                  //                 isStudent: true,
+                  //               ),
+                  //             ),
+                  //             (route) => false,
+                  //           );
+                  //         });
+                  //       },
+                  //       child: Text(
+                  //         'Sign Up',
+                  //         style: GoogleFonts.inter(
+                  //           fontSize: 18,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),

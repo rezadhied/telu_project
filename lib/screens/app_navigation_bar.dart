@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/navigation_state.dart';
 import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
 import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/profile_user.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigationBar extends StatefulWidget {
@@ -23,8 +23,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyProject(),
-    Center(child: Text("Inbox", textAlign: TextAlign.center)),
-    Center(child: Text("Profile", textAlign: TextAlign.center)),
+    RequestDetail(),
+    ProfileApp(),
   ];
 
   void _onItemTapped(int index) {
@@ -50,9 +50,8 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
           );
         },
       ),
-      bottomNavigationBar: Consumer<NavigationState>(
-        builder: (context, navigationState, _) => navigationState.showNavBar
-            ? Container(
+      bottomNavigationBar: (
+        Container(
                 decoration: const BoxDecoration(
                   border: Border(
                     top: BorderSide(
@@ -88,8 +87,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                   selectedItemColor: AppColors.primary,
                   onTap: _onItemTapped,
                 ),
-              )
-            : const SizedBox(), // Ensure that a Widget is returned
+        )
       ),
     );
   }
