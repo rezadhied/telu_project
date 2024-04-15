@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:telu_project/colors.dart';
+// import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() => runApp(const ProfileApp());
 
 class ProfileApp extends StatelessWidget {
-  const ProfileApp({super.key});
+  const ProfileApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ProfileApp extends StatelessWidget {
 }
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -24,25 +25,51 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isEditing = false;
-  TextEditingController firstNameController =
-      TextEditingController(text: 'Jonathan');
-  TextEditingController lastNameController =
-      TextEditingController(text: 'Smith');
-  TextEditingController nimController =
-      TextEditingController(text: '123456789');
-  TextEditingController phoneController =
-      TextEditingController(text: '1234567890');
-  TextEditingController genderController = TextEditingController(text: 'Male');
-  TextEditingController facultyController =
-      TextEditingController(text: 'Engineering');
-  TextEditingController majorController =
-      TextEditingController(text: 'Computer Science');
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController nimController;
+  late TextEditingController phoneController;
+  late TextEditingController genderController;
+  late TextEditingController facultyController;
+  late TextEditingController majorController;
+  String? imagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    firstNameController = TextEditingController(text: 'Jonathan');
+    lastNameController = TextEditingController(text: 'Smith');
+    nimController = TextEditingController(text: '123456789');
+    phoneController = TextEditingController(text: '1234567890');
+    genderController = TextEditingController(text: 'Male');
+    facultyController = TextEditingController(text: 'Engineering');
+    majorController = TextEditingController(text: 'Computer Science');
+    imagePath = 'assets/images/_DSC0435_!.jpg';
+  }
+
+  // Future<void> _pickImage() async {
+  //   final picker = ImagePicker();
+  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
+
+  //   if (pickedImage != null) {
+  //     setState(() {
+  //       imagePath = pickedImage.path;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text(
+          'User Profile',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,18 +77,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/images/ijad.jpg'),
+              GestureDetector(
+                // onTap: isEditing ? _pickImage : null,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: imagePath != null
+                          ? FileImage(File(imagePath!))
+                          : AssetImage(imagePath!) as ImageProvider,
+                    ),
+                    if (isEditing)
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.red, width: 2.0),
+                        ),
+                        width: 124,
+                        height: 124,
+                      ),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    isEditing = !isEditing;
-                  });
-                },
-                child: Text(isEditing ? 'Save' : 'Edit'),
+              Visibility(
+                visible: !isEditing,
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isEditing = !isEditing;
+                    });
+                  },
+                  child: const Text('Edit'),
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -70,124 +119,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const Text('j.smith@example.com'),
               const SizedBox(height: 24),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: firstNameController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'First Name',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('First Name', firstNameController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: lastNameController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'Last Name',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('Last Name', lastNameController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: nimController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'NIM',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('NIM', nimController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: phoneController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'No Handphone',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('No Handphone', phoneController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: genderController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'Gender',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('Gender', genderController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: facultyController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'Faculty',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('Faculty', facultyController),
               const SizedBox(height: 16),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextFormField(
-                  controller: majorController,
-                  enabled: isEditing,
-                  decoration: InputDecoration(
-                    labelText: 'Major',
-                    labelStyle: TextStyle(
-                      color: isEditing ? AppColors.black : Colors.blue,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              ),
+              buildTextFormField('Major', majorController),
               const SizedBox(height: 16),
               if (isEditing)
                 Row(
@@ -195,21 +139,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Simpan perubahan
                         setState(() {
                           isEditing = false;
                         });
                       },
-                      child: Text('Save'),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: const Text('Save'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Batalkan perubahan
                         setState(() {
                           isEditing = false;
                         });
                       },
-                      child: Text('Cancel'),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text('Cancel'),
                     ),
                   ],
                 ),
@@ -230,5 +180,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     facultyController.dispose();
     majorController.dispose();
     super.dispose();
+  }
+
+  Widget buildTextFormField(
+      String labelText, TextEditingController controller) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: TextFormField(
+        controller: controller,
+        enabled: isEditing,
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: isEditing ? Colors.grey : Colors.blue,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
+    );
   }
 }
