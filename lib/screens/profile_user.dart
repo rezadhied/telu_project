@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 void main() => runApp(const ProfileApp());
 
 class ProfileApp extends StatelessWidget {
-  const ProfileApp({Key? key}) : super(key: key);
+  const ProfileApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ProfileApp extends StatelessWidget {
 }
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController genderController;
   late TextEditingController facultyController;
   late TextEditingController majorController;
-  String? imagePath;
+  String? imagePath = 'assets/images'; // Set default image path
 
   @override
   void initState() {
@@ -44,19 +44,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     genderController = TextEditingController(text: 'Male');
     facultyController = TextEditingController(text: 'Engineering');
     majorController = TextEditingController(text: 'Computer Science');
-    imagePath = 'assets/images/_DSC0435_!.jpg';
   }
 
-  // Future<void> _pickImage() async {
-  //   final picker = ImagePicker();
-  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-  //   if (pickedImage != null) {
-  //     setState(() {
-  //       imagePath = pickedImage.path;
-  //     });
-  //   }
-  // }
+    if (pickedImage != null) {
+      setState(() {
+        imagePath = pickedImage.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text(
           'User Profile',
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
         ),
       ),
       body: Padding(
@@ -78,7 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               GestureDetector(
-                // onTap: isEditing ? _pickImage : null,
+                onTap: isEditing
+                    ? _pickImage
+                    : null, // Only enable tap for image selection in editing mode
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
