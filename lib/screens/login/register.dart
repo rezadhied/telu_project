@@ -49,7 +49,9 @@ class _RegisterState extends State<Register> {
                   const TextFieldComponent(hintText: "Confirm Password"),
                   ButtonComponent(
                     buttonText: 'Next',
-                    targetPage: widget.isStudent ? const RegisterStudent() : const RegisterLecturer(),
+                    targetPage: widget.isStudent
+                        ? const RegisterStudent()
+                        : const RegisterLecturer(),
                   ),
                   const Spacer(),
                   Row(
