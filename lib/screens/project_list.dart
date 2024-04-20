@@ -2,17 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:telu_project/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:telu_project/colors.dart';
+import 'dart:async';
 
 class ListProject extends StatefulWidget {
-  const ListProject({super.key});
+  const ListProject({Key? key}) : super(key: key);
 
   @override
   State<ListProject> createState() => _ListProjectState();
 }
 
 class _ListProjectState extends State<ListProject> {
+  List<Map<String, dynamic>> displayedProjects = [];
+  bool isLoading = false;
+  ScrollController _scrollController = ScrollController();
+
   List<Map<String, dynamic>> projects = [
     {
       "projectID": 13,
@@ -192,6 +197,52 @@ class _ListProjectState extends State<ListProject> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadProjects();
+    _scrollController.addListener(_scrollListener);
+  }
+  
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _loadProjects() {
+    setState(() {
+      isLoading = true;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        displayedProjects.addAll(projects.take(4));
+        isLoading = false;
+      });
+    });
+  }
+
+  void _loadMoreProjects() {
+    setState(() {
+      isLoading = true;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        displayedProjects
+            .addAll(projects.skip(displayedProjects.length).take(4));
+        isLoading = false;
+      });
+    });
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMoreProjects();
+    }
+  }
+
+    @override
   Widget build(BuildContext context) {
     return MaterialApp(
       color: AppColors.white,
@@ -245,166 +296,152 @@ class _ListProjectState extends State<ListProject> {
             ),
           ),
         ),
-        body: Container(
-          margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Flex(
-            direction: Axis.vertical,
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: displayedProjects.length + (isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index < displayedProjects.length) {
+                    return buildProjectItem(displayedProjects[index]);
+                  } else {
+                    if (!isLoading) {
+                      _loadMoreProjects();
+                    }
+                    return buildLoadingIndicator();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildProjectItem(Map<String, dynamic> project) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: AppColors.whiteAlternative,
+        border: Border.all(color: AppColors.grey),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Text(
+                      project["title"],
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                      maxLines: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 2.0),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              Container(
+                child: Flexible(
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      "By: ${project['projectOwner']['firstName']} ${project['projectOwner']['lastName'][0]}.",
+                      overflow: TextOverflow.visible,
+                      maxLines: 2,
+                      style: GoogleFonts.inter(
+                          fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 5),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.black.withOpacity(0.30)),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: AppColors.black,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (value) {
-                    ;
-                  },
+                width: MediaQuery.of(context).size.width * 0.2,
+                child: Text(
+                  "Deskripsi",
+                  style: GoogleFonts.inter(
+                      color: AppColors.grey, fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
-                height: 10,
+                width: 5,
               ),
-              Expanded(
-                  child: ListView.builder(
-                itemCount: projects.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteAlternative,
-                      border: Border.all(color: AppColors.grey),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
-                                  child: Text(
-                                    projects[index]["title"],
-                                    style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                    maxLines: 3,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.black, width: 2.0),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Container(
-                                child: Flexible(
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  "By: ${projects[index]['projectOwner']['firstName']} ${projects[index]['projectOwner']['lastName'][0]}.",
-                                  overflow: TextOverflow.visible,
-                                  maxLines: 2,
-                                  style: GoogleFonts.inter(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ))
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.sizeOf(context).width * 0.2,
-                              child: Text(
-                                "Deskripsi",
-                                style: GoogleFonts.inter(
-                                    color: AppColors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                                child: Flexible(
-                                    child: Text(
-                              projects[index]['description'],
-                              style: GoogleFonts.inter(color: AppColors.black),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ))),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.sizeOf(context).width * 0.2,
-                              child: Text(
-                                "Open Until",
-                                style: GoogleFonts.inter(
-                                    color: AppColors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              child: Flexible(
-                                child: Text(
-                                  DateFormat('d MMMM yyyy', 'id').format(
-                                      DateTime.parse(
-                                          projects[index]['openUntil'])),
-                                  style:
-                                      GoogleFonts.inter(color: AppColors.black),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ))
+              Container(
+                child: Flexible(
+                  child: Text(
+                    project['description'],
+                    style: GoogleFonts.inter(color: AppColors.black),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.2,
+                child: Text(
+                  "Open Until",
+                  style: GoogleFonts.inter(
+                      color: AppColors.grey, fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Container(
+                child: Flexible(
+                  child: Text(
+                    DateFormat('d MMMM yyyy', 'id')
+                        .format(DateTime.parse(project['openUntil'])),
+                    style: GoogleFonts.inter(color: AppColors.black),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
       ),
+    );
+  }
+
+  Widget buildLoadingIndicator() {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: CircularProgressIndicator(),
     );
   }
 }
