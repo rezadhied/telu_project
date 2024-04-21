@@ -7,7 +7,8 @@ import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/user_profile.dart';
 
 class InviteStudent extends StatefulWidget {
-  const InviteStudent({Key? key});
+  final projectTitle;
+  const InviteStudent({Key? key, this.projectTitle});
 
   @override
   State<InviteStudent> createState() => _InviteStudentState();
@@ -88,15 +89,18 @@ class _InviteStudentState extends State<InviteStudent> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: AppColors.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: AppBar(
+            surfaceTintColor: Colors.transparent,
             backgroundColor: AppColors.white,
             toolbarHeight: 200,
             flexibleSpace: SafeArea(
               child: Container(
+                margin: EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,8 +126,8 @@ class _InviteStudentState extends State<InviteStudent> {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 18,
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w500,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -172,7 +176,7 @@ class _InviteStudentState extends State<InviteStudent> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. ',
+                          widget.projectTitle,
                           style: GoogleFonts.inter(
                             fontSize: 18,
                             color: AppColors.black,
@@ -417,6 +421,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.black,
                                 ),
                               ),
                             ),
@@ -434,6 +439,18 @@ class _InviteStudentState extends State<InviteStudent> {
                                   borderSide: BorderSide(
                                     color: AppColors.black.withOpacity(0.30),
                                   ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                      color: AppColors.black.withOpacity(0.30),
+                                    )), // your
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                  borderSide: BorderSide(
+                                    color: AppColors.black.withOpacity(0.30),
+                                  ), // Warna border saat fokus
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20,
@@ -457,6 +474,8 @@ class _InviteStudentState extends State<InviteStudent> {
                                   index == 0 ? 0 : 10,
                                   15,
                                   index == searchedStudents.length ? 20 : 0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
@@ -491,7 +510,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 30),
+                                      const SizedBox(width: 15),
                                       Expanded(
                                         child: Text(
                                           searchedStudents[index]['firstName'] +

@@ -19,6 +19,7 @@ class UserProfile extends StatelessWidget {
             toolbarHeight: 200,
             flexibleSpace: SafeArea(
               child: Container(
+                margin: EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,8 +46,8 @@ class UserProfile extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontSize: 18,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

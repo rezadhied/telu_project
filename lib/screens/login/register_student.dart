@@ -5,6 +5,7 @@ import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/signin.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/app_navigation_bar.dart';
 
 class RegisterStudent extends StatefulWidget {
   const RegisterStudent({super.key});
@@ -47,9 +48,53 @@ class _RegisterStudentState extends State<RegisterStudent> {
                   const TextFieldComponent(hintText: "Phone Number"),
                   const TextFieldComponent(hintText: "Faculty"),
                   const TextFieldComponent(hintText: "Major"),
-                  const ButtonComponent(
-                    buttonText: 'Sign Up',
-                    targetPage: MyProject(),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.white,
+                          backgroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.black),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        ),
+                        onPressed: () {
+                          final snackBar = SnackBar(
+                            content: const Text('Yay! AKun telah dibuat'),
+                            action: SnackBarAction(
+                              label: 'Yay',
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AppNavigationBar(
+                                        isStudent: true,
+                                      ),
+                                    ),
+                                    (route) => false,
+                                  );
+                                });
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   const Spacer(),
                   Row(
@@ -85,3 +130,43 @@ class _RegisterStudentState extends State<RegisterStudent> {
     );
   }
 }
+
+
+ // Container(
+                  //   margin: const EdgeInsets.only(top: 20),
+                  //   child: SizedBox(
+                  //     height: 50,
+                  //     width: double.infinity,
+                  //     child: OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         foregroundColor: AppColors.white,
+                  //         backgroundColor: AppColors.primary,
+                  //         side: const BorderSide(color: AppColors.black),
+                  //         shape: const RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(12)),
+                  //         ),
+                  //         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  //       ),
+                  //       onPressed: () {
+                  //         WidgetsBinding.instance
+                  //             .addPostFrameCallback((timeStamp) {
+                  //           Navigator.of(context).pushAndRemoveUntil(
+                  //             MaterialPageRoute(
+                  //               builder: (context) => const AppNavigationBar(
+                  //                 isStudent: true,
+                  //               ),
+                  //             ),
+                  //             (route) => false,
+                  //           );
+                  //         });
+                  //       },
+                  //       child: Text(
+                  //         'Sign Up',
+                  //         style: GoogleFonts.inter(
+                  //           fontSize: 18,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
