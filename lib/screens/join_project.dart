@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:file_picker/file_picker.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class JoinProject extends StatelessWidget {
+  const JoinProject({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,7 @@ class MyApp extends StatelessWidget {
               top: 10,
               left: 20,
               child: Text(
-                'Project',
+                'Join Project',
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inter(
                   color: AppColors.primary,
@@ -118,14 +114,14 @@ class MyApp extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Container(
-                          width: 39,
-                          height: 39,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: AppColors.white,
+                            color: AppColors.grey,
                           ),
                           child: Image.asset(
-                            'assets/images/nopal.png',
+                            'assets/images/people.png',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -171,7 +167,7 @@ class MyApp extends StatelessWidget {
                                 color: AppColors.white,
                               ),
                               child: Image.asset(
-                                'assets/images/rei.png', // Ganti dengan path gambar Anda
+                                'assets/images/down-arrow.png', // Ganti dengan path gambar Anda
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -305,7 +301,7 @@ class MyApp extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Apa Tujuan Mu ?',
+                                  'Visi & Misi ?',
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.inter(
                                     color: AppColors.black,
@@ -386,6 +382,7 @@ class MyApp extends StatelessWidget {
                               height: 1,
                             ),
                             decoration: InputDecoration(
+                              hintText: 'isi',
                               border: InputBorder
                                   .none, // Menghilangkan garis tepi TextField
                               contentPadding: EdgeInsets
@@ -460,7 +457,7 @@ class MyApp extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Apa Tujuan Mu ?',
+                                  'Bahasa yang dikuasai  ?',
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.inter(
                                     color: AppColors.black,
@@ -541,6 +538,7 @@ class MyApp extends StatelessWidget {
                               height: 1,
                             ),
                             decoration: InputDecoration(
+                              hintText: 'isi',
                               border: InputBorder
                                   .none, // Menghilangkan garis tepi TextField
                               contentPadding: EdgeInsets
@@ -696,6 +694,7 @@ class MyApp extends StatelessWidget {
                               height: 1,
                             ),
                             decoration: InputDecoration(
+                              hintText: 'isi',
                               border: InputBorder
                                   .none, // Menghilangkan garis tepi TextField
                               contentPadding: EdgeInsets
@@ -749,6 +748,10 @@ class MyApp extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.white,
                           ),
+                          child: Image.asset(
+                            'assets/images/folder.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       Padding(
@@ -760,7 +763,7 @@ class MyApp extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Upload Your CV',
+                                  'UPLOAD FILE ?',
                                   textAlign: TextAlign.left,
                                   style: GoogleFonts.inter(
                                     color: AppColors.black,
@@ -814,29 +817,13 @@ class MyApp extends StatelessWidget {
                         // Panggil fungsi upload CV di sini
                         FilePickerResult? result =
                             await FilePicker.platform.pickFiles(
-                          type: FileType.custom,
-                          allowedExtensions: [
-                            'pdf',
-                            'doc',
-                            'docx',
-                            'jpg',
-                            'jpeg',
-                            'png'
-                          ],
+                          type: FileType.any,
+                          allowMultiple: false,
                         );
-                        if (result != null) {
-                          // Lakukan sesuatu dengan file yang dipilih
-                          print(
-                              'Path file yang dipilih: ${result.files.single.path}');
-                          print(
-                              'Nama file yang dipilih: ${result.files.single.name}');
-                        } else {
-                          // Tidak ada file yang dipilih
-                          print('Tidak ada file yang dipilih.');
-                        }
+                        if (result != null) {}
                       },
                       child: Text(
-                        'Unggah CV',
+                        'Upload CV',
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           color: Colors.black,
@@ -848,29 +835,36 @@ class MyApp extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 20,
+              bottom: 100,
               left: 0,
               right: 0,
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Tambahkan fungsi untuk meng-handle submit di sini
-                    // Misalnya:
-                    print('Tombol Submit ditekan');
-                  },
                   child: Text(
-                    'Submit',
+                    'SUBMIT',
                     style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: AppColors.black,
+                      fontSize: 14,
+                      color: Colors.black,
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Upload File'),
+                        contentPadding: const EdgeInsets.all(20.0),
+                        content: const Text('Thank you for registering'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
