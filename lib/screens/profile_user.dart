@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:telu_project/colors.dart';
 
 void main() => runApp(const ProfileApp());
 
@@ -61,27 +63,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'User Profile',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
-        ),
+        backgroundColor: AppColors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 1.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: isEditing
-                    ? _pickImage
-                    : null, // Only enable tap for image selection in editing mode
+                onTap: isEditing ? _pickImage : null,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 60,
+                      radius: 50,
+                      backgroundColor: Colors.grey,
                       backgroundImage: imagePath != null
                           ? FileImage(File(imagePath!))
                           : AssetImage(imagePath!) as ImageProvider,
@@ -92,11 +89,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.red, width: 2.0),
                         ),
-                        width: 124,
-                        height: 124,
+                        width: 100,
+                        height: 120,
                       ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 10),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Jonathan Smith',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Opacity(
+                    opacity: 0.5,
+                    child: Text('j.smith@example.com'),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Visibility(
@@ -107,15 +118,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isEditing = !isEditing;
                     });
                   },
-                  child: const Text('Edit'),
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Jonathan Smith',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const Text('j.smith@example.com'),
               const SizedBox(height: 24),
               buildTextFormField('First Name', firstNameController),
               const SizedBox(height: 16),
@@ -184,16 +193,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       String labelText, TextEditingController controller) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 30.0),
+      padding: const EdgeInsets.all(5.0),
       child: TextFormField(
         controller: controller,
         enabled: isEditing,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: TextStyle(
-            color: isEditing ? Colors.grey : Colors.blue,
+            color: isEditing ? Colors.grey : const Color(0xFF002B5B),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: const BorderSide(
+              width: 5.0,
+            ),
           ),
         ),
       ),
