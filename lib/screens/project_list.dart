@@ -215,7 +215,7 @@ class _ListProjectState extends State<ListProject> {
     });
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
-        displayedProjects.addAll(projects.take(4));
+        displayedProjects.addAll(projects.take(6));
         isLoading = false;
       });
     });
@@ -228,7 +228,7 @@ class _ListProjectState extends State<ListProject> {
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         displayedProjects
-            .addAll(projects.skip(displayedProjects.length).take(4));
+            .addAll(projects.skip(displayedProjects.length).take(6));
         isLoading = false;
       });
     });
