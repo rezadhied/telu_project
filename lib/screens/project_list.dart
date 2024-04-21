@@ -298,6 +298,28 @@ class _ListProjectState extends State<ListProject> {
         ),
         body: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  top: 5, bottom: 20, left: 15, right: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.black.withOpacity(0.30)),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  hintStyle: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: AppColors.black,
+                  ),
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  ;
+                },
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
