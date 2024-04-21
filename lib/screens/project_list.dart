@@ -202,7 +202,7 @@ class _ListProjectState extends State<ListProject> {
     _loadProjects();
     _scrollController.addListener(_scrollListener);
   }
-  
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -242,7 +242,7 @@ class _ListProjectState extends State<ListProject> {
     }
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       color: AppColors.white,
@@ -322,7 +322,7 @@ class _ListProjectState extends State<ListProject> {
 
   Widget buildProjectItem(Map<String, dynamic> project) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
