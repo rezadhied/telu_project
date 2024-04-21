@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:telu_project/screens/home_screen.dart';
 
 class JoinProject extends StatelessWidget {
   const JoinProject({super.key});
@@ -157,19 +158,6 @@ class JoinProject extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(width: 110),
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.white,
-                              ),
-                              child: Image.asset(
-                                'assets/images/down-arrow.png', // Ganti dengan path gambar Anda
-                                fit: BoxFit.cover,
-                              ),
                             ),
                           ],
                         ),
@@ -836,10 +824,14 @@ class JoinProject extends StatelessWidget {
             ),
             Positioned(
               bottom: 100,
-              left: 0,
+              left: 150,
               right: 0,
               child: Center(
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(AppColors
+                        .secondary), // Ganti dengan warna latar belakang yang Anda inginkan
+                  ),
                   child: Text(
                     'SUBMIT',
                     style: GoogleFonts.inter(
@@ -857,7 +849,11 @@ class JoinProject extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()),
+                              );
                             },
                             child: const Text('Close'),
                           ),
@@ -868,10 +864,35 @@ class JoinProject extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+              bottom: 100,
+              left: 0,
+              right: 150,
+              child: Center(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(AppColors
+                        .primaryAlternative), // Ganti dengan warna latar belakang yang Anda inginkan
+                  ),
+                  child: Text(
+                    'BACK',
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                ),
+              ),
+            ),
           ]),
         ),
       ),
     );
-    ;
   }
 }

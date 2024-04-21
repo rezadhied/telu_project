@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/project_join.dart';
 
 class HomeProjectDetail extends StatelessWidget {
   final Map<String, dynamic> projectData;
@@ -17,9 +18,7 @@ class HomeProjectDetail extends StatelessWidget {
         'project_start': '2022-04-10',
         'project_end': '2022-05-10'
       },
-      required this.isStudent
-    }
-  );
+      required this.isStudent});
 
   @override
   Widget build(BuildContext context) {
@@ -90,31 +89,37 @@ class HomeProjectDetail extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // Adjust the border radius as needed
-                        ),
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.white
-                      ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8), // Adjust the border radius as needed
+                          ),
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.white),
                       child: Text('Back'),
                     ),
                   ),
                   SizedBox(width: 16), // Add space between buttons
-                  isStudent ? Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add your action for the second button here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // Adjust the border radius as needed
-                        ),
-                        backgroundColor: AppColors.secondary,
-                        foregroundColor: AppColors.white
-                      ),
-                      child: Text('Request To Join'),
-                    ),
-                  ) : Container(),
+                  isStudent
+                      ? Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => JoinProject()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8), // Adjust the border radius as needed
+                                ),
+                                backgroundColor: AppColors.secondary,
+                                foregroundColor: AppColors.white),
+                            child: Text('Request To Join'),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ],
