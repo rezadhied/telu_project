@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/project_join.dart';
 import 'package:telu_project/screens/project_list.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:provider/provider.dart';
@@ -175,53 +176,59 @@ class _HomePage extends State<HomePage> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(14),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.white,
-                        AppColors.secondaryAlternative.withOpacity(0.1)
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp,
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ProjectJoin()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.white,
+                          AppColors.secondaryAlternative.withOpacity(0.1)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary,
-                          borderRadius: BorderRadius.circular(90),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary,
+                            borderRadius: BorderRadius.circular(90),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              projectList[index]['title'] ?? '',
-                              style: GoogleFonts.inter(fontSize: 16),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
-                              style: GoogleFonts.inter(color: Colors.grey),
-                            ),
-                          ],
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                projectList[index]['title'] ?? '',
+                                style: GoogleFonts.inter(fontSize: 16),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
+                                style: GoogleFonts.inter(color: Colors.grey),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
