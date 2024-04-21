@@ -81,6 +81,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+<<<<<<< Updated upstream
+  file_picker:
+    dependency: "direct main"
+=======
+  file:
+    dependency: transitive
+>>>>>>> Stashed changes
+    description:
+      name: file_picker
+      sha256: "704259669b5e9cb24e15c11cfcf02caf5f20d30901b3916d60b6d1c2d647035f"
+      url: "https://pub.dev"
+    source: hosted
+<<<<<<< Updated upstream
+    version: "4.6.1"
+=======
+    version: "7.0.0"
   file_picker:
     dependency: "direct main"
     description:
@@ -89,6 +105,39 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.1"
+  file_selector_linux:
+    dependency: transitive
+    description:
+      name: file_selector_linux
+      sha256: "045d372bf19b02aeb69cacf8b4009555fb5f6f0b7ad8016e5f46dd1387ddd492"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.2+1"
+  file_selector_macos:
+    dependency: transitive
+    description:
+      name: file_selector_macos
+      sha256: b15c3da8bd4908b9918111fa486903f5808e388b8d1c559949f584725a6594d6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.3+3"
+  file_selector_platform_interface:
+    dependency: transitive
+    description:
+      name: file_selector_platform_interface
+      sha256: a3994c26f10378a039faa11de174d7b78eb8f79e4dd0af2a451410c1a5c3f66b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.2"
+  file_selector_windows:
+    dependency: transitive
+    description:
+      name: file_selector_windows
+      sha256: d3547240c20cabf205c7c7f01a50ecdbc413755814d6677f3cb366f04abcead0
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.3+1"
+>>>>>>> Stashed changes
   flutter:
     dependency: "direct main"
     description: flutter
