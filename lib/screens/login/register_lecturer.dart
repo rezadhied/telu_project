@@ -83,10 +83,7 @@ class _RegisterLecturerState extends State<RegisterLecturer> {
                     ],
                   ),
                 ],
-              )
-            )
-          ),
-        
+              ))),
     );
   }
 }
