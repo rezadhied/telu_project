@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/project_join.dart';
 import 'package:telu_project/screens/home_project_detail.dart';
 import 'package:telu_project/screens/project_list.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
