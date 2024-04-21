@@ -25,7 +25,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     HomePage(),
     MyProject(),
     Requested(),
-    Center(child: Text("Profile", textAlign: TextAlign.center)),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -51,45 +51,42 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
           );
         },
       ),
-      bottomNavigationBar: (
-        Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.grey,
-                      width: 0.5,
-                    ),
-                  ),
-                ),
-                child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.work),
-                      label: 'My Project',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.inbox),
-                      label: 'Inbox',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle_rounded),
-                      label: 'Profile',
-                    ),
-                  ],
-                  backgroundColor: AppColors.white,
-                  currentIndex: _selectedIndex,
-                  unselectedItemColor:
-                      AppColors.blackAlternative.withOpacity(0.4),
-                  selectedItemColor: AppColors.primary,
-                  onTap: _onItemTapped,
-                ),
-        )
-      ),
+      bottomNavigationBar: (Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work),
+              label: 'My Project',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inbox),
+              label: 'Inbox',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_rounded),
+              label: 'Profile',
+            ),
+          ],
+          backgroundColor: AppColors.white,
+          currentIndex: _selectedIndex,
+          unselectedItemColor: AppColors.blackAlternative.withOpacity(0.4),
+          selectedItemColor: AppColors.primary,
+          onTap: _onItemTapped,
+        ),
+      )),
     );
   }
 }
