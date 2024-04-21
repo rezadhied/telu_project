@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:telu_project/screens/project_list.dart';
 
 void main() {
   Intl.defaultLocale = 'id';
