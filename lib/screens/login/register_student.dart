@@ -73,11 +73,9 @@ class _RegisterStudentState extends State<RegisterStudent> {
                                     .addPostFrameCallback((timeStamp) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AppNavigationBar(
-                                        isStudent: true,
-                                      ),
-                                    ),
+                                        builder: (context) =>
+                                            const AppNavigationBar(
+                                                isStudent: true)),
                                     (route) => false,
                                   );
                                 });

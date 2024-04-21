@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/home_project_detail.dart';
 import 'package:telu_project/screens/project_list.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:provider/provider.dart';
@@ -16,22 +17,42 @@ class _HomePage extends State<HomePage> {
     {
       'title': 'Proyek Bandara Internasional Soekarno-Hatta',
       'status': 'Open Request',
-      'capacity': '1/4'
+      'capacity': '1/4',
+      'description':
+          'Proyek ini bertujuan untuk meningkatkan fasilitas dan pelayanan di Bandara Internasional Soekarno-Hatta.',
+      'lecturer': 'Dr. Ahmad',
+      'project_start': '2022-04-10',
+      'project_end': '2022-05-10'
     },
     {
       'title': 'Proyek Tol Trans-Jawa',
       'status': 'Open Request',
-      'capacity': '2/4'
+      'capacity': '2/4',
+      'description':
+          'Proyek ini bertujuan untuk memperbaiki jalan tol Trans-Jawa yang sudah rusak.',
+      'lecturer': 'Prof. Budi',
+      'project_start': '2022-04-15',
+      'project_end': '2022-06-15'
     },
     {
       'title': 'Proyek Jembatan Baltimore',
       'status': 'Open Request',
-      'capacity': '3/69'
+      'capacity': '3/69',
+      'description':
+          'Proyek ini bertujuan untuk membangun jembatan baru di kota Baltimore.',
+      'lecturer': 'Dr. Charlie',
+      'project_start': '2022-05-01',
+      'project_end': '2022-08-01'
     },
     {
       'title': 'Proyek Jembatan Suramadu',
       'status': 'Open Request',
-      'capacity': '3/4'
+      'capacity': '3/4',
+      'description':
+          'Proyek ini bertujuan untuk meningkatkan keamanan dan efisiensi lalu lintas di Jembatan Suramadu.',
+      'lecturer': 'Prof. Dian',
+      'project_start': '2022-06-01',
+      'project_end': '2022-09-01'
     },
   ];
 
@@ -175,53 +196,61 @@ class _HomePage extends State<HomePage> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(14),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.white,
-                        AppColors.secondaryAlternative.withOpacity(0.1)
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => HomeProjectDetail(
+                                projectData: projectList[index], isStudent: true)));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(14),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.white,
+                          AppColors.secondaryAlternative.withOpacity(0.1)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary,
-                          borderRadius: BorderRadius.circular(90),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary,
+                            borderRadius: BorderRadius.circular(90),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              projectList[index]['title'] ?? '',
-                              style: GoogleFonts.inter(fontSize: 16),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
-                              style: GoogleFonts.inter(color: Colors.grey),
-                            ),
-                          ],
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                projectList[index]['title'] ?? '',
+                                style: GoogleFonts.inter(fontSize: 16),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
+                                style: GoogleFonts.inter(color: Colors.grey),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
