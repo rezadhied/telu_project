@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/screens/requested.dart';
 
 class RequestDetail extends StatefulWidget {
-  const RequestDetail({super.key});
+  final Request request;
+
+  const RequestDetail({super.key, required this.request});
 
   @override
-  State<RequestDetail> createState() => _RequestDetail();
+  State<RequestDetail> createState() => _RequestDetailState();
 }
 
-class _RequestDetail extends State<RequestDetail> {
+class _RequestDetailState extends State<RequestDetail> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,10 +20,10 @@ class _RequestDetail extends State<RequestDetail> {
         home: Scaffold(
           backgroundColor: AppColors.white,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
+            preferredSize: const Size.fromHeight(70),
             child: AppBar(
               backgroundColor: AppColors.white,
-              toolbarHeight: 200,
+              toolbarHeight: 250,
               flexibleSpace: SafeArea(
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -41,18 +44,23 @@ class _RequestDetail extends State<RequestDetail> {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                          width: 10), // Jarak antara tombol kembali dan judul
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            'Proyek ambassing',
-                            textAlign: TextAlign.center,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(
-                              fontSize: 18,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Text(
+                              widget.request.project,
+                              textAlign: TextAlign.center,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
@@ -68,7 +76,7 @@ class _RequestDetail extends State<RequestDetail> {
               children: [
                 Container(
                   margin: const EdgeInsets.fromLTRB(10, 15, 10, 5),
-                  height: 550,
+                  height: MediaQuery.sizeOf(context).height * 0.6,
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.whiteAlternative,
@@ -78,7 +86,7 @@ class _RequestDetail extends State<RequestDetail> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 1,
                           blurRadius: 3,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -95,11 +103,13 @@ class _RequestDetail extends State<RequestDetail> {
                               color: AppColors.black),
                         ),
                         const SizedBox(height: 5),
-                        Text('Fasya Reza Fathurrahim',
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              color: AppColors.black,
-                            )),
+                        Text(
+                          widget.request.name,
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: AppColors.black,
+                          ),
+                        ),
                         const SizedBox(height: 25),
                         Text(
                           'Message',
@@ -134,44 +144,36 @@ class _RequestDetail extends State<RequestDetail> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: AppColors.secondary,
-                          foregroundColor: AppColors.whiteAlternative,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            padding: const EdgeInsets.fromLTRB(35, 15, 35, 15),
-                        ),
-                        onPressed: () {
-                        },
-                        child: Text(
-                          'Approve'
-                          ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Tambahkan logika untuk menyetujui request
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
                       ),
-                      ElevatedButton(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: AppColors.primaryAlternative,
-                          foregroundColor: AppColors.whiteAlternative,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            padding: const EdgeInsets.fromLTRB(35, 15, 35, 15),
-                        ),
-                        onPressed: () {
-                        },
-                        child: Text('Decline'),
+                      child: const Text(
+                        'Approve',
+                        style: TextStyle(color: Colors.white),
                       ),
-                    ],
-                  ),
-                )
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Tambahkan logika untuk menolak request
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text(
+                        'Decline',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
