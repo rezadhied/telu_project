@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Telyu Project',
-      home: JoinProject(),
+      home: WelcomePage(),
     );
   }
 }
