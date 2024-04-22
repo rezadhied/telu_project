@@ -25,6 +25,7 @@ class HomeProjectDetail extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
+          color: AppColors.white,
           padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

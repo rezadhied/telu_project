@@ -10,15 +10,24 @@ import 'package:provider/provider.dart';
 
 class AppNavigationBar extends StatefulWidget {
   final bool isStudent;
+  final int selectedIndex;
 
-  const AppNavigationBar({super.key, required this.isStudent});
+  const AppNavigationBar(
+      {super.key, required this.isStudent, this.selectedIndex = 0});
 
   @override
   State<AppNavigationBar> createState() => _AppNavigationBarState();
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
+
   late BuildContext scaffoldContext;
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -32,11 +41,6 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
