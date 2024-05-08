@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
+import 'package:telu_project/screens/app_navigation_bar.dart';
 import 'package:telu_project/screens/login/component/text_field_component.dart';
 import 'package:telu_project/screens/login/component/button_component.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
@@ -148,7 +149,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                 ? Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: ((context) => const MyProject()),
+                                      builder: ((context) =>
+                                          const AppNavigationBar(
+                                            isStudent: true,
+                                            selectedIndex: 1,
+                                          )),
                                     ),
                                   )
                                 : null;

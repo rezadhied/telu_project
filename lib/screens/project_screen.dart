@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/invite_student.dart';
+import 'package:telu_project/screens/project_edit.dart';
 import 'package:telu_project/screens/user_profile.dart';
 import 'package:provider/provider.dart';
-
 
 class Project extends StatefulWidget {
   final Map<String, dynamic> projectData;
@@ -16,7 +16,6 @@ class Project extends StatefulWidget {
 }
 
 class _ProjectState extends State<Project> {
-
   late Map<String, dynamic> projectData;
 
   @override
@@ -43,12 +42,17 @@ class _ProjectState extends State<Project> {
               flexibleSpace: SafeArea(
                 child: Container(
                   margin: EdgeInsets.only(top: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: InkWell(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: AppColors.black.withOpacity(0.10)))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
                           onTap: () {
                             Navigator.pop(
                               context,
@@ -59,29 +63,38 @@ class _ProjectState extends State<Project> {
                             Icons.arrow_back,
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Text(
-                            projectData['title'],
+                            'Project Detail',
                             textAlign: TextAlign.center,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.inter(
                               fontSize: 18,
                               color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ),
-                      const Center(
-                        child: Icon(
-                          Icons.settings,
-                        ),
-                      )
-                    ],
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) => ProjectEdit()),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.settings,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -98,6 +111,23 @@ class _ProjectState extends State<Project> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            'Project Title',
+                            style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.black),
+                          ),
+                          const SizedBox(height: 5),
+                          Container(
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Text('${projectData['title']}',
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: AppColors.black,
+                                )),
+                          ),
+                          const SizedBox(height: 15),
                           Text(
                             'Project Status',
                             style: GoogleFonts.inter(

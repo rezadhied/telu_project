@@ -67,12 +67,12 @@ class _SigninState extends State<Signin> {
                     },
                   ),
                   const ButtonComponent(
-                      buttonText: 'Sign in', targetPage: MyProject()),
-                  ElevatedButton(
-                      onPressed: () {
-                        _loginUser(email, password); // Call login function
-                      },
-                      child: Text('signin')),
+                      buttonText: 'Sign in', targetPage: AppNavigationBar(isStudent: false), isReplacementPush: true,),
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       _loginUser(email, password); // Call login function
+                  //     },
+                  //     child: Text('signin')),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
