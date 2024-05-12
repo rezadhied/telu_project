@@ -155,7 +155,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                             selectedIndex: 1,
                                           )),
                                     ),
-                                  )
+                                  ) 
                                 : null;
                           },
                           child: Text(

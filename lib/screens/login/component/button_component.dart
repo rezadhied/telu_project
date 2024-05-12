@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class ButtonComponent extends StatelessWidget {
   final String buttonText;
   final Widget targetPage;
   final bool isReplacementPush;
+  final String action;
+  final dynamic data;
+  final Function(String)? callback;
 
-  const ButtonComponent(
-      {super.key,
-      required this.buttonText,
-      required this.targetPage,
-      this.isReplacementPush = false});
+  const ButtonComponent({
+    super.key,
+    required this.buttonText,
+    required this.targetPage,
+    this.isReplacementPush = false,
+    this.action = "",
+    this.data = "",
+    this.callback,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +40,32 @@ class ButtonComponent extends StatelessWidget {
             ),
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           ),
-          onPressed: () {
-            !isReplacementPush
-                ? Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => targetPage,
-                    ),
-                  )
-                : Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => targetPage),
-                    (route) => false,
-                  );
+          onPressed: () async {
+            final apiUrlProvider =
+                Provider.of<ApiUrlProvider>(context, listen: false);
+            print(apiUrlProvider.baseUrl);
+            bool berhasil = false;
+            if (action == "signin") {
+              berhasil = await AuthProvider().loginUser(
+                  data['email'], data['password'], apiUrlProvider.baseUrl);
+            }
+            print(berhasil);
+            if (berhasil) {
+              if (!isReplacementPush) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => targetPage,
+                  ),
+                );
+              } else {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => targetPage),
+                  (route) => false,
+                );
+              }
+            } else {
+              callback!("Login Gagal");
+            }
           },
           child: Text(
             buttonText,

@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/auth_provider.dart';
+import 'package:telu_project/screens/login/welcome_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(const ProfileApp());
 
@@ -140,6 +143,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 16),
               buildTextFormField('Major', majorController),
               const SizedBox(height: 16),
+              ElevatedButton(
+                  onPressed: () {
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .logoutUser();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => WelcomePage()));
+                  },
+                  child: Text("Logout")),
               if (isEditing)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

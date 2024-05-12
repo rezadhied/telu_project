@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/profile_user.dart';
 import 'package:telu_project/screens/project_edit.dart';
@@ -14,10 +16,19 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:telu_project/screens/project_list.dart';
 import 'package:telu_project/screens/project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
+import 'package:telu_project/providers/auth_provider.dart';
 
-void main() {
+void main() async {
   Intl.defaultLocale = 'id';
-  initializeDateFormatting().then((_) => runApp(const MyApp()));
+  initializeDateFormatting().then((_) => runApp(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => AuthProvider()),
+            ChangeNotifierProvider(create: (context) => ApiUrlProvider()),
+          ],
+          child: const MyApp(),
+        ),
+      ));
 }
 
 class MyApp extends StatefulWidget {
