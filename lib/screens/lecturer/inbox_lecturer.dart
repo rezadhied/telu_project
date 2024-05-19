@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/request_detail.dart';
+import 'package:telu_project/screens/lecturer/partials/inbox/request_detail.dart';
 
-class Requested extends StatefulWidget {
-  const Requested({super.key});
+
+class InboxLecturer extends StatefulWidget {
+  const InboxLecturer({super.key});
+
 
   @override
-  State<Requested> createState() => _RequestedState();
+  State<InboxLecturer> createState() => _InboxLecturerState();
 }
 
-class _RequestedState extends State<Requested> {
+class Request {
+  String name;
+  String project;
+  String role;
+  String photo;
+
+  Request({
+    required this.name,
+    required this.project,
+    required this.role,
+    required this.photo,
+  });
+}
+
+class _InboxLecturerState extends State<InboxLecturer> {
   List<Request> originalRequests = [
     Request(
       name: "Muhammad Zaky Fathurahim",
@@ -146,19 +162,7 @@ class _RequestedState extends State<Requested> {
   }
 }
 
-class Request {
-  String name;
-  String project;
-  String role;
-  String photo;
 
-  Request({
-    required this.name,
-    required this.project,
-    required this.role,
-    required this.photo,
-  });
-}
 
 class RequestItem extends StatelessWidget {
   final Request request;

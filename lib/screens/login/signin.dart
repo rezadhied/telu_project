@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/app_navigation_bar.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/login/component/text_field_component.dart';
+import 'package:telu_project/screens/main_app.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/components/text_field_component.dart';
 import 'package:telu_project/screens/login/register_option.dart';
 
 class Signin extends StatefulWidget {
@@ -16,8 +16,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  String email = "";
-  String password = "";
+  String email = "mzakyf@telkomuniversity.ac.id";
+  String password = "123";
 
   String loginErrorMessage = "";
 
@@ -31,7 +31,6 @@ class _SigninState extends State<Signin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -92,7 +91,7 @@ class _SigninState extends State<Signin> {
                       : SizedBox(),
                   ButtonComponent(
                     buttonText: 'Sign in',
-                    targetPage: AppNavigationBar(isStudent: false),
+                    targetPage: MainApp(),
                     isReplacementPush: true,
                     action: "signin",
                     data: {"email": email, "password": password},

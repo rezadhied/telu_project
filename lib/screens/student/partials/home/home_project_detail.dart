@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/project_join.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_join.dart';
 
 class HomeProjectDetail extends StatelessWidget {
   final Map<String, dynamic> projectData;

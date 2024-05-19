@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/invite_student.dart';
-import 'package:telu_project/screens/project_edit.dart';
-import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/invite_student.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_edit.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
 import 'package:provider/provider.dart';
 
 class Project extends StatefulWidget {

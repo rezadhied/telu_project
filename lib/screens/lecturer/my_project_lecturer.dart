@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/create_project_screen.dart';
-import 'package:telu_project/screens/project_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:telu_project/screens/test.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/create_project_screen.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_screen.dart';
 
-class MyProject extends StatefulWidget {
-  const MyProject({super.key});
+class MyProjectLecturer extends StatefulWidget {
+  const MyProjectLecturer({super.key});
 
   @override
-  State<MyProject> createState() => _MyProjectState();
+  State<MyProjectLecturer> createState() => _MyProjectLecturerState();
 }
 
-class _MyProjectState extends State<MyProject> {
+class _MyProjectLecturerState extends State<MyProjectLecturer> {
   List<String> statusList = [
     'All',
     'Active',
