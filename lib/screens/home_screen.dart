@@ -86,6 +86,7 @@ class _HomePage extends State<HomePage> {
             _showNoNewestProjectMessage = true;
           }
         });
+        print('yey');
       } else {
         throw Exception('Failed to fetch newest projects');
       }
@@ -100,8 +101,8 @@ class _HomePage extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    fetchNewestProjects();
   }
 
   @override
@@ -268,12 +269,12 @@ class _HomePage extends State<HomePage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
+                        final project = _newestProject[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => HomeProjectDetail(
-                                    projectData: projectList[index],
-                                    isStudent: true)));
+                                    projectData: project, isStudent: true)));
                           },
                           child: Container(
                             margin: EdgeInsets.fromLTRB(
@@ -314,12 +315,12 @@ class _HomePage extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        projectList[index]['title'] ?? '',
+                                        project['title'] ?? '',
                                         style: GoogleFonts.inter(fontSize: 16),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
+                                        'Open Recruitment: ${project['totalMember'] - project['projectMemberCount']}/${project['totalMember'] ?? ''} left',
                                         style: GoogleFonts.inter(
                                             color: Colors.grey),
                                       ),
@@ -331,7 +332,7 @@ class _HomePage extends State<HomePage> {
                           ),
                         );
                       },
-                      childCount: projectList.length,
+                      childCount: _newestProject.length,
                     ),
                   ),
                   SliverToBoxAdapter(
