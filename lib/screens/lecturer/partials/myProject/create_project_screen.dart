@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
+import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/main_app.dart';
 import 'package:telu_project/components/text_field_component.dart';
 import 'package:telu_project/components/button_component.dart';
@@ -92,15 +93,15 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         );
 
         if (response.statusCode == 201) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AppNavigationBar(
-                isStudent: false,
-                selectedIndex: 1,
-              ),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => const AppNavigationBar(
+          //       isStudent: false,
+          //       selectedIndex: 1,
+          //     ),
+          //   ),
+          // );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Failed to create project.')),

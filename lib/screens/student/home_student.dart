@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/student/partials/home/home_project_detail.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/project_list.dart';
 import 'package:telu_project/screens/student/my_project_student.dart';
