@@ -7,6 +7,8 @@ import 'package:telu_project/screens/lecturer/partials/myProject/project_list.da
 import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeStudent extends StatefulWidget {
   const HomeStudent({super.key});
@@ -15,6 +17,9 @@ class HomeStudent extends StatefulWidget {
 }
 
 class _HomeStudent extends State<HomeStudent> {
+  bool _isLoadingNewestProject = false;
+  bool _showNoNewestProjectMessage = false;
+  List<dynamic> _newestProject = [];
   List<Map<String, String>> projectList = [
     {
       'title': 'Proyek Bandara Internasional Soekarno-Hatta',
@@ -60,10 +65,42 @@ class _HomeStudent extends State<HomeStudent> {
 
   late User user;
 
+  Future<void> fetchNewestProjects() async {
+    setState(() {
+      _isLoadingNewestProject = true;
+    });
+
+    try {
+      final apiUrlProvider =
+          Provider.of<ApiUrlProvider>(context, listen: false);
+      String apiUrl = apiUrlProvider.baseUrl;
+
+      final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _newestProject = jsonDecode(response.body);
+          if (_newestProject.isEmpty) {
+            _showNoNewestProjectMessage = true;
+          }
+        });
+        print('yey');
+      } else {
+        throw Exception('Failed to fetch newest projects');
+      }
+    } catch (error) {
+      print("Failed to fetch newest projects: $error");
+    } finally {
+      setState(() {
+        _isLoadingNewestProject = false;
+      });
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    fetchNewestProjects();
   }
 
   @override
@@ -230,12 +267,12 @@ class _HomeStudent extends State<HomeStudent> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
+                        final project = _newestProject[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => HomeProjectDetail(
-                                    projectData: projectList[index],
-                                    isStudent: true)));
+                                    projectData: project, isStudent: true)));
                           },
                           child: Container(
                             margin: EdgeInsets.fromLTRB(
@@ -276,12 +313,12 @@ class _HomeStudent extends State<HomeStudent> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        projectList[index]['title'] ?? '',
+                                        project['title'] ?? '',
                                         style: GoogleFonts.inter(fontSize: 16),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        'Open Recruitment: ${projectList[index]['capacity'] ?? ''} left',
+                                        'Open Recruitment: ${project['totalMember'] - project['projectMemberCount']}/${project['totalMember'] ?? ''} left',
                                         style: GoogleFonts.inter(
                                             color: Colors.grey),
                                       ),
@@ -293,7 +330,7 @@ class _HomeStudent extends State<HomeStudent> {
                           ),
                         );
                       },
-                      childCount: projectList.length,
+                      childCount: _newestProject.length,
                     ),
                   ),
                   SliverToBoxAdapter(
