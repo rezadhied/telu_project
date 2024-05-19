@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/create_project_screen.dart';
-import 'package:telu_project/screens/lecturer/partials/myProject/project_screen.dart';
+import 'package:telu_project/screens/project_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:telu_project/screens/test.dart';
+import 'package:http/http.dart' as http;
 
 class MyProjectLecturer extends StatefulWidget {
   const MyProjectLecturer({super.key});
@@ -22,587 +30,604 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
   String? selectedStatus;
   String searchText = '';
 
-  List<Map<String, dynamic>> projectList = [
-    {
-      'title': 'Proyek Bandara Internasional Soekarno-Hatta',
-      'status': 'Active',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'Japran',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Tol Trans-Jawa',
-      'status': 'Open Request',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title':
-          'Proyek Jembatan Suramadu Kereta Api Cepat Jakarta-Bandung Tol Trans-Jawa',
-      'status': 'Finished',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Kereta Api Cepat Jakarta-Bandung',
-      'status': 'Waiting to Start',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Bendungan Karetan',
-      'status': 'Finished',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Konservasi Monumen Borobudur',
-      'status': 'Active',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Taman Nasional Gunung Leuser',
-      'status': 'Waiting to Start',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Stadion Utama Gelora Bung Karno',
-      'status': 'Active',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Jalan Tol Bali Mandara',
-      'status': 'Open Request',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Bendungan Sutami',
-      'status': 'Finished',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek Jalan Tol Trans-Sumatera',
-      'status': 'Active',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-    {
-      'title': 'Proyek MRT Jakarta',
-      'status': 'Open Request',
-      'member': [
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Zaky Fathurahim',
-          'role': 'Backend Developer',
-          'profilePath': 'assets/images/stiv.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Raihan Fasya',
-          'role': 'UI/UX Designer',
-          'profilePath': 'assets/images/rei.png'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Reza adhie darmawan',
-          'role': 'Frontend Developer',
-          'profilePath': 'assets/images/reja.jpg'
-        },
-        {
-          'firstName': 'Muhammad',
-          'lastName': 'Hasnan Hunaini',
-          'role': 'Turu Developer',
-          'profilePath': 'assets/images/kebab.png'
-        },
-        {
-          'firstName': 'Muhammad Naufal',
-          'lastName': 'Zaki Kemana?',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/nopal.png'
-        },
-        {
-          'firstName': 'Surya',
-          'lastName': 'Aulia',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/suep.jpg'
-        },
-        {
-          'firstName': 'japrannn',
-          'lastName': 'Aulia Zafran',
-          'role': 'Ngilang Developer',
-          'profilePath': 'assets/images/japrannn.png'
-        }
-      ]
-    },
-  ];
+  // List projectList = [
+  //   {
+  //     'title': 'Proyek Bandara Internasional Soekarno-Hatta',
+  //     'status': 'Active',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Japran',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Tol Trans-Jawa',
+  //     'status': 'Open Request',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title':
+  //         'Proyek Jembatan Suramadu Kereta Api Cepat Jakarta-Bandung Tol Trans-Jawa',
+  //     'status': 'Finished',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Kereta Api Cepat Jakarta-Bandung',
+  //     'status': 'Waiting to Start',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Bendungan Karetan',
+  //     'status': 'Finished',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Konservasi Monumen Borobudur',
+  //     'status': 'Active',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Taman Nasional Gunung Leuser',
+  //     'status': 'Waiting to Start',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Stadion Utama Gelora Bung Karno',
+  //     'status': 'Active',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Jalan Tol Bali Mandara',
+  //     'status': 'Open Request',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Bendungan Sutami',
+  //     'status': 'Finished',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek Jalan Tol Trans-Sumatera',
+  //     'status': 'Active',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     'title': 'Proyek MRT Jakarta',
+  //     'status': 'Open Request',
+  //     'member': [
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Zaky Fathurahim',
+  //         'role': 'Backend Developer',
+  //         'profilePath': 'assets/images/stiv.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Raihan Fasya',
+  //         'role': 'UI/UX Designer',
+  //         'profilePath': 'assets/images/rei.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Reza adhie darmawan',
+  //         'role': 'Frontend Developer',
+  //         'profilePath': 'assets/images/reja.jpg'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad',
+  //         'lastName': 'Hasnan Hunaini',
+  //         'role': 'Turu Developer',
+  //         'profilePath': 'assets/images/kebab.png'
+  //       },
+  //       {
+  //         'firstName': 'Muhammad Naufal',
+  //         'lastName': 'Zaki Kemana?',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/nopal.png'
+  //       },
+  //       {
+  //         'firstName': 'Surya',
+  //         'lastName': 'Aulia',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/suep.jpg'
+  //       },
+  //       {
+  //         'firstName': 'japrannn',
+  //         'lastName': 'Aulia Zafran',
+  //         'role': 'Ngilang Developer',
+  //         'profilePath': 'assets/images/japrannn.png'
+  //       }
+  //     ]
+  //   },
+  // ];
 
+  List projectList = [];
   List filteredProjects = [];
+
+  Future<void> fetchMyProjects() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    String userId = "1307751688";
+    final response = await http.get(Uri.parse('$url/student/projects/$userId'));
+    if (response.statusCode == 200) {
+      final List projects = json.decode(response.body);
+      print(projects);
+      setState(() {
+        projectList = projects;
+        filteredProjects = projects;
+      });
+    } else {
+      throw Exception('Failed to load projects');
+    }
+  }
 
   @override
   void initState() {
@@ -612,6 +637,8 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
       final statusMatches = project['status'] == selectedStatus;
       return statusMatches;
     }).toList();
+
+    fetchMyProjects();
   }
 
   @override
@@ -824,13 +851,12 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context, rootNavigator: true).push(
-                                    MaterialPageRoute(
+                                Navigator.of(context, rootNavigator: true)
+                                    .push(MaterialPageRoute(
                                         builder: (context) => Project(
-                                            projectData:
-                                                filteredProjects[index])
-                                    )
-                                  );
+                                              id: filteredProjects[index]
+                                                  ['projectID'],
+                                            )));
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -847,19 +873,19 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                       height: 15,
                                       decoration: BoxDecoration(
                                         color: filteredProjects[index]
-                                                    ['status'] ==
+                                                    ['projectStatus'] ==
                                                 'Active'
                                             ? AppColors.secondary
                                             : filteredProjects[index]
-                                                        ['status'] ==
+                                                        ['projectStatus'] ==
                                                     'Finished'
                                                 ? AppColors.primary
                                                 : filteredProjects[index]
-                                                            ['status'] ==
+                                                            ['projectStatus'] ==
                                                         'Open Request'
                                                     ? Colors.yellow
-                                                    : filteredProjects[index]
-                                                                ['status'] ==
+                                                    : filteredProjects[index][
+                                                                'projectStatus'] ==
                                                             'Waiting to Start'
                                                         ? AppColors.tertiary
                                                         : AppColors.grey,
@@ -881,7 +907,7 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            'Status: ${filteredProjects[index]['status']}',
+                                            'Status: ${filteredProjects[index]['projectStatus']}',
                                             style: GoogleFonts.inter(
                                               fontSize: 14,
                                               color: AppColors.black
