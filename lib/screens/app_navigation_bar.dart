@@ -3,27 +3,37 @@ import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/home_screen.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:telu_project/screens/request_detail.dart';
+import 'package:telu_project/screens/requested.dart';
 import 'package:telu_project/screens/user_profile.dart';
 import 'package:telu_project/screens/profile_user.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigationBar extends StatefulWidget {
   final bool isStudent;
+  final int selectedIndex;
 
-  const AppNavigationBar({super.key, required this.isStudent});
+  const AppNavigationBar(
+      {super.key, required this.isStudent, this.selectedIndex = 0});
 
   @override
   State<AppNavigationBar> createState() => _AppNavigationBarState();
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
+
   late BuildContext scaffoldContext;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyProject(),
-    RequestDetail(),
+    Requested(),
     ProfileApp(),
   ];
 
@@ -31,11 +41,6 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -50,45 +55,42 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
           );
         },
       ),
-      bottomNavigationBar: (
-        Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.grey,
-                      width: 0.5,
-                    ),
-                  ),
-                ),
-                child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.work),
-                      label: 'My Project',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.inbox),
-                      label: 'Inbox',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle_rounded),
-                      label: 'Profile',
-                    ),
-                  ],
-                  backgroundColor: AppColors.white,
-                  currentIndex: _selectedIndex,
-                  unselectedItemColor:
-                      AppColors.blackAlternative.withOpacity(0.4),
-                  selectedItemColor: AppColors.primary,
-                  onTap: _onItemTapped,
-                ),
-        )
-      ),
+      bottomNavigationBar: (Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work),
+              label: 'My Project',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inbox),
+              label: 'Inbox',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_rounded),
+              label: 'Profile',
+            ),
+          ],
+          backgroundColor: AppColors.white,
+          currentIndex: _selectedIndex,
+          unselectedItemColor: AppColors.blackAlternative.withOpacity(0.4),
+          selectedItemColor: AppColors.primary,
+          onTap: _onItemTapped,
+        ),
+      )),
     );
   }
 }
