@@ -4,8 +4,41 @@ import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/screens/home_screen.dart';
 
-class JoinProject extends StatelessWidget {
-  const JoinProject({super.key});
+class JoinProject extends StatefulWidget {
+  const JoinProject({Key? key}) : super(key: key);
+
+  @override
+  _JoinProjectState createState() => _JoinProjectState();
+}
+
+class _JoinProjectState extends State<JoinProject> {
+  String? selectedRole;
+  String? selectedFileName;
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null && result.files.single.name != null) {
+      setState(() {
+        selectedFileName = result.files.single.name;
+      });
+    } else {
+      // User canceled the picker
+      setState(() {
+        selectedFileName = null;
+      });
+    }
+  }
+
+  void submitForm() {
+    // Add any form validation or submission logic here
+
+    // Navigate to the homepage
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,883 +47,285 @@ class JoinProject extends StatelessWidget {
       home: Scaffold(
         body: Container(
           color: const Color.fromRGBO(254, 251, 246, 1),
-          child: Stack(children: <Widget>[
-            Positioned(
-              top: 10,
-              left: 20,
-              child: Text(
-                'Join Project',
-                textAlign: TextAlign.left,
-                style: GoogleFonts.inter(
-                  color: AppColors.primary,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 80,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12, left: 30),
-                        child: Text(
-                          'YOLO - Tracking Truck With AI',
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                top: 10,
+                left: 20,
+                right: 20,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Join Project',
                           textAlign: TextAlign.left,
                           style: GoogleFonts.inter(
-                            color: AppColors.black,
-                            fontSize: 20,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 0.8,
+                            color: AppColors.primary,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, left: 100),
-                        child: Text(
-                          'Fasya Maulana St. Mptm',
-                          textAlign: TextAlign.center,
+                        SizedBox(height: 4), // Add some space between the texts
+                        Text(
+                          'Project Title',
+                          textAlign: TextAlign.left,
                           style: GoogleFonts.inter(
-                            color: AppColors.grey,
-                            fontSize: 12,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
+                            color: AppColors.blackAlternative,
+                            fontSize: 16,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 150,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.grey,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      },
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: AppColors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'x',
+                            style: GoogleFonts.inter(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: Image.asset(
-                            'assets/images/people.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Team',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 12,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1,
-                                  ),
-                                ),
-                                Text(
-                                  'Computer Vision',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 16,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 220,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 340,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: AppColors.white,
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.grey,
-                            offset: Offset(0, 0),
-                            blurRadius: 2,
-                          )
-                        ],
-                        color: AppColors.white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Please fill these questions to convince me that you',
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.inter(
-                                color: AppColors.black,
-                                fontSize: 13,
-                                letterSpacing: 0,
-                                fontWeight: FontWeight.normal,
-                                height: 1,
-                              ),
-                            ),
-                            Text(
-                              'intend to follow this project.',
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.inter(
-                                color: AppColors.black,
-                                fontSize: 13,
-                                letterSpacing: 0,
-                                fontWeight: FontWeight.normal,
-                                height: 1,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              top: 280,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    // BORDER ATAS 1
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.grey,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '1', // Isi dengan teks angka yang Anda inginkan
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors
-                                    .black, // Sesuaikan warna teks dengan kebutuhan Anda
-                              ),
-                            ),
-                          ),
-                        ),
+              Positioned(
+                top: 100,
+                left: 20,
+                right: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        height: 16), // Add some space before the text field
+                    Text(
+                      'Student Name',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                        color: AppColors.blackAlternative,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Visi & Misi ?',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 16,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 340,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
                     ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 260,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            // BORDER BAWAH 3
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                          ),
+                    SizedBox(height: 8), // Add some space before the text box
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          width: constraints.maxWidth > 400
+                              ? 400
+                              : constraints.maxWidth - 60,
                           child: TextField(
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.inter(
-                              color: AppColors.black,
-                              fontSize: 15,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1,
-                            ),
                             decoration: InputDecoration(
-                              hintText: 'isi',
-                              border: InputBorder
-                                  .none, // Menghilangkan garis tepi TextField
-                              contentPadding: EdgeInsets
-                                  .zero, // Menghilangkan padding di dalam TextField
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 410,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    // BORDER ATAS 2
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.grey,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '2', // Isi dengan teks angka yang Anda inginkan
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors
-                                    .black, // Sesuaikan warna teks dengan kebutuhan Anda
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
+                              hintText: 'Enter your name',
+                              filled: true,
+                              fillColor: Colors.white,
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Bahasa yang dikuasai  ?',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 16,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 470,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 260,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            // BORDER BAWAH 3
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                          ),
-                          child: TextField(
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.inter(
-                              color: AppColors.black,
-                              fontSize: 15,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'isi',
-                              border: InputBorder
-                                  .none, // Menghilangkan garis tepi TextField
-                              contentPadding: EdgeInsets
-                                  .zero, // Menghilangkan padding di dalam TextField
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 540,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    // BORDER ATAS 3
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.grey,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '3', // Isi dengan teks angka yang Anda inginkan
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors
-                                    .black, // Sesuaikan warna teks dengan kebutuhan Anda
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Apa Tujuan Mu ?',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 16,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 600,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 260,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            // BORDER BAWAH 3
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                          ),
-                          child: TextField(
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.inter(
-                              color: AppColors.black,
-                              fontSize: 15,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'isi',
-                              border: InputBorder
-                                  .none, // Menghilangkan garis tepi TextField
-                              contentPadding: EdgeInsets
-                                  .zero, // Menghilangkan padding di dalam TextField
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 670,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    // BORDER ATAS 4
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColors.white,
-                          ),
-                          child: Image.asset(
-                            'assets/images/folder.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 0),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'UPLOAD FILE ?',
-                                  textAlign: TextAlign.left,
-                                  style: GoogleFonts.inter(
-                                    color: AppColors.black,
-                                    fontSize: 16,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 730,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 340,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                    border: Border.all(
-                      color: AppColors.grey,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black,
-                        offset: Offset(0, 0),
-                        blurRadius: 2,
-                      )
-                    ],
-                    color: AppColors.white,
-                  ),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // Panggil fungsi upload CV di sini
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
-                          type: FileType.any,
-                          allowMultiple: false,
                         );
-                        if (result != null) {}
                       },
-                      child: Text(
-                        'Upload CV',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 210,
+                left: 20,
+                right: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        height: 16), // Add some space before the text field
+                    Text(
+                      'Select Your Role',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                        color: AppColors.blackAlternative,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          width: constraints.maxWidth > 400
+                              ? 400
+                              : constraints.maxWidth - 20,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(color: Colors.black, width: 1),
+                            color: Colors.white,
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedRole,
+                              hint: Text('Select role'),
+                              isExpanded: false,
+                              items: <String>[
+                                'Manager',
+                                'QA',
+                                'Backend',
+                                'Frontend'
+                              ].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedRole = newValue;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 320,
+                left: 20,
+                right: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        height: 16), // Add some space before the text field
+                    Text(
+                      'Tell us about yourself and why you want to join this project',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                        color: AppColors.blackAlternative,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8), // Add some space before the text box
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          width: constraints.maxWidth > 400
+                              ? 400
+                              : constraints.maxWidth - 50,
+                          height: 200,
+                          child: TextField(
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              hintText: 'Write Your Reason',
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 460,
+                left: 20,
+                right: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        height: 16), // Add some space before the text field
+                    Text(
+                      'Upload Supporting Document',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                        color: AppColors.blackAlternative,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8), // Add some space before the text box
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          width: constraints.maxWidth > 400
+                              ? 400
+                              : constraints.maxWidth - 20,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: pickFile,
+                            child: Text(selectedFileName ?? 'Choose File'),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: AppColors.white,
+                              backgroundColor:
+                                  AppColors.primary, // background color
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 570,
+                left: 20,
+                right: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 16), // Add some space before the button
+                    ElevatedButton(
+                      onPressed: submitForm,
+                      child: Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: AppColors.white,
+                        backgroundColor: AppColors.primary, // background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 20,
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 100,
-              left: 150,
-              right: 0,
-              child: Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(AppColors
-                        .secondary), // Ganti dengan warna latar belakang yang Anda inginkan
-                  ),
-                  child: Text(
-                    'SUBMIT',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Upload File'),
-                        contentPadding: const EdgeInsets.all(20.0),
-                        content: const Text('Thank you for registering'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                              );
-                            },
-                            child: const Text('Close'),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 100,
-              left: 0,
-              right: 150,
-              child: Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(AppColors
-                        .primaryAlternative), // Ganti dengan warna latar belakang yang Anda inginkan
-                  ),
-                  child: Text(
-                    'BACK',
-                    style: GoogleFonts.inter(
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ]),
+            ],
+          ),
         ),
       ),
     );
