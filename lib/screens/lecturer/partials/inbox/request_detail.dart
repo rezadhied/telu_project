@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/requested.dart';
+import 'package:telu_project/screens/lecturer/inbox_lecturer.dart';
 
 class RequestDetail extends StatefulWidget {
   final Request request;

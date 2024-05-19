@@ -1,46 +1,27 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/providers/api_url_provider.dart';
-import 'package:telu_project/screens/invite_student.dart';
-import 'package:telu_project/screens/project_edit.dart';
-import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/invite_student.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_edit.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class Project extends StatefulWidget {
-  final int id;
+  final Map<String, dynamic> projectData;
 
-  const Project({super.key, required this.id});
+  const Project({Key? key, required this.projectData}) : super(key: key);
 
   @override
   State<Project> createState() => _ProjectState();
 }
 
 class _ProjectState extends State<Project> {
-  var projectData = {};
-
-  Future<void> getProjectById() async {
-    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
-    final response = await http.get(Uri.parse('$url/project/${widget.id}'));
-
-    if (response.statusCode != 200) {
-      return;
-    } else {
-      final projects = json.decode(response.body);
-      print(projects);
-      setState(() {
-        projectData = projects;
-      });
-    }
-  }
+  late Map<String, dynamic> projectData;
 
   @override
   void initState() {
     super.initState();
-    getProjectById();
+    projectData = widget.projectData;
   }
 
   @override
@@ -140,7 +121,7 @@ class _ProjectState extends State<Project> {
                           const SizedBox(height: 5),
                           Container(
                             width: MediaQuery.sizeOf(context).width,
-                            child: Text('${projectData['title'] ?? "no title"}',
+                            child: Text('${projectData['title']}',
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   color: AppColors.black,

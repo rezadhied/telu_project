@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
-import 'package:telu_project/screens/app_navigation_bar.dart';
-import 'package:telu_project/screens/login/component/text_field_component.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/main_app.dart';
+import 'package:telu_project/components/text_field_component.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreateProjectPage extends StatefulWidget {
@@ -150,8 +150,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: ((context) =>
-                                          const AppNavigationBar(
-                                            isStudent: true,
+                                          const MainApp(
                                             selectedIndex: 1,
                                           )),
                                     ),

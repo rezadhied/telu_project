@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
@@ -41,13 +42,14 @@ class ButtonComponent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           ),
           onPressed: () async {
-            final apiUrlProvider =
-                Provider.of<ApiUrlProvider>(context, listen: false);
-            print(apiUrlProvider.baseUrl);
+            final apiUrlProvider =Provider.of<ApiUrlProvider>(context, listen: false);
             bool berhasil = false;
             if (action == "signin") {
-              berhasil = await AuthProvider().loginUser(
-                  data['email'], data['password'], apiUrlProvider.baseUrl);
+              berhasil = await AuthProvider().loginUser(data['email'], data['password'], apiUrlProvider.baseUrl);
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString("isStudent", data['email'].contains("student") ? "true" : "");
+            } else {
+              berhasil = true;
             }
             print(berhasil);
             if (berhasil) {
