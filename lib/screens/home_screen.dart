@@ -7,6 +7,10 @@ import 'package:telu_project/screens/project_list.dart';
 import 'package:telu_project/screens/my_project_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../providers/api_url_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +19,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  bool _isLoadingNewestProject = false;
+  bool _showNoNewestProjectMessage = false;
+  List<dynamic> _newestProject = [];
   List<Map<String, String>> projectList = [
     {
       'title': 'Proyek Bandara Internasional Soekarno-Hatta',
@@ -59,6 +66,37 @@ class _HomePage extends State<HomePage> {
   ];
 
   late User user;
+
+  Future<void> fetchNewestProjects() async {
+    setState(() {
+      _isLoadingNewestProject = true;
+    });
+
+    try {
+      final apiUrlProvider =
+          Provider.of<ApiUrlProvider>(context, listen: false);
+      String apiUrl = apiUrlProvider.baseUrl;
+
+      final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _newestProject = jsonDecode(response.body);
+          if (_newestProject.isEmpty) {
+            _showNoNewestProjectMessage = true;
+          }
+        });
+      } else {
+        throw Exception('Failed to fetch newest projects');
+      }
+    } catch (error) {
+      print("Failed to fetch newest projects: $error");
+    } finally {
+      setState(() {
+        _isLoadingNewestProject = false;
+      });
+    }
+  }
 
   @override
   void initState() {
