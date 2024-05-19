@@ -7,7 +7,7 @@ import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/create_project_screen.dart';
-import 'package:telu_project/screens/project_screen.dart';
+import 'package:telu_project/screens/my_project_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/screens/test.dart';
 import 'package:http/http.dart' as http;
@@ -852,7 +852,7 @@ class _MyProjectState extends State<MyProject> {
                               onTap: () {
                                 Navigator.of(context, rootNavigator: true)
                                     .push(MaterialPageRoute(
-                                        builder: (context) => Project(
+                                        builder: (context) => MyProjectDetail(
                                               id: filteredProjects[index]
                                                   ['projectID'],
                                             )));

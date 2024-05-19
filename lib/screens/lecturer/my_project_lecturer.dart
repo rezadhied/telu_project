@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/create_project_screen.dart';
-import 'package:telu_project/screens/project_screen.dart';
+import 'package:telu_project/screens/my_project_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/screens/test.dart';
 import 'package:http/http.dart' as http;
@@ -615,14 +616,23 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
 
   Future<void> fetchMyProjects() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
-    String userId = "1307751688";
-    final response = await http.get(Uri.parse('$url/student/projects/$userId'));
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userId = pref.getString('userId') ?? '';
+    final response =
+        await http.get(Uri.parse('$url/lecturer/projects/$userId'));
     if (response.statusCode == 200) {
       final List projects = json.decode(response.body);
-      print(projects);
+      // print(projects);
       setState(() {
         projectList = projects;
-        filteredProjects = projects;
+        if (selectedStatus == 'All') {
+          filteredProjects = projectList;
+        } else {
+          filteredProjects = projectList.where((project) {
+            final statusMatches = project['projectStatus'] == selectedStatus;
+            return statusMatches;
+          }).toList();
+        }
       });
     } else {
       throw Exception('Failed to load projects');
@@ -632,13 +642,8 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
   @override
   void initState() {
     super.initState();
-    selectedStatus = statusList[1];
-    filteredProjects = projectList.where((project) {
-      final statusMatches = project['status'] == selectedStatus;
-      return statusMatches;
-    }).toList();
-
     fetchMyProjects();
+    selectedStatus = statusList[0];
   }
 
   @override
@@ -853,7 +858,7 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                               onTap: () {
                                 Navigator.of(context, rootNavigator: true)
                                     .push(MaterialPageRoute(
-                                        builder: (context) => Project(
+                                        builder: (context) => MyProjectDetail(
                                               id: filteredProjects[index]
                                                   ['projectID'],
                                             )));
@@ -942,8 +947,8 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
         filteredProjects = projectList.where((project) {
           final titleMatches =
               project['title']!.toLowerCase().contains(query.toLowerCase());
-          final statusMatches =
-              selectedStatus == 'All' || project['status'] == selectedStatus;
+          final statusMatches = selectedStatus == 'All' ||
+              project['projectStatus'] == selectedStatus;
           return titleMatches && statusMatches;
         }).toList();
       } else {

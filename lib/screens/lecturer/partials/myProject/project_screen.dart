@@ -237,9 +237,7 @@ class _ProjectState extends State<Project> {
                                           context,
                                           MaterialPageRoute(
                                             builder: ((context) => UserProfile(
-                                                  userData:
-                                                      projectData['member']
-                                                          [index],
+                                                  userId: "1",
                                                 )),
                                           ),
                                         );

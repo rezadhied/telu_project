@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
@@ -56,7 +57,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
 
   Future<void> _handleSubmit() async {
     if (_isInputComplete) {
-      String userID = '1307684006';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String userID = pref.getString('userId') ?? '';
       int maxMembers =
           _roles.fold(0, (sum, role) => sum + role['quantity'] as int);
 

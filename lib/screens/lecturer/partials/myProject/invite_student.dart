@@ -300,7 +300,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((context) => UserProfile(
-                                          userData: selectedStudent,
+                                          userId: "1",
                                         )),
                                   ),
                                 );
