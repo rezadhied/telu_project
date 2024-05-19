@@ -3,6 +3,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/screens/home_screen.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class JoinProject extends StatefulWidget {
   const JoinProject({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class JoinProject extends StatefulWidget {
 class _JoinProjectState extends State<JoinProject> {
   String? selectedRole;
   String? selectedFileName;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -30,14 +34,30 @@ class _JoinProjectState extends State<JoinProject> {
     }
   }
 
-  void submitForm() {
-    // Add any form validation or submission logic here
+  Future<void> submitForm() async {
+    const url = 'http://localhost:3000/submit';
 
-    // Navigate to the homepage
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields['name'] = nameController.text;
+    request.fields['role'] = selectedRole ?? '';
+    request.fields['reason'] = reasonController.text;
+
+    if (selectedFileName != null) {
+      var file = await http.MultipartFile.fromPath('file', selectedFileName!);
+      request.files.add(file);
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('Form submitted successfully!');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      print('Failed to submit form');
+    }
   }
 
   @override
@@ -134,6 +154,7 @@ class _JoinProjectState extends State<JoinProject> {
                               ? 400
                               : constraints.maxWidth - 60,
                           child: TextField(
+                            controller: nameController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15.0),
@@ -186,10 +207,12 @@ class _JoinProjectState extends State<JoinProject> {
                               hint: Text('Select role'),
                               isExpanded: false,
                               items: <String>[
-                                'Manager',
-                                'QA',
-                                'Backend',
-                                'Frontend'
+                                'Back-End Developer',
+                                'Front-End Developer',
+                                'UI/UX Designer',
+                                'Data Scientist',
+                                'Data Analyst',
+                                'Business Analyst',
                               ].map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -237,6 +260,7 @@ class _JoinProjectState extends State<JoinProject> {
                               : constraints.maxWidth - 50,
                           height: 200,
                           child: TextField(
+                            controller: reasonController,
                             maxLines: null,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
