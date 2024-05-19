@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/screens/create_project_screen.dart';
 import 'package:telu_project/screens/project_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/screens/test.dart';
+import 'package:http/http.dart' as http;
 
 class MyProject extends StatefulWidget {
   const MyProject({super.key});
@@ -24,7 +30,7 @@ class _MyProjectState extends State<MyProject> {
   String? selectedStatus;
   String searchText = '';
 
-  List<Map<String, dynamic>> projectList = [
+  List projectList = [
     {
       'title': 'Proyek Bandara Internasional Soekarno-Hatta',
       'status': 'Active',
@@ -606,6 +612,22 @@ class _MyProjectState extends State<MyProject> {
 
   List filteredProjects = [];
 
+  Future<void> fetchMyProjects() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    String userId = "1307751688";
+    final response = await http.get(Uri.parse('$url/student/projects/$userId'));
+    if (response.statusCode == 200) {
+      final List projects = json.decode(response.body);
+      print(projects);
+      setState(() {
+        projectList = projects;
+        filteredProjects = projects;
+      });
+    } else {
+      throw Exception('Failed to load projects');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -614,6 +636,8 @@ class _MyProjectState extends State<MyProject> {
       final statusMatches = project['status'] == selectedStatus;
       return statusMatches;
     }).toList();
+
+    fetchMyProjects();
   }
 
   @override
@@ -826,13 +850,12 @@ class _MyProjectState extends State<MyProject> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context, rootNavigator: true).push(
-                                    MaterialPageRoute(
+                                Navigator.of(context, rootNavigator: true)
+                                    .push(MaterialPageRoute(
                                         builder: (context) => Project(
-                                            projectData:
-                                                filteredProjects[index])
-                                    )
-                                  );
+                                              id: filteredProjects[index]
+                                                  ['projectID'],
+                                            )));
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -849,19 +872,19 @@ class _MyProjectState extends State<MyProject> {
                                       height: 15,
                                       decoration: BoxDecoration(
                                         color: filteredProjects[index]
-                                                    ['status'] ==
+                                                    ['projectStatus'] ==
                                                 'Active'
                                             ? AppColors.secondary
                                             : filteredProjects[index]
-                                                        ['status'] ==
+                                                        ['projectStatus'] ==
                                                     'Finished'
                                                 ? AppColors.primary
                                                 : filteredProjects[index]
-                                                            ['status'] ==
+                                                            ['projectStatus'] ==
                                                         'Open Request'
                                                     ? Colors.yellow
-                                                    : filteredProjects[index]
-                                                                ['status'] ==
+                                                    : filteredProjects[index][
+                                                                'projectStatus'] ==
                                                             'Waiting to Start'
                                                         ? AppColors.tertiary
                                                         : AppColors.grey,
@@ -883,7 +906,7 @@ class _MyProjectState extends State<MyProject> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            'Status: ${filteredProjects[index]['status']}',
+                                            'Status: ${filteredProjects[index]['projectStatus']}',
                                             style: GoogleFonts.inter(
                                               fontSize: 14,
                                               color: AppColors.black

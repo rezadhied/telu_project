@@ -16,8 +16,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  String email = "";
-  String password = "";
+  String email = "mzakyf@student.telkomuniversity.ac.id";
+  String password = "123";
 
   String loginErrorMessage = "";
 
