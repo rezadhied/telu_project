@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/login/component/text_field_component.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/components/text_field_component.dart';
 import 'package:telu_project/screens/login/signin.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
-import 'package:telu_project/screens/app_navigation_bar.dart';
+import 'package:telu_project/screens/student/my_project_student.dart';
+import 'package:telu_project/screens/main_app.dart';
 
 class RegisterStudent extends StatefulWidget {
   const RegisterStudent({super.key});
@@ -75,8 +75,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const AppNavigationBar(
-                                                isStudent: true)),
+                                            const MainApp()),
                                     (route) => false,
                                   );
                                 });
@@ -151,7 +150,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                   //             .addPostFrameCallback((timeStamp) {
                   //           Navigator.of(context).pushAndRemoveUntil(
                   //             MaterialPageRoute(
-                  //               builder: (context) => const AppNavigationBar(
+                  //               builder: (context) => const MainApp(
                   //                 isStudent: true,
                   //               ),
                   //             ),

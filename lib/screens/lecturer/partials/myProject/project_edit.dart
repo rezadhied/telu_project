@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/home_screen.dart';
-import 'package:telu_project/screens/project_edit_data.dart';
+import 'package:telu_project/screens/student/home_student.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_edit_data.dart';
 
 class ProjectEdit extends StatefulWidget {
   const ProjectEdit({super.key});

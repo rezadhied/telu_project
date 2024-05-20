@@ -55,7 +55,7 @@ class HomeProjectDetail extends StatelessWidget {
               Container(
                   margin: EdgeInsets.only(bottom: 16),
                   child: Text(
-                    projectData['lecturer'],
+                    "${projectData['projectOwner']['firstName']} ${projectData['projectOwner']['lastName']} ",
                     style: TextStyle(
                         color: AppColors.blackAlternative,
                         fontSize: 18,
@@ -73,9 +73,7 @@ class HomeProjectDetail extends StatelessWidget {
               Container(
                   margin: EdgeInsets.only(bottom: 9),
                   child: Text(
-                    projectData['project_start'] +
-                        " - " +
-                        projectData['project_end'],
+                    "${projectData['startProject']} -  ${projectData['endProject']}",
                     style: TextStyle(
                         color: AppColors.blackAlternative,
                         fontSize: 18,

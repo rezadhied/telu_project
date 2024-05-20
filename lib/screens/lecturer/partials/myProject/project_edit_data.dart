@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/home_screen.dart';
+import 'package:telu_project/screens/student/home_student.dart';
 
 class ProjectEditData extends StatefulWidget {
   final String nameColumn;
