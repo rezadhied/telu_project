@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/firebase_options.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:telu_project/screens/main_app.dart';
 import 'firebase_options.dart';
 
 String? token;
@@ -57,6 +59,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool isLoading = true;
+  Widget defaultHome = WelcomePage();
+
   late FirebaseMessaging _messaging;
   @override
   void initState() {
@@ -67,6 +72,9 @@ class _MyAppState extends State<MyApp> {
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     FlutterLocalNotificationsPlugin().initialize(initializationSettings);
+    getToken();
+
+    checkUserId();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -90,12 +98,35 @@ class _MyAppState extends State<MyApp> {
     _messaging.subscribeToTopic('projects');
   }
 
+  getToken() async {
+    token = await FirebaseMessaging.instance.getToken();
+  }
+
+  Future<void> checkUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    if (userId != null) {
+      setState(() {
+        defaultHome = const MainApp(
+          selectedIndex: 0,
+        );
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    if (isLoading) {
+      return CircularProgressIndicator();
+    }
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Telyu Project',
-      home: WelcomePage(),
+      home: defaultHome,
     );
   }
 }
