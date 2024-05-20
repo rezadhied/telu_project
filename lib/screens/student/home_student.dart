@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/home_project_detail.dart';
-import 'package:telu_project/screens/project_list.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/screens/student/partials/home/home_project_detail.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/project_list.dart';
+import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:provider/provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../providers/api_url_provider.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeStudent extends StatefulWidget {
+  const HomeStudent({super.key});
   @override
-  State<HomePage> createState() => _HomePage();
+  State<HomeStudent> createState() => _HomeStudent();
 }
 
-class _HomePage extends State<HomePage> {
+class _HomeStudent extends State<HomeStudent> {
   bool _isLoadingNewestProject = false;
   bool _showNoNewestProjectMessage = false;
   List<dynamic> _newestProject = [];

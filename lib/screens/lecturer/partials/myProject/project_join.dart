@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:telu_project/screens/home_screen.dart';
+import 'package:telu_project/screens/main_app.dart';
+import 'package:telu_project/screens/student/home_student.dart';
 
 class JoinProject extends StatelessWidget {
   const JoinProject({super.key});
@@ -852,8 +853,8 @@ class JoinProject extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                              );
+                                    builder: (context) => MainApp(),
+                              ));
                             },
                             child: const Text('Close'),
                           ),
@@ -884,8 +885,8 @@ class JoinProject extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                      MaterialPageRoute(builder: (context) => MainApp()
+                    ));
                   },
                 ),
               ),

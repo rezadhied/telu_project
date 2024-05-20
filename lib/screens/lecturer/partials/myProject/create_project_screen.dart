@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
 import 'package:telu_project/providers/api_url_provider.dart';
-import 'package:telu_project/screens/app_navigation_bar.dart';
-import 'package:telu_project/screens/login/component/text_field_component.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/screens/main_app.dart';
+import 'package:telu_project/components/text_field_component.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -56,7 +57,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
 
   Future<void> _handleSubmit() async {
     if (_isInputComplete) {
-      String userID = '1307684006';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String userID = pref.getString('userId') ?? '';
       int maxMembers =
           _roles.fold(0, (sum, role) => sum + role['quantity'] as int);
 
@@ -77,7 +79,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         'maxMembers': maxMembers,
         'groupChatLink': _groupChatLinkController.text,
         'skillTags': _skills,
-        'roles': rolesData, 
+        'roles': rolesData,
       };
 
       try {
@@ -96,8 +98,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AppNavigationBar(
-                isStudent: false,
+              builder: (context) => const MainApp(
                 selectedIndex: 1,
               ),
             ),
@@ -209,8 +210,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                 SnackBar(
                                   content: Text(
                                       'Create project failed. Please fill in all required fields.'),
-                                  backgroundColor: Colors
-                                      .red,
+                                  backgroundColor: Colors.red,
                                 ),
                               );
                             }
