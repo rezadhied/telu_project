@@ -202,7 +202,7 @@ class _ListProjectState extends State<ListProject> {
     _loadProjects();
     _scrollController.addListener(_scrollListener);
   }
-  
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -215,7 +215,7 @@ class _ListProjectState extends State<ListProject> {
     });
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
-        displayedProjects.addAll(projects.take(4));
+        displayedProjects.addAll(projects.take(6));
         isLoading = false;
       });
     });
@@ -228,7 +228,7 @@ class _ListProjectState extends State<ListProject> {
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         displayedProjects
-            .addAll(projects.skip(displayedProjects.length).take(4));
+            .addAll(projects.skip(displayedProjects.length).take(6));
         isLoading = false;
       });
     });
@@ -242,7 +242,7 @@ class _ListProjectState extends State<ListProject> {
     }
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       color: AppColors.white,
@@ -298,6 +298,28 @@ class _ListProjectState extends State<ListProject> {
         ),
         body: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  top: 5, bottom: 20, left: 15, right: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.black.withOpacity(0.30)),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  hintStyle: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: AppColors.black,
+                  ),
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  ;
+                },
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
@@ -322,7 +344,7 @@ class _ListProjectState extends State<ListProject> {
 
   Widget buildProjectItem(Map<String, dynamic> project) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(

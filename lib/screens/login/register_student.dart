@@ -65,19 +65,18 @@ class _RegisterStudentState extends State<RegisterStudent> {
                         ),
                         onPressed: () {
                           final snackBar = SnackBar(
-                            content: const Text('Yay! AKun telah dibuat'),
+                            content:
+                                const Text('Alhamdulillah! Akun telah dibuat'),
                             action: SnackBarAction(
-                              label: 'Yay',
+                              label: 'Yes',
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((timeStamp) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AppNavigationBar(
-                                        isStudent: true,
-                                      ),
-                                    ),
+                                        builder: (context) =>
+                                            const AppNavigationBar(
+                                                isStudent: true)),
                                     (route) => false,
                                   );
                                 });

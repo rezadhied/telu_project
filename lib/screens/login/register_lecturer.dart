@@ -50,7 +50,7 @@ class _RegisterLecturerState extends State<RegisterLecturer> {
                   const TextFieldComponent(hintText: "Major"),
                   const ButtonComponent(
                     buttonText: 'Sign Up',
-                    targetPage: AppNavigationBar(isStudent : false),
+                    targetPage: AppNavigationBar(isStudent: false),
                     isReplacementPush: true,
                   ),
                   const Spacer(),
@@ -83,10 +83,7 @@ class _RegisterLecturerState extends State<RegisterLecturer> {
                     ],
                   ),
                 ],
-              )
-            )
-          ),
-        
+              ))),
     );
   }
 }
