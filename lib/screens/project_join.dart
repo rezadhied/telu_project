@@ -65,15 +65,14 @@ class _JoinProjectState extends State<JoinProject> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Container(
-          color: const Color.fromRGBO(254, 251, 246, 1),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                top: 10,
-                left: 20,
-                right: 20,
-                child: Row(
+        body: SingleChildScrollView(
+          child: Container(
+            color: const Color.fromRGBO(254, 251, 246, 1),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
@@ -88,7 +87,7 @@ class _JoinProjectState extends State<JoinProject> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 4), // Add some space between the texts
+                        SizedBox(height: 4),
                         Text(
                           'Project Title',
                           textAlign: TextAlign.left,
@@ -126,229 +125,137 @@ class _JoinProjectState extends State<JoinProject> {
                     ),
                   ],
                 ),
-              ),
-              Positioned(
-                top: 100,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 16), // Add some space before the text field
-                    Text(
-                      'Student Name',
-                      textAlign: TextAlign.left,
-                      style: GoogleFonts.inter(
-                        color: AppColors.blackAlternative,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                SizedBox(height: 20),
+                Text(
+                  'Student Name',
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inter(
+                    color: AppColors.blackAlternative,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    SizedBox(height: 8), // Add some space before the text box
-                    LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Container(
-                          width: constraints.maxWidth > 400
-                              ? 400
-                              : constraints.maxWidth - 60,
-                          child: TextField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              hintText: 'Enter your name',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
+                    hintText: 'Enter your name',
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Select Your Role',
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inter(
+                    color: AppColors.blackAlternative,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    border: Border.all(color: Colors.black, width: 1),
+                    color: Colors.white,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: selectedRole,
+                      hint: Text('Select role'),
+                      isExpanded: true,
+                      items: <String>[
+                        'Back-End Developer',
+                        'Front-End Developer',
+                        'UI/UX Designer',
+                        'Data Scientist',
+                        'Data Analyst',
+                        'Business Analyst',
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
                         );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedRole = newValue;
+                        });
                       },
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 210,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 16), // Add some space before the text field
-                    Text(
-                      'Select Your Role',
-                      textAlign: TextAlign.left,
-                      style: GoogleFonts.inter(
-                        color: AppColors.blackAlternative,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                SizedBox(height: 20),
+                Text(
+                  'Tell us about yourself and why you want to join this project',
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inter(
+                    color: AppColors.blackAlternative,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  controller: reasonController,
+                  maxLines: 8,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    hintText: 'Write Your Reason',
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Upload Supporting Document',
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inter(
+                    color: AppColors.blackAlternative,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: pickFile,
+                  child: Text(selectedFileName ?? 'Choose File'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: AppColors.white,
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: submitForm,
+                    child: Text('Submit'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: AppColors.white,
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 20,
                       ),
                     ),
-                    SizedBox(height: 8),
-                    LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Container(
-                          width: constraints.maxWidth > 400
-                              ? 400
-                              : constraints.maxWidth - 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(color: Colors.black, width: 1),
-                            color: Colors.white,
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedRole,
-                              hint: Text('Select role'),
-                              isExpanded: false,
-                              items: <String>[
-                                'Back-End Developer',
-                                'Front-End Developer',
-                                'UI/UX Designer',
-                                'Data Scientist',
-                                'Data Analyst',
-                                'Business Analyst',
-                              ].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedRole = newValue;
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 320,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 16), // Add some space before the text field
-                    Text(
-                      'Tell us about yourself and why you want to join this project',
-                      textAlign: TextAlign.left,
-                      style: GoogleFonts.inter(
-                        color: AppColors.blackAlternative,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8), // Add some space before the text box
-                    LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Container(
-                          width: constraints.maxWidth > 400
-                              ? 400
-                              : constraints.maxWidth - 50,
-                          height: 200,
-                          child: TextField(
-                            controller: reasonController,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              hintText: 'Write Your Reason',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 460,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 16), // Add some space before the text field
-                    Text(
-                      'Upload Supporting Document',
-                      textAlign: TextAlign.left,
-                      style: GoogleFonts.inter(
-                        color: AppColors.blackAlternative,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8), // Add some space before the text box
-                    LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Container(
-                          width: constraints.maxWidth > 400
-                              ? 400
-                              : constraints.maxWidth - 20,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: pickFile,
-                            child: Text(selectedFileName ?? 'Choose File'),
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: AppColors.white,
-                              backgroundColor:
-                                  AppColors.primary, // background color
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 570,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 16), // Add some space before the button
-                    ElevatedButton(
-                      onPressed: submitForm,
-                      child: Text('Submit'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: AppColors.white,
-                        backgroundColor: AppColors.primary, // background color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
