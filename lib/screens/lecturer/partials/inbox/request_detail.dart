@@ -52,7 +52,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 15),
                             child: Text(
-                              widget.request.project,
+                              widget.request.firstName,
                               textAlign: TextAlign.center,
                               maxLines: 4,
                               overflow: TextOverflow.ellipsis,
@@ -104,7 +104,7 @@ class _RequestDetailState extends State<RequestDetail> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          widget.request.name,
+                          widget.request.firstName,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: AppColors.black,
@@ -119,8 +119,9 @@ class _RequestDetailState extends State<RequestDetail> {
                               color: AppColors.black),
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                            'Saya sangat menyukai singing, maka dari itu saya ingin join proyek ambassing. Semoga bapak/ibu dapat menerima saya dalam pengerjaan proyek ambassing ini. Ambasssinggg',
+                        Text(widget.request.message,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.black,
@@ -134,8 +135,7 @@ class _RequestDetailState extends State<RequestDetail> {
                               color: AppColors.black),
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                            'Menghijaukan pertanian untuk masyarakat Indonesia, khususnya di daerah Sukabirus dan Sukapura, merupakan langkah penting untuk meningkatkan kualitas hidup petani, menciptakan lingkungan yang berkelanjutan, dan memberikan kontribusi pada ketahanan pangan nasional.',
+                        Text(widget.request.projectDescription,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.black,

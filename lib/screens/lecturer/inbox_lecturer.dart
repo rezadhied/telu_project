@@ -1,59 +1,133 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/inbox/request_detail.dart';
-
 
 class InboxLecturer extends StatefulWidget {
   const InboxLecturer({super.key});
-
 
   @override
   State<InboxLecturer> createState() => _InboxLecturerState();
 }
 
 class Request {
-  String name;
-  String project;
-  String role;
-  String photo;
+  final int requestID;
+  final String userID;
+  final int roleID;
+  final String message;
+  final String firstName;
+  final String lastName;
+  final String roleName;
+  final int projectID;
+  final String projectName;
+  final String projectDescription;
+  final String projectOwnerID;
+  final String startProject;
+  final String endProject;
+  final String openUntil;
+  final int totalMember;
+  final String groupLink;
+  final String projectStatus;
+  final String projectCreatedAt;
+  final String projectUpdatedAt;
 
   Request({
-    required this.name,
-    required this.project,
-    required this.role,
-    required this.photo,
+    required this.requestID,
+    required this.userID,
+    required this.roleID,
+    required this.message,
+    required this.firstName,
+    required this.lastName,
+    required this.roleName,
+    required this.projectID,
+    required this.projectName,
+    required this.projectDescription,
+    required this.projectOwnerID,
+    required this.startProject,
+    required this.endProject,
+    required this.openUntil,
+    required this.totalMember,
+    required this.groupLink,
+    required this.projectStatus,
+    required this.projectCreatedAt,
+    required this.projectUpdatedAt,
   });
+
+  factory Request.fromJson(Map<String, dynamic> json) {
+    return Request(
+      requestID: json['requestID'],
+      userID: json['userID'],
+      roleID: json['roleID'],
+      message: json['message'],
+      firstName: json['user']['firstName'],
+      lastName: json['user']['lastName'],
+      roleName: json['Role']['name'],
+      projectID: json['projectID'],
+      projectName: json['project']['title'],
+      projectDescription: json['project']['description'],
+      projectOwnerID: json['project']['projectOwnerID'],
+      startProject: json['project']['startProject'],
+      endProject: json['project']['endProject'],
+      openUntil: json['project']['openUntil'],
+      totalMember: json['project']['totalMember'],
+      groupLink: json['project']['groupLink'],
+      projectStatus: json['project']['projectStatus'],
+      projectCreatedAt: json['project']['createdAt'],
+      projectUpdatedAt: json['project']['updatedAt'],
+    );
+  }
 }
 
 class _InboxLecturerState extends State<InboxLecturer> {
-  List<Request> originalRequests = [
-    Request(
-      name: "Muhammad Zaky Fathurahim",
-      project: "Proyek supersemar batmans ambasing Happy birthday",
-      role: "Back-End Developer",
-      photo: "ijad.jpg",
-    ),
-    Request(
-      name: "Fasya Raihan Maulana",
-      project: "Proyek Konservasi Monumen Borobudur",
-      role: "Back-End Developer",
-      photo: "nopal.jpg",
-    ),
-    Request(
-      name: "Hasnan Husaini",
-      project: "Proyek perampokan cayo perico",
-      role: "Back-End Developer",
-      photo: "kebab.png",
-    ),
-  ];
-
+  List<Request> originalRequests = [];
   List<Request> filteredRequests = [];
+
+  Future<void> fetchRequests() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userId = pref.getString('userId') ?? '';
+    final response = await http.get(Uri.parse('$url/requestMember/$userId'));
+    if (response.statusCode == 200) {
+      final List projectsJson = json.decode(response.body);
+      setState(() {
+        originalRequests = projectsJson.expand((projectJson) {
+          return (projectJson['Requests'] as List).map((requestJson) {
+            return Request.fromJson({...requestJson, 'project': projectJson});
+          });
+        }).toList();
+        filteredRequests = originalRequests;
+      });
+    } else {
+      throw Exception('Failed to load requests');
+    }
+  }
+
+  void filterRequest(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredRequests = originalRequests;
+      } else {
+        filteredRequests = originalRequests.where((request) {
+          final fullName =
+              '${request.firstName} ${request.lastName}'.toLowerCase();
+          final searchLower = query.toLowerCase();
+          return fullName.contains(searchLower) ||
+              request.message.toLowerCase().contains(searchLower);
+        }).toList();
+      }
+    });
+  }
 
   @override
   void initState() {
-    filteredRequests = originalRequests;
     super.initState();
+    fetchRequests();
   }
 
   @override
@@ -114,9 +188,6 @@ class _InboxLecturerState extends State<InboxLecturer> {
                         ),
                         border: InputBorder.none,
                       ),
-                      onChanged: (value) {
-                        filterRequest(value);
-                      },
                     ),
                   ),
                 ],
@@ -147,22 +218,7 @@ class _InboxLecturerState extends State<InboxLecturer> {
       ),
     );
   }
-
-  void filterRequest(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredRequests = originalRequests;
-      } else {
-        filteredRequests = originalRequests
-            .where((request) =>
-                request.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
-  }
 }
-
-
 
 class RequestItem extends StatelessWidget {
   final Request request;
@@ -198,18 +254,14 @@ class RequestItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/${request.photo}'),
-                    radius: 25,
-                  ),
+                  CircleAvatar(),
                   const SizedBox(width: 10),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          request.name,
+                          request.firstName + ' ' + request.lastName,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -217,13 +269,13 @@ class RequestItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          request.project,
+                          request.projectName,
                           style:
                               const TextStyle(fontSize: 14, color: Colors.grey),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          request.role,
+                          request.roleName,
                           style:
                               const TextStyle(fontSize: 14, color: Colors.grey),
                           overflow: TextOverflow.ellipsis,
