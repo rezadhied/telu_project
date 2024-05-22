@@ -9,6 +9,9 @@ import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/inbox/request_detail.dart';
 
+List<Request> originalRequests = [];
+List<Request> filteredRequests = [];
+
 class InboxLecturer extends StatefulWidget {
   const InboxLecturer({super.key});
 
@@ -85,9 +88,6 @@ class Request {
 }
 
 class _InboxLecturerState extends State<InboxLecturer> {
-  List<Request> originalRequests = [];
-  List<Request> filteredRequests = [];
-
   Future<void> fetchRequests() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -225,10 +225,65 @@ class _InboxLecturerState extends State<InboxLecturer> {
   }
 }
 
-class RequestItem extends StatelessWidget {
+class RequestItem extends StatefulWidget {
   final Request request;
 
   const RequestItem({super.key, required this.request});
+
+  @override
+  State<RequestItem> createState() => _RequestItemState();
+}
+
+class _RequestItemState extends State<RequestItem> {
+  Future<void> fetchRequests() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userId = pref.getString('userId') ?? '';
+    final response = await http.get(Uri.parse('$url/requestMember/$userId'));
+    if (response.statusCode == 200) {
+      final List projectsJson = json.decode(response.body);
+      setState(() {
+        originalRequests = projectsJson.expand((projectJson) {
+          return (projectJson['Requests'] as List).map((requestJson) {
+            return Request.fromJson({...requestJson, 'project': projectJson});
+          });
+        }).toList();
+        filteredRequests = originalRequests;
+      });
+    } else {
+      throw Exception('Failed to load requests');
+    }
+  }
+
+  void decline(int requestID) async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    final response = await http.patch(
+      Uri.parse('$url/changeStatus/$requestID'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'status': 'rejected'}),
+    );
+    if (response.statusCode == 200) {
+      print("berhasil decline");
+      await fetchRequests();
+    } else {
+      throw Exception('Failed to decline request');
+    }
+  }
+
+  void approve(int requestID) async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    final response = await http.patch(
+      Uri.parse('$url/changeStatus/$requestID'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'status': 'accepted'}),
+    );
+    if (response.statusCode == 200) {
+      print("berhasil approve");
+      await fetchRequests();
+    } else {
+      throw Exception('Failed to approve request');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +302,7 @@ class RequestItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => RequestDetail(
-                request: request,
+                request: widget.request,
               ),
             ),
           );
@@ -266,7 +321,9 @@ class RequestItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          request.firstName + ' ' + request.lastName,
+                          widget.request.firstName +
+                              ' ' +
+                              widget.request.lastName,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -274,13 +331,13 @@ class RequestItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          request.projectName,
+                          widget.request.projectName,
                           style:
                               const TextStyle(fontSize: 14, color: Colors.grey),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          request.roleName,
+                          widget.request.roleName,
                           style:
                               const TextStyle(fontSize: 14, color: Colors.grey),
                           overflow: TextOverflow.ellipsis,
@@ -295,7 +352,9 @@ class RequestItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      approve(widget.request.requestID);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
@@ -305,7 +364,9 @@ class RequestItem extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      decline(widget.request.requestID);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
