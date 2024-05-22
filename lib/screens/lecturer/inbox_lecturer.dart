@@ -235,6 +235,7 @@ class RequestItem extends StatefulWidget {
 }
 
 class _RequestItemState extends State<RequestItem> {
+  bool isLoading = false;
   Future<void> fetchRequests() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -256,32 +257,114 @@ class _RequestItemState extends State<RequestItem> {
   }
 
   void decline(int requestID) async {
-    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
-    final response = await http.patch(
-      Uri.parse('$url/changeStatus/$requestID'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'status': 'rejected'}),
+    bool confirmed = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Decline"),
+          content: Text("Are you sure you want to decline this request?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text("Decline"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
-    if (response.statusCode == 200) {
-      print("berhasil decline");
-      await fetchRequests();
-    } else {
-      throw Exception('Failed to decline request');
+
+    if (confirmed) {
+      setState(() {
+        isLoading = true;
+      });
+
+      String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+      final response = await http.patch(
+        Uri.parse('$url/changeStatus/$requestID'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'status': 'rejected'}),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          originalRequests = originalRequests
+              .where((request) => request.requestID != requestID)
+              .toList();
+          filteredRequests = filteredRequests
+              .where((request) => request.requestID != requestID)
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception('Failed to decline request');
+      }
     }
   }
 
   void approve(int requestID) async {
-    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
-    final response = await http.patch(
-      Uri.parse('$url/changeStatus/$requestID'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'status': 'accepted'}),
+    bool confirmed = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Approve"),
+          content: Text("Are you sure you want to approve this request?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: Text("Approve"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
     );
-    if (response.statusCode == 200) {
-      print("berhasil approve");
-      await fetchRequests();
-    } else {
-      throw Exception('Failed to approve request');
+
+    if (confirmed) {
+      setState(() {
+        isLoading = true;
+      });
+
+      String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+      final response = await http.patch(
+        Uri.parse('$url/changeStatus/$requestID'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'status': 'accepted'}),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          originalRequests = originalRequests
+              .where((request) => request.requestID != requestID)
+              .toList();
+          filteredRequests = filteredRequests
+              .where((request) => request.requestID != requestID)
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception('Failed to approve request');
+      }
     }
   }
 
@@ -295,91 +378,104 @@ class _RequestItemState extends State<RequestItem> {
       ),
       elevation: 0,
       color: Colors.white,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15.0),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RequestDetail(
-                request: widget.request,
+      child: Stack(
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(15.0),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RequestDetail(
+                    request: widget.request,
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.request.firstName +
+                                  ' ' +
+                                  widget.request.lastName,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              widget.request.projectName,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              widget.request.roleName,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          approve(widget.request.requestID);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: const Text(
+                          'Approve',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          decline(widget.request.requestID);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text(
+                          'Decline',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.request.firstName +
-                              ' ' +
-                              widget.request.lastName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          widget.request.projectName,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          widget.request.roleName,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      approve(widget.request.requestID);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    child: const Text(
-                      'Approve',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      decline(widget.request.requestID);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: const Text(
-                      'Decline',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
-        ),
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black54,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
