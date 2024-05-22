@@ -98,7 +98,9 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: ((context) => ProjectEdit()),
+                                    builder: ((context) => ProjectEdit(
+                                          projectId: widget.id,
+                                        )),
                                   ),
                                 );
                               },
