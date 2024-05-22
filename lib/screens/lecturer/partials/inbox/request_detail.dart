@@ -44,8 +44,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                          width: 10), // Jarak antara tombol kembali dan judul
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -149,9 +148,7 @@ class _RequestDetailState extends State<RequestDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Tambahkan logika untuk menyetujui request
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
@@ -161,9 +158,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // Tambahkan logika untuk menolak request
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                       ),

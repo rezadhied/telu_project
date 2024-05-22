@@ -188,6 +188,11 @@ class _InboxLecturerState extends State<InboxLecturer> {
                         ),
                         border: InputBorder.none,
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          filterRequest(value);
+                        });
+                      },
                     ),
                   ),
                 ],
