@@ -103,9 +103,11 @@ class _ProjectEditState extends State<ProjectEdit> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.pop(
-                              context,
-                            );
+                            if (firstStatus == status) {
+                              Navigator.pop(context, 'not updated');
+                            } else {
+                              Navigator.pop(context, 'updated');
+                            }
                           },
                           borderRadius: BorderRadius.circular(14),
                           child: const Icon(
@@ -130,12 +132,14 @@ class _ProjectEditState extends State<ProjectEdit> {
                           padding: const EdgeInsets.only(top: 3),
                           child: Align(
                             alignment: Alignment.topCenter,
-                            child: InkWell(
+                            child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  handleSave();
-                                  save = false;
-                                });
+                                if (status != firstStatus) {
+                                  setState(() {
+                                    handleSave();
+                                    save = false;
+                                  });
+                                }
                               },
                               child: Text(
                                 'Save',
@@ -363,15 +367,21 @@ class _ProjectEditState extends State<ProjectEdit> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            handleEditStatus('Active');
-
-                                            if (firstStatus == status) {
+                                          handleEditStatus('Active');
+                                          print('f' + firstStatus);
+                                          if (firstStatus == status) {
+                                            setState(() {
                                               save = false;
-                                            } else {
+                                            });
+                                          } else if (status == 'Active') {
+                                            setState(() {
+                                              save = false;
+                                            });
+                                          } else {
+                                            setState(() {
                                               save = true;
-                                            }
-                                          });
+                                            });
+                                          }
                                         },
                                         child: Container(
                                           width: 10,
