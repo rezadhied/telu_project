@@ -139,7 +139,8 @@ class _InboxLecturerState extends State<InboxLecturer> {
           SliverAppBar(
             automaticallyImplyLeading: false,
             title: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+              margin: EdgeInsets.only(bottom: 10),
               child: Text(
                 'Requested',
                 style: GoogleFonts.inter(
@@ -156,8 +157,8 @@ class _InboxLecturerState extends State<InboxLecturer> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(15, 25, 15, 15),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Column(
                 children: [
                   Container(
@@ -195,6 +196,27 @@ class _InboxLecturerState extends State<InboxLecturer> {
                       },
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              "${filteredRequests.length} ",
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              'Request',
+                              style: GoogleFonts.inter(
+                                  fontSize: 14, color: AppColors.black),
+                            ),
+                          ],
+                        )),
+                  )
                 ],
               ),
             ),
@@ -371,7 +393,7 @@ class _RequestItemState extends State<RequestItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
         side: const BorderSide(color: Colors.grey, width: 0.7),

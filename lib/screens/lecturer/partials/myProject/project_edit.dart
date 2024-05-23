@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,11 +33,20 @@ class _ProjectEditState extends State<ProjectEdit> {
     }
   }
 
+  ValueNotifier<bool> _notifier = ValueNotifier(false);
+  ValueNotifier<bool> _notifierDescription = ValueNotifier(false);
+  ValueNotifier<bool> _notifierTitle = ValueNotifier(false);
+
+  @override
+  void dispose() {
+    _notifier.dispose();
+    _notifierDescription.dispose();
+    _notifierTitle.dispose();
+    super.dispose();
+  }
+
   void handleEditStatus(String newStatus) async {
-    setState(() {
-      status = newStatus;
-    });
-    print(status);
+    status = newStatus;
   }
 
   void handleSave() async {
@@ -128,33 +138,36 @@ class _ProjectEditState extends State<ProjectEdit> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: GestureDetector(
-                              onTap: () {
-                                if (status != firstStatus) {
-                                  setState(() {
-                                    handleSave();
-                                    save = false;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                'Save',
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: save
-                                      ? AppColors.tertiary
-                                      : AppColors.black.withOpacity(0.30),
+                        ValueListenableBuilder(
+                            valueListenable: _notifier,
+                            builder: (context, value, child) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 3),
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (status != firstStatus) {
+                                        handleSave();
+                                        save = false;
+                                        _notifier.value = !_notifier.value;
+                                      }
+                                    },
+                                    child: Text(
+                                      'Save',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: save
+                                            ? AppColors.tertiary
+                                            : AppColors.black.withOpacity(0.30),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
+                              );
+                            })
                       ],
                     ),
                   ),
@@ -206,28 +219,43 @@ class _ProjectEditState extends State<ProjectEdit> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.7,
-                                    child: Text(
-                                      '${projectData['title'] ?? "no title"}',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        color: AppColors.black,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
+                                  ValueListenableBuilder(
+                                      valueListenable: _notifierTitle,
+                                      builder: (context, value, child) {
+                                        return Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.7,
+                                          child: Text(
+                                            '${projectData['title'] ?? "no title"}',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        );
+                                      }),
                                   InkWell(
-                                      onTap: () {
-                                        Navigator.push(
+                                      onTap: () async {
+                                        String value = await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    const ProjectEditData(
-                                                        nameColumn: "Title",
-                                                        projectId: "120"))));
+                                                    ProjectEditData(
+                                                      nameColumn: "Title",
+                                                      projectId: projectData[
+                                                          'projectID'],
+                                                      data:
+                                                          projectData['title'],
+                                                    ))));
+                                        if (value != projectData['title'] &&
+                                            value != '') {
+                                          projectData['title'] = value;
+                                          _notifierTitle.value =
+                                              !_notifierTitle.value;
+                                        }
                                       },
                                       child: Icon(Icons.arrow_right))
                                 ],
@@ -316,250 +344,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Status',
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: AppColors.black.withOpacity(0.30),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: AppColors.black
-                                                  .withOpacity(0.30)))),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.7,
-                                        child: Text(
-                                          "Active",
-                                          style: GoogleFonts.inter(
-                                            fontSize: 16,
-                                            color: AppColors.black,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          handleEditStatus('Active');
-                                          print('f' + firstStatus);
-                                          if (firstStatus == status) {
-                                            setState(() {
-                                              save = false;
-                                            });
-                                          } else if (status == 'Active') {
-                                            setState(() {
-                                              save = false;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              save = true;
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black),
-                                              color: status == 'Active'
-                                                  ? AppColors.secondary
-                                                  : AppColors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: AppColors.black
-                                                  .withOpacity(0.30)))),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.7,
-                                        child: Text(
-                                          "Finished",
-                                          style: GoogleFonts.inter(
-                                            fontSize: 16,
-                                            color: AppColors.black,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            handleEditStatus('Finished');
-                                            if (firstStatus == status) {
-                                              save = false;
-                                            } else {
-                                              save = true;
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: AppColors.black),
-                                              color: status == 'Finished'
-                                                  ? AppColors.secondary
-                                                  : AppColors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: AppColors.black
-                                                  .withOpacity(0.30)))),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.7,
-                                        child: Text(
-                                          "Open Request",
-                                          style: GoogleFonts.inter(
-                                            fontSize: 16,
-                                            color: AppColors.black,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            handleEditStatus('Open Request');
-                                            if (firstStatus == status) {
-                                              save = false;
-                                            } else {
-                                              save = true;
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black),
-                                              color: status == 'Open Request'
-                                                  ? AppColors.secondary
-                                                  : AppColors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: AppColors.black
-                                                  .withOpacity(0.30)))),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.7,
-                                        child: Text(
-                                          "Waiting to Start",
-                                          style: GoogleFonts.inter(
-                                            fontSize: 16,
-                                            color: AppColors.black,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            handleEditStatus(
-                                                'Waiting to Start');
-                                            if (firstStatus == status) {
-                                              save = false;
-                                            } else {
-                                              save = true;
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black),
-                                              color:
-                                                  status == 'Waiting to Start'
-                                                      ? AppColors.secondary
-                                                      : AppColors.grey,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          statusSection(),
                           const SizedBox(height: 20),
                           Container(
                             alignment: Alignment.centerLeft,
@@ -742,24 +527,38 @@ class _ProjectEditState extends State<ProjectEdit> {
                                   Container(
                                     width:
                                         MediaQuery.sizeOf(context).width * 0.7,
-                                    child: Text(
-                                      projectData['description'],
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        color: AppColors.black,
-                                      ),
-                                    ),
+                                    child: ValueListenableBuilder(
+                                        valueListenable: _notifierDescription,
+                                        builder: (context, value, child) {
+                                          return Text(
+                                            projectData['description'],
+                                            style: GoogleFonts.inter(
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                            ),
+                                          );
+                                        }),
                                   ),
                                   InkWell(
-                                      onTap: () {
-                                        Navigator.push(
+                                      onTap: () async {
+                                        String value = await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    const ProjectEditData(
-                                                        nameColumn:
-                                                            "Description",
-                                                        projectId: "120"))));
+                                                    ProjectEditData(
+                                                      nameColumn: "Description",
+                                                      projectId: projectData[
+                                                          'projectID'],
+                                                      data: projectData[
+                                                          'description'],
+                                                    ))));
+                                        if (value !=
+                                                projectData['description'] &&
+                                            value != '') {
+                                          projectData['description'] = value;
+                                          _notifierDescription.value =
+                                              !_notifierDescription.value;
+                                        }
                                       },
                                       child: Icon(Icons.arrow_right))
                                 ],
@@ -771,6 +570,104 @@ class _ProjectEditState extends State<ProjectEdit> {
                   );
                 }
               })),
+    );
+  }
+
+  Widget statusSection() {
+    @override
+    void dispose() {
+      _notifier.dispose();
+      super.dispose();
+    }
+
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Status',
+            style: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        ValueListenableBuilder(
+            valueListenable: _notifier,
+            builder: (context, value, child) {
+              return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.black.withOpacity(0.30),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      statusItem(
+                          'Active', () => {_notifier.value = !_notifier.value}),
+                      statusItem('Finished',
+                          () => {_notifier.value = !_notifier.value}),
+                      statusItem('Open Request',
+                          () => {_notifier.value = !_notifier.value}),
+                      statusItem('Waiting to Start',
+                          () => {_notifier.value = !_notifier.value}),
+                    ],
+                  ));
+            })
+      ],
+    );
+  }
+
+  Widget statusItem(String statusName, Function callback) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.black.withOpacity(0.30),
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: MediaQuery.sizeOf(context).width * 0.7,
+            child: Text(
+              statusName,
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                color: AppColors.black,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              handleEditStatus(statusName);
+              save = firstStatus != status;
+              callback();
+            },
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                color:
+                    status == statusName ? AppColors.secondary : AppColors.grey,
+                borderRadius: BorderRadius.circular(50),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
