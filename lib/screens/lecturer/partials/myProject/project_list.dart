@@ -47,35 +47,42 @@ class _ListProjectState extends State<ListProject> {
       final response = await http.get(Uri.parse(
           '$apiUrl/openRequestProjects?page=$page&limit=$projectsPerPage'));
 
-      if (response.statusCode == 200) {
-        await Future.delayed(Duration(seconds: 2));
-        final List<dynamic> projects = json.decode(response.body);
-        setState(() {
-          if (page == 1) {
-            displayedProjects = projects.cast<Map<String, dynamic>>().take(5).toList();
-          } else {
-            displayedProjects.addAll(projects.cast<Map<String, dynamic>>());
-          }
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        print(
-            'Error: Failed to load projects. Status code: ${response.statusCode}');
+      if (mounted) {
+        if (response.statusCode == 200) {
+          await Future.delayed(Duration(seconds: 2));
+          final List<dynamic> projects = json.decode(response.body);
+          setState(() {
+            if (page == 1) {
+              displayedProjects =
+                  projects.cast<Map<String, dynamic>>().take(5).toList();
+            } else {
+              displayedProjects.addAll(projects.cast<Map<String, dynamic>>());
+            }
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          print(
+              'Error: Failed to load projects. Status code: ${response.statusCode}');
+        }
       }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Error: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        print('Error: $e');
+      }
     }
   }
 
   void _loadMoreProjects() {
     currentPage++;
-    _fetchProjects(page: currentPage);
+    if (mounted) {
+      _fetchProjects(page: currentPage);
+    }
   }
 
   void _scrollListener() {
