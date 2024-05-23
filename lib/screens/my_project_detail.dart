@@ -94,13 +94,20 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                           Align(
                             alignment: Alignment.topCenter,
                             child: InkWell(
-                              onTap: () {
-                                Navigator.push(
+                              onTap: () async {
+                                final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: ((context) => ProjectEdit()),
+                                    builder: (context) => ProjectEdit(
+                                      projectId: widget.id,
+                                    ),
                                   ),
                                 );
+                                if (result != null && result == 'updated') {
+                                  setState(() {
+                                    getProjectById();
+                                  });
+                                }
                               },
                               child: Icon(
                                 Icons.settings,
