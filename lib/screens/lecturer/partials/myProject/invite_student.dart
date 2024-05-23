@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/home_screen.dart';
-import 'package:telu_project/screens/user_profile.dart';
+import 'package:telu_project/screens/student/home_student.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
 
 class InviteStudent extends StatefulWidget {
   final projectTitle;
@@ -139,7 +139,7 @@ class _InviteStudentState extends State<InviteStudent> {
                               ? Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: ((context) => const HomePage()),
+                                    builder: ((context) => const HomeStudent()),
                                   ),
                                 )
                               : null;
@@ -300,7 +300,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((context) => UserProfile(
-                                          userData: selectedStudent,
+                                          userId: "1",
                                         )),
                                   ),
                                 );

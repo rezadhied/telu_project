@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/login/component/text_field_component.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/components/text_field_component.dart';
 import 'package:telu_project/screens/login/register_lecturer.dart';
 import 'package:telu_project/screens/login/register_student.dart';
 import 'package:telu_project/screens/login/signin.dart';

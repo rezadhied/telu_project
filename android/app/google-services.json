@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "277365665132",
+    "project_id": "telu-project",
+    "storage_bucket": "telu-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277365665132:android:18b6c730a1c0709ab19749",
+        "android_client_info": {
+          "package_name": "com.example.telu_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKwHDhHEKXBJwHweDEZSh1vOkrVP9e-Go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

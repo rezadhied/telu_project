@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
-import 'package:telu_project/screens/login/component/text_field_component.dart';
-import 'package:telu_project/screens/login/component/button_component.dart';
-import 'package:telu_project/screens/my_project_screen.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/screens/main_app.dart';
+import 'package:telu_project/components/text_field_component.dart';
+import 'package:telu_project/components/button_component.dart';
+import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class CreateProjectPage extends StatefulWidget {
   @override
@@ -16,7 +22,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   TextEditingController _projectTitleController = TextEditingController();
   TextEditingController _groupChatLinkController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _maxMembersController = TextEditingController();
   TextEditingController _roleNameController = TextEditingController();
   TextEditingController _roleQuantityController = TextEditingController();
   TextEditingController _skillController = TextEditingController();
@@ -36,7 +41,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     _projectTitleController.addListener(_checkInputCompletion);
     _groupChatLinkController.addListener(_checkInputCompletion);
     _descriptionController.addListener(_checkInputCompletion);
-    _maxMembersController.addListener(_checkInputCompletion);
   }
 
   void _checkInputCompletion() {
@@ -47,14 +51,69 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           _groupChatLinkController.text.contains('.com') &&
           _descriptionController.text.isNotEmpty &&
           _descriptionController.text.length > 11 &&
-          _maxMembersController.text.isNotEmpty &&
-          int.tryParse(_maxMembersController.text) != null &&
-          int.parse(_maxMembersController.text) > 0;
+          _roles.isNotEmpty;
     });
   }
 
-  void _handleSubmit() {
-    if (_isInputComplete) {}
+  Future<void> _handleSubmit() async {
+    if (_isInputComplete) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String userID = pref.getString('userId') ?? '';
+      int maxMembers =
+          _roles.fold(0, (sum, role) => sum + role['quantity'] as int);
+
+      List<Map<String, dynamic>> rolesData = _roles.map((role) {
+        return {
+          'name': role['name'],
+          'quantity': role['quantity'],
+        };
+      }).toList();
+
+      Map<String, dynamic> projectData = {
+        'projectTitle': _projectTitleController.text,
+        'currentUserId': userID,
+        'description': _descriptionController.text,
+        'startDate': _startDate.toIso8601String(),
+        'endDate': _endDate.toIso8601String(),
+        'opreqDate': _opreqDate.toIso8601String(),
+        'maxMembers': maxMembers,
+        'groupChatLink': _groupChatLinkController.text,
+        'skillTags': _skills,
+        'roles': rolesData,
+      };
+
+      try {
+        final apiUrlProvider =
+            Provider.of<ApiUrlProvider>(context, listen: false);
+        String apiUrl = apiUrlProvider.baseUrl;
+        final response = await http.post(
+          Uri.parse('$apiUrl/projects'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(projectData),
+        );
+
+        if (response.statusCode == 201) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainApp(
+                selectedIndex: 1,
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to create project.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
   }
 
   void _handleAddSkill() {
@@ -142,16 +201,19 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                         alignment: Alignment.topCenter,
                         child: InkWell(
                           onTap: () {
-                            _isInputComplete &&
-                                    _skills.isNotEmpty &&
-                                    _roles.isNotEmpty
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: ((context) => const MyProject()),
-                                    ),
-                                  )
-                                : null;
+                            if (_isInputComplete &&
+                                _skills.isNotEmpty &&
+                                _roles.isNotEmpty) {
+                              _handleSubmit();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Create project failed. Please fill in all required fields.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           },
                           child: Text(
                             'Create',
@@ -436,36 +498,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                        width:
-                            20), // Spasi antara field "Open Recruitment Until" dan "Maximum Member"
-                    Expanded(
-                      flex:
-                          2, // Fleksibilitas lebih kecil untuk field "Maximum Member"
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: AppColors.black.withOpacity(0.2)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: _maxMembersController,
-                          decoration: InputDecoration(
-                            hintText: 'Max Member',
-                            border: InputBorder.none,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 12),
-                          ),
-                          maxLines: 1,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {},
-                        ),
-                      ),
-                    ),
+                    ), // Spasi antara field "Open Recruitment Until" dan "Maximum Member"
                   ],
                 ),
                 Container(

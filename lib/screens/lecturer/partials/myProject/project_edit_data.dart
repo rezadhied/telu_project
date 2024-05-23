@@ -1,19 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/home_screen.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/screens/student/home_student.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ProjectEditData extends StatefulWidget {
   final String nameColumn;
-  final String projectId;
+  final int projectId;
   final String data;
 
   const ProjectEditData(
-      {Key? key,
+      {super.key,
       required this.nameColumn,
       required this.projectId,
-      this.data = "tess"})
-      : super(key: key);
+      required this.data});
 
   @override
   State<ProjectEditData> createState() => _ProjectEditState();
@@ -27,6 +31,61 @@ class _ProjectEditState extends State<ProjectEditData> {
     // TODO: implement initState
     super.initState();
     textController.text = TextEditingValue(text: widget.data).text;
+    firstData = textController.text;
+  }
+
+  String newData = '';
+  String firstData = '';
+  bool save = false;
+
+  void updateData(String section) {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+
+    if (section == "Description") {
+      updateDescription(url);
+    } else if (section == "Title") {
+      updateTitle(url);
+    }
+
+    setState(() {
+      save = false;
+      firstData = textController.text;
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
+  }
+
+  void updateDescription(String url) async {
+    final response = await http.put(
+      Uri.parse('$url/projects/${widget.projectId}/description'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'newDescription': textController.text,
+      }),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update project status');
+    } else {
+      newData = textController.text;
+    }
+  }
+
+  void updateTitle(String url) async {
+    final response = await http.put(
+      Uri.parse('$url/projects/${widget.projectId}/title'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'newTitle': textController.text,
+      }),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update project status');
+    } else {
+      newData = textController.text;
+    }
   }
 
   @override
@@ -56,9 +115,7 @@ class _ProjectEditState extends State<ProjectEditData> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pop(
-                            context,
-                          );
+                          Navigator.pop(context, newData);
                         },
                         borderRadius: BorderRadius.circular(14),
                         child: const Icon(
@@ -84,13 +141,17 @@ class _ProjectEditState extends State<ProjectEditData> {
                         child: Align(
                           alignment: Alignment.topCenter,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              updateData(widget.nameColumn);
+                            },
                             child: Text(
                               'Save',
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.black.withOpacity(0.30),
+                                color: save
+                                    ? AppColors.tertiary
+                                    : AppColors.black.withOpacity(0.30),
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -139,6 +200,19 @@ class _ProjectEditState extends State<ProjectEditData> {
                           width: MediaQuery.sizeOf(context).width * 0.7,
                           child: TextField(
                             controller: textController,
+                            onChanged: (value) {
+                              print('n ' + value);
+                              print('f ' + firstData);
+                              if (firstData != value) {
+                                setState(() {
+                                  save = true;
+                                });
+                              } else {
+                                setState(() {
+                                  save = false;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Enter ${widget.nameColumn}',
@@ -147,6 +221,9 @@ class _ProjectEditState extends State<ProjectEditData> {
                                 color: AppColors.black.withOpacity(0.30),
                               ),
                             ),
+                            keyboardType: TextInputType.multiline,
+                            minLines: 1,
+                            maxLines: 10,
                           ),
                         ),
                       ],

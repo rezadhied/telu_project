@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
-import 'package:telu_project/screens/requested.dart';
+import 'package:telu_project/screens/lecturer/inbox_lecturer.dart';
 
 class RequestDetail extends StatefulWidget {
   final Request request;
 
-  const RequestDetail(
-      {super.key, required this.request});
+  const RequestDetail({super.key, required this.request});
 
   @override
   State<RequestDetail> createState() => _RequestDetailState();
@@ -45,15 +44,14 @@ class _RequestDetailState extends State<RequestDetail> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                          width: 10), // Jarak antara tombol kembali dan judul
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 15), 
+                            padding: const EdgeInsets.only(top: 15),
                             child: Text(
-                              widget.request.project,
+                              widget.request.firstName,
                               textAlign: TextAlign.center,
                               maxLines: 4,
                               overflow: TextOverflow.ellipsis,
@@ -105,8 +103,7 @@ class _RequestDetailState extends State<RequestDetail> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          widget.request
-                              .name,
+                          widget.request.firstName,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: AppColors.black,
@@ -121,8 +118,9 @@ class _RequestDetailState extends State<RequestDetail> {
                               color: AppColors.black),
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                            'Saya sangat menyukai singing, maka dari itu saya ingin join proyek ambassing. Semoga bapak/ibu dapat menerima saya dalam pengerjaan proyek ambassing ini. Ambasssinggg',
+                        Text(widget.request.message,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.black,
@@ -136,8 +134,7 @@ class _RequestDetailState extends State<RequestDetail> {
                               color: AppColors.black),
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                            'Menghijaukan pertanian untuk masyarakat Indonesia, khususnya di daerah Sukabirus dan Sukapura, merupakan langkah penting untuk meningkatkan kualitas hidup petani, menciptakan lingkungan yang berkelanjutan, dan memberikan kontribusi pada ketahanan pangan nasional.',
+                        Text(widget.request.projectDescription,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.black,
@@ -151,9 +148,7 @@ class _RequestDetailState extends State<RequestDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Tambahkan logika untuk menyetujui request
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
@@ -163,9 +158,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // Tambahkan logika untuk menolak request
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                       ),
