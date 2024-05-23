@@ -21,48 +21,6 @@ class _HomeLecturer extends State<HomeLecturer> {
   bool _isLoadingNewestProject = false;
   bool _showNoNewestProjectMessage = false;
   List<dynamic> _newestProject = [];
-  List<Map<String, String>> projectList = [
-    {
-      'title': 'Proyek Bandara Internasional Soekarno-Hatta',
-      'status': 'Open Request',
-      'capacity': '1/4',
-      'description':
-          'Proyek ini bertujuan untuk meningkatkan fasilitas dan pelayanan di Bandara Internasional Soekarno-Hatta.',
-      'lecturer': 'Dr. Ahmad',
-      'project_start': '2022-04-10',
-      'project_end': '2022-05-10'
-    },
-    {
-      'title': 'Proyek Tol Trans-Jawa',
-      'status': 'Open Request',
-      'capacity': '2/4',
-      'description':
-          'Proyek ini bertujuan untuk memperbaiki jalan tol Trans-Jawa yang sudah rusak.',
-      'lecturer': 'Prof. Budi',
-      'project_start': '2022-04-15',
-      'project_end': '2022-06-15'
-    },
-    {
-      'title': 'Proyek Jembatan Baltimore',
-      'status': 'Open Request',
-      'capacity': '3/69',
-      'description':
-          'Proyek ini bertujuan untuk membangun jembatan baru di kota Baltimore.',
-      'lecturer': 'Dr. Charlie',
-      'project_start': '2022-05-01',
-      'project_end': '2022-08-01'
-    },
-    {
-      'title': 'Proyek Jembatan Suramadu',
-      'status': 'Open Request',
-      'capacity': '3/4',
-      'description':
-          'Proyek ini bertujuan untuk meningkatkan keamanan dan efisiensi lalu lintas di Jembatan Suramadu.',
-      'lecturer': 'Prof. Dian',
-      'project_start': '2022-06-01',
-      'project_end': '2022-09-01'
-    },
-  ];
 
   late User user;
 
