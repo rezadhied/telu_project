@@ -241,7 +241,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             width: 15,
                                           ),
                                           Text(
-                                            '3',
+                                            '12',
                                             style: GoogleFonts.inter(
                                                 color: AppColors.white),
                                             textAlign: TextAlign.left,

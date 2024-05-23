@@ -855,13 +855,20 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                             child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true)
+                              onTap: () async {
+                                var result = await Navigator.of(context,
+                                        rootNavigator: true)
                                     .push(MaterialPageRoute(
                                         builder: (context) => MyProjectDetail(
                                               id: filteredProjects[index]
                                                   ['projectID'],
                                             )));
+
+                                if (result == true) {
+                                  setState(() {
+                                    fetchMyProjects();
+                                  });
+                                }
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(

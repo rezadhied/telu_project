@@ -5,12 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/functions/formatter.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/project_edit_data.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class ProjectEdit extends StatefulWidget {
   final int projectId;
@@ -60,10 +63,23 @@ class _ProjectEditState extends State<ProjectEdit> {
         'newStatus': status,
       }),
     );
+
     if (response.statusCode != 200) {
       throw Exception('Failed to update project status');
     }
+    update = true;
+    firstStatus = status;
+    Fluttertoast.showToast(
+        msg: "Status has been updated",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: AppColors.black,
+        textColor: AppColors.white,
+        fontSize: 16.0);
   }
+
+  final Formatter formatter = Formatter();
 
   @override
   void initState() {
@@ -83,6 +99,8 @@ class _ProjectEditState extends State<ProjectEdit> {
 
   String status = "";
   String firstStatus = "";
+
+  bool update = false;
 
   Future<Map<String, dynamic>> project = Future.value({});
 
@@ -113,7 +131,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                       children: [
                         InkWell(
                           onTap: () {
-                            if (firstStatus == status) {
+                            if (!update) {
                               Navigator.pop(context, 'not updated');
                             } else {
                               Navigator.pop(context, 'updated');
@@ -255,6 +273,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           projectData['title'] = value;
                                           _notifierTitle.value =
                                               !_notifierTitle.value;
+                                          update = true;
                                         }
                                       },
                                       child: Icon(Icons.arrow_right))
@@ -380,7 +399,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Open Requested",
+                                            "Open Request Until",
                                             style: GoogleFonts.inter(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -390,7 +409,8 @@ class _ProjectEditState extends State<ProjectEdit> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            projectData['openUntil'],
+                                            formatter.formatDate(
+                                                projectData['openUntil']),
                                             style: GoogleFonts.inter(
                                               fontSize: 16,
                                               color: AppColors.black,
@@ -437,7 +457,8 @@ class _ProjectEditState extends State<ProjectEdit> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            projectData['startProject'],
+                                            formatter.formatDate(
+                                                projectData['startProject']),
                                             style: GoogleFonts.inter(
                                               fontSize: 16,
                                               color: AppColors.black,
@@ -484,7 +505,8 @@ class _ProjectEditState extends State<ProjectEdit> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            projectData['endProject'],
+                                            formatter.formatDate(
+                                                projectData['endProject']),
                                             style: GoogleFonts.inter(
                                               fontSize: 16,
                                               color: AppColors.black,
@@ -558,6 +580,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           projectData['description'] = value;
                                           _notifierDescription.value =
                                               !_notifierDescription.value;
+                                          update = true;
                                         }
                                       },
                                       child: Icon(Icons.arrow_right))

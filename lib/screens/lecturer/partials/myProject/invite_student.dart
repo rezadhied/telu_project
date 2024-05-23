@@ -4,11 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/screens/student/home_student.dart';
-import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/member_profile.dart';
 
 class InviteStudent extends StatefulWidget {
   final projectTitle;
-  const InviteStudent({Key? key, this.projectTitle});
+  final projectID;
+  const InviteStudent({Key? key, this.projectTitle, this.projectID});
 
   @override
   State<InviteStudent> createState() => _InviteStudentState();
@@ -299,7 +300,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: ((context) => UserProfile(
+                                    builder: ((context) => MemberProfile(
                                           userId: "1",
                                         )),
                                   ),
