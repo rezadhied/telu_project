@@ -1,36 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/screens/main_app.dart';
 import 'package:telu_project/screens/student/home_student.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/member_profile.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class InviteStudent extends StatefulWidget {
   final projectTitle;
   final projectID;
-  const InviteStudent({Key? key, this.projectTitle, this.projectID});
+  final projectRoles;
+  const InviteStudent(
+      {Key? key, this.projectTitle, this.projectID, this.projectRoles});
 
   @override
   State<InviteStudent> createState() => _InviteStudentState();
 }
 
 class _InviteStudentState extends State<InviteStudent> {
-  List<String> listRole = [
-    "Back-End Developer",
-    "Front-End Developer",
-    "UI/UX Designer",
-    "Data Scientist",
-    "Data Analyst",
-    "Business Analyst",
-  ];
-
   final TextEditingController _messageController = TextEditingController(
     text: 'Hi, saya ingin mengundang kamu untuk bergabung ke project ini.',
   );
 
   List searchedStudents = [];
-  Map<String, String>? selectedStudent;
+  Map<String, dynamic>? selectedStudent;
 
   List student = [
     {
@@ -76,15 +77,70 @@ class _InviteStudentState extends State<InviteStudent> {
       'profilePath': 'assets/images/japrannn.png'
     }
   ];
+  List listRole = [];
+  var selectedRole;
 
-  String? selectedRole;
+  void findStudent(String value) async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    final response = await http
+        .get(Uri.parse('$url/students/search/$value/${widget.projectID}}'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        searchedStudents = jsonDecode(response.body);
+        if (searchedStudents.isEmpty) {
+          searchedStudents = [];
+        }
+        print(searchedStudents);
+      });
+    } else {
+      searchedStudents = [];
+    }
+
+    if (value == "") {
+      setState(() {
+        searchedStudents = [];
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
 
-    selectedRole = "Back-End Developer";
     selectedStudent = null;
+
+    listRole = widget.projectRoles;
+  }
+
+  void sendInvitation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    // ignore: use_build_context_synchronously
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    print(
+        '$userId ${selectedRole['roleID']}  ${selectedStudent!['userID']} ${widget.projectID}  ${_messageController.text}');
+    await http.post(Uri.parse('$url/invitation'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'senderID': userId,
+          'roleID': selectedRole['roleID'],
+          'receiverID': selectedStudent!['userID'],
+          'projectID': widget.projectID,
+          'message': _messageController.text,
+        }));
+
+    Fluttertoast.showToast(
+        msg:
+            "${selectedStudent!['firstName']} ${selectedStudent!['lastName']} has been invited",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: AppColors.black,
+        textColor: AppColors.white,
+        fontSize: 16.0);
   }
 
   @override
@@ -136,14 +192,17 @@ class _InviteStudentState extends State<InviteStudent> {
                       alignment: Alignment.topCenter,
                       child: InkWell(
                         onTap: () {
-                          selectedStudent != null
-                              ? Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => const HomeStudent()),
-                                  ),
-                                )
-                              : null;
+                          if (selectedStudent != null && selectedRole != null) {
+                            sendInvitation();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((context) => const MainApp(
+                                      selectedIndex: 0,
+                                    )),
+                              ),
+                            );
+                          }
                         },
                         child: Text(
                           'Send',
@@ -211,9 +270,16 @@ class _InviteStudentState extends State<InviteStudent> {
                         ),
                         child: DropdownButton(
                           value: selectedRole,
-                          onChanged: (String? value) {
+                          hint: Text(
+                            'Select Role',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: Colors.black.withOpacity(0.60),
+                            ),
+                          ),
+                          onChanged: (value) {
                             setState(() {
-                              selectedRole = value!;
+                              selectedRole = value;
                             });
                           },
                           style: GoogleFonts.inter(
@@ -224,10 +290,10 @@ class _InviteStudentState extends State<InviteStudent> {
                           iconEnabledColor: AppColors.black,
                           underline: const SizedBox(),
                           isExpanded: true,
-                          items: listRole.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          items: listRole.map((value) {
+                            return DropdownMenuItem(
+                              value: value['Role']['name'],
+                              child: Text(value['Role']['name']),
                             );
                           }).toList(),
                         ),
@@ -266,7 +332,7 @@ class _InviteStudentState extends State<InviteStudent> {
                               border: InputBorder.none,
                             ),
                             onChanged: (value) {
-                              searchStudents(value);
+                              findStudent(value);
                             },
                           ),
                         ),
@@ -301,7 +367,7 @@ class _InviteStudentState extends State<InviteStudent> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((context) => MemberProfile(
-                                          userId: "1",
+                                          userId: selectedStudent!['userID'],
                                         )),
                                   ),
                                 );
@@ -328,14 +394,14 @@ class _InviteStudentState extends State<InviteStudent> {
                                               ),
                                             ),
                                             child: ClipOval(
-                                              child: Image.asset(
-                                                selectedStudent!['profilePath']
-                                                    .toString(),
-                                                width: 50,
-                                                height: 50,
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
+                                                // child: Image.asset(
+                                                //   selectedStudent!['profilePath']
+                                                //       .toString(),
+                                                //   width: 50,
+                                                //   height: 50,
+                                                //   fit: BoxFit.fill,
+                                                // ),
+                                                ),
                                           ),
                                           SizedBox(width: 15),
                                           Container(
@@ -502,14 +568,14 @@ class _InviteStudentState extends State<InviteStudent> {
                                           ),
                                         ),
                                         child: ClipOval(
-                                          child: Image.asset(
-                                            searchedStudents[index]
-                                                ['profilePath'],
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
+                                            // child: Image.asset(
+                                            //   searchedStudents[index]
+                                            //       ['profilePath'],
+                                            //   width: 50,
+                                            //   height: 50,
+                                            //   fit: BoxFit.fill,
+                                            // ),
+                                            ),
                                       ),
                                       const SizedBox(width: 15),
                                       Expanded(
@@ -543,19 +609,19 @@ class _InviteStudentState extends State<InviteStudent> {
     );
   }
 
-  void searchStudents(String query) {
-    setState(() {
-      if (query.isNotEmpty) {
-        searchedStudents = student.where((student) {
-          final firstNameMatches =
-              student['firstName']!.toLowerCase().contains(query.toLowerCase());
-          final lastNameMatches =
-              student['lastName']!.toLowerCase().contains(query.toLowerCase());
-          return firstNameMatches || lastNameMatches;
-        }).toList();
-      } else {
-        searchedStudents = [];
-      }
-    });
-  }
+  // void searchStudents(String query) {
+  //   setState(() {
+  //     if (query.isNotEmpty) {
+  //       searchedStudents = student.where((student) {
+  //         final firstNameMatches =
+  //             student['firstName']!.toLowerCase().contains(query.toLowerCase());
+  //         final lastNameMatches =
+  //             student['lastName']!.toLowerCase().contains(query.toLowerCase());
+  //         return firstNameMatches || lastNameMatches;
+  //       }).toList();
+  //     } else {
+  //       searchedStudents = [];
+  //     }
+  //   });
+  // }
 }

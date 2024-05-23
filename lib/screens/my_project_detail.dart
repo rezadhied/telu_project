@@ -243,7 +243,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                     children: [
                                       Text(
                                         'Project Member'
-                                        ' (${projectData['ProjectMembers'].length}/10)',
+                                        ' (${projectData['ProjectMembers'].length}/${projectData['totalMember']})',
                                         style: GoogleFonts.inter(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -260,6 +260,8 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                         projectData['title'],
                                                     projectID: projectData[
                                                         'projectID'],
+                                                    projectRoles: projectData[
+                                                        'ProjectRoles'],
                                                   )),
                                             ),
                                           );
