@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
@@ -21,8 +22,26 @@ class _HomeLecturer extends State<HomeLecturer> {
   bool _isLoadingNewestProject = false;
   bool _showNoNewestProjectMessage = false;
   List<dynamic> _newestProject = [];
+  int projectCount = 0;
 
   late User user;
+
+  Future<void> fetchMyProjects() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userId = pref.getString('userId') ?? '';
+    final response =
+        await http.get(Uri.parse('$url/lecturer/projects/$userId'));
+
+    if (response.statusCode == 200) {
+      final List projects = json.decode(response.body);
+      setState(() {
+        projectCount = projects.length;
+      });
+    } else {
+      throw Exception('Failed to load projects');
+    }
+  }
 
   Future<void> fetchNewestProjects() async {
     setState(() {
@@ -56,10 +75,20 @@ class _HomeLecturer extends State<HomeLecturer> {
     }
   }
 
+  String addSpaces(String input) {
+    return input.split('').join(' ');
+  }
+
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1).toLowerCase();
+  }
+
   @override
   void initState() {
     super.initState();
     fetchNewestProjects();
+    fetchMyProjects();
   }
 
   @override
@@ -140,7 +169,10 @@ class _HomeLecturer extends State<HomeLecturer> {
                                         children: [
                                           SizedBox(
                                             width: 100,
-                                            child: Text('Lecturer',
+                                            child: Text(
+                                                user != null
+                                                    ? capitalize(user.role)
+                                                    : 'Loading...',
                                                 style: GoogleFonts.inter(
                                                     color: AppColors.grey),
                                                 textAlign: TextAlign.start),
@@ -177,7 +209,10 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
-                                            child: Text('1 3 0 2 2 1 3 0 1 6',
+                                            child: Text(
+                                                user != null
+                                                    ? addSpaces(user.userID)
+                                                    : 'Loading...',
                                                 style: GoogleFonts.inter(
                                                     color: AppColors.grey,
                                                     fontSize: 16),
@@ -199,7 +234,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             width: 15,
                                           ),
                                           Text(
-                                            '3',
+                                            '$projectCount',
                                             style: GoogleFonts.inter(
                                                 color: AppColors.white),
                                             textAlign: TextAlign.left,
