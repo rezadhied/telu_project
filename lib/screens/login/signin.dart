@@ -16,8 +16,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  String email = "mzakyf@telkomuniversity.ac.id";
-  String password = "123";
+  String email = "";
+  String password = "";
 
   String loginErrorMessage = "";
 
@@ -38,6 +38,7 @@ class _SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Container(
               margin: const EdgeInsets.fromLTRB(30, 20, 30, 50),
