@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:provider/provider.dart';
 
-class UserProfile extends StatelessWidget {
+class MemberProfile extends StatelessWidget {
   final String userId;
 
-  const UserProfile({super.key, required this.userId});
+  const MemberProfile({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class UserProfile extends StatelessWidget {
                         ),
                       ),
                       const Icon(
-                        Icons.settings,
+                        Icons.delete,
                       ),
                     ],
                   ),
