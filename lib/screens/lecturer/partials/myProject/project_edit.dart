@@ -657,28 +657,28 @@ class _ProjectEditState extends State<ProjectEdit> {
           ),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            width: MediaQuery.sizeOf(context).width * 0.7,
-            child: Text(
-              statusName,
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                color: AppColors.black,
+      child: GestureDetector(
+        onTap: () {
+          handleEditStatus(statusName);
+          save = firstStatus != status;
+          callback();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.7,
+              child: Text(
+                statusName,
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  color: AppColors.black,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          GestureDetector(
-            onTap: () {
-              handleEditStatus(statusName);
-              save = firstStatus != status;
-              callback();
-            },
-            child: Container(
+            Container(
               width: 10,
               height: 10,
               decoration: BoxDecoration(
@@ -688,8 +688,8 @@ class _ProjectEditState extends State<ProjectEdit> {
                 borderRadius: BorderRadius.circular(50),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

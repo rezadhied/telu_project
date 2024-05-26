@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
@@ -613,8 +614,12 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
 
   List projectList = [];
   List filteredProjects = [];
+  bool isLoading = false;
 
   Future<void> fetchMyProjects() async {
+    setState(() {
+      isLoading = true;
+    });
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
@@ -622,20 +627,31 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
         await http.get(Uri.parse('$url/lecturer/projects/$userId'));
     if (response.statusCode == 200) {
       final List projects = json.decode(response.body);
-      // print(projects);
-      setState(() {
-        projectList = projects;
-        if (selectedStatus == 'All') {
-          filteredProjects = projectList;
-        } else {
-          filteredProjects = projectList.where((project) {
-            final statusMatches = project['projectStatus'] == selectedStatus;
-            return statusMatches;
-          }).toList();
-        }
-      });
+      if (mounted) {
+        setState(() {
+          projectList = projects;
+          if (selectedStatus == 'All') {
+            filteredProjects = projectList;
+          } else {
+            filteredProjects = projectList.where((project) {
+              final statusMatches = project['projectStatus'] == selectedStatus;
+              return statusMatches;
+            }).toList();
+          }
+        });
+      }
     } else {
-      throw Exception('Failed to load projects');
+      if (mounted) {
+        setState(() {
+          throw Exception('Failed to load projects');
+        });
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -648,16 +664,13 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (bool didPop) {
-        print("pop");
-      },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: AppColors.white,
-          body: Column(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: AppColors.white,
+        body: RefreshIndicator(
+          onRefresh: fetchMyProjects,
+          child: Column(
             children: [
               Expanded(
                 child: CustomScrollView(
@@ -748,10 +761,12 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                               child: DropdownButton(
                                 value: selectedStatus,
                                 onChanged: (String? value) {
-                                  setState(() {
-                                    selectedStatus = value!;
-                                    filterProjects(searchText);
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      selectedStatus = value!;
+                                      filterProjects(searchText);
+                                    });
+                                  }
                                 },
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
@@ -835,115 +850,186 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                       ),
                                     ],
                                   )),
-                            )
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return Container(
-                            margin: EdgeInsets.fromLTRB(
-                                15,
-                                index == 0 ? 0 : 10,
-                                15,
-                                index == filteredProjects.length - 1 ? 20 : 0),
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: AppColors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: GestureDetector(
-                              onTap: () async {
-                                var result = await Navigator.of(context,
-                                        rootNavigator: true)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => MyProjectDetail(
-                                              id: filteredProjects[index]
-                                                  ['projectID'],
-                                            )));
+                    isLoading
+                        ? _buildLoadingSkeleton()
+                        : Skeletonizer.sliver(
+                            enabled: isLoading,
+                            child: SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        15,
+                                        index == 0 ? 0 : 10,
+                                        15,
+                                        index == filteredProjects.length - 1
+                                            ? 20
+                                            : 0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        var result = await Navigator.of(context,
+                                                rootNavigator: true)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MyProjectDetail(
+                                                      id: filteredProjects[
+                                                          index]['projectID'],
+                                                    )));
 
-                                if (result == true) {
-                                  setState(() {
-                                    fetchMyProjects();
-                                  });
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      width: 15,
-                                      height: 15,
-                                      decoration: BoxDecoration(
-                                        color: filteredProjects[index]
-                                                    ['projectStatus'] ==
-                                                'Active'
-                                            ? AppColors.secondary
-                                            : filteredProjects[index]
-                                                        ['projectStatus'] ==
-                                                    'Finished'
-                                                ? AppColors.primary
-                                                : filteredProjects[index]
+                                        if (result == true) {
+                                          setState(() {
+                                            fetchMyProjects();
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 15),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: 15,
+                                              height: 15,
+                                              decoration: BoxDecoration(
+                                                color: filteredProjects[index]
                                                             ['projectStatus'] ==
-                                                        'Open Request'
-                                                    ? Colors.yellow
+                                                        'Active'
+                                                    ? AppColors.secondary
                                                     : filteredProjects[index][
                                                                 'projectStatus'] ==
-                                                            'Waiting to Start'
-                                                        ? AppColors.tertiary
-                                                        : AppColors.grey,
-                                        borderRadius: BorderRadius.circular(90),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 15),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            filteredProjects[index]['title'] ??
-                                                '',
-                                            style: GoogleFonts.inter(
-                                                fontSize: 16,
-                                                color: AppColors.black),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            'Status: ${filteredProjects[index]['projectStatus']}',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 14,
-                                              color: AppColors.black
-                                                  .withOpacity(0.60),
+                                                            'Finished'
+                                                        ? AppColors.primary
+                                                        : filteredProjects[
+                                                                        index][
+                                                                    'projectStatus'] ==
+                                                                'Open Request'
+                                                            ? Colors.yellow
+                                                            : filteredProjects[
+                                                                            index]
+                                                                        [
+                                                                        'projectStatus'] ==
+                                                                    'Waiting to Start'
+                                                                ? AppColors
+                                                                    .tertiary
+                                                                : AppColors
+                                                                    .grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(90),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            const SizedBox(width: 15),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    filteredProjects[index]
+                                                            ['title'] ??
+                                                        '',
+                                                    style: GoogleFonts.inter(
+                                                        fontSize: 16,
+                                                        color: AppColors.black),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    'Status: ${filteredProjects[index]['projectStatus']}',
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 14,
+                                                      color: AppColors.black
+                                                          .withOpacity(0.60),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
+                                childCount: filteredProjects.length,
                               ),
                             ),
-                          );
-                        },
-                        childCount: filteredProjects.length,
-                      ),
-                    ),
+                          ),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Skeletonizer(
+            enabled: true,
+            child: Container(
+              margin: EdgeInsets.fromLTRB(
+                  15, index == 0 ? 0 : 10, 15, index == 9 ? 20 : 0),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.grey, width: 1),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(90),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 20,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          width: 150,
+                          height: 20,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        childCount: 3,
       ),
     );
   }
