@@ -67,9 +67,11 @@ class _HomeLecturer extends State<HomeLecturer> {
   late User user;
 
   Future<void> fetchNewestProjects() async {
-    setState(() {
-      _isLoadingNewestProject = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingNewestProject = true;
+      });
+    }
 
     try {
       final apiUrlProvider =
@@ -92,9 +94,11 @@ class _HomeLecturer extends State<HomeLecturer> {
     } catch (error) {
       print("Failed to fetch newest projects: $error");
     } finally {
-      setState(() {
-        _isLoadingNewestProject = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingNewestProject = false;
+        });
+      }
     }
   }
 
@@ -241,7 +245,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             width: 15,
                                           ),
                                           Text(
-                                            '3',
+                                            '12',
                                             style: GoogleFonts.inter(
                                                 color: AppColors.white),
                                             textAlign: TextAlign.left,

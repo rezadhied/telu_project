@@ -47,6 +47,8 @@ dependencies:
   firebase_core: ^2.30.1
   firebase_messaging: ^14.9.2
   flutter_local_notifications: ^17.1.2
+  fluttertoast: ^8.2.5
+  skeletonizer: ^1.1.2+1
 
 dev_dependencies:
   flutter_test:
