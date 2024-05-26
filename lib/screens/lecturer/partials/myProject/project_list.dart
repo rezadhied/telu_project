@@ -97,54 +97,55 @@ class _ListProjectState extends State<ListProject> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       color: AppColors.white,
       home: Scaffold(
         backgroundColor: AppColors.white,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: AppBar(
-            surfaceTintColor: Colors.transparent,
-            backgroundColor: AppColors.white,
-            toolbarHeight: 200,
-            flexibleSpace: SafeArea(
+  preferredSize: const Size.fromHeight(kToolbarHeight),
+  child: AppBar(
+    surfaceTintColor: Colors.transparent,
+    backgroundColor: AppColors.white,
+    toolbarHeight: 200,
+    flexibleSpace: SafeArea(
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                borderRadius: BorderRadius.circular(14),
+                child: const Icon(Icons.arrow_back),
+              ),
+            ),
+            Center(
               child: Container(
-                margin: EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      borderRadius: BorderRadius.circular(14),
-                      child: const Icon(Icons.arrow_back),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        'Project List',
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(
-                          fontSize: 18,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Icon(Icons.filter_alt_rounded),
-                    ),
-                  ],
+                child: Text(
+                  'Project List',
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
+      ),
+    ),
+  ),
+),
+
         body: Column(
           children: [
             Container(
