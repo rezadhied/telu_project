@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
-import 'package:telu_project/screens/student/home_student.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -51,6 +51,14 @@ class _ProjectEditState extends State<ProjectEditData> {
       save = false;
       firstData = textController.text;
       FocusManager.instance.primaryFocus?.unfocus();
+      Fluttertoast.showToast(
+          msg: "${widget.nameColumn} has been updated",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.black,
+          textColor: AppColors.white,
+          fontSize: 16.0);
     });
   }
 
@@ -85,6 +93,18 @@ class _ProjectEditState extends State<ProjectEditData> {
       throw Exception('Failed to update project status');
     } else {
       newData = textController.text;
+    }
+  }
+
+  Color _getSaveButtonColor(String nameColumn, int textLength) {
+    if (!save) {
+      return AppColors.black.withOpacity(0.30);
+    } else if (nameColumn == "Title" && textLength < 3) {
+      return AppColors.black.withOpacity(0.30);
+    } else if (nameColumn == "Description" && textLength < 12) {
+      return AppColors.black.withOpacity(0.30);
+    } else {
+      return AppColors.tertiary;
     }
   }
 
@@ -142,6 +162,16 @@ class _ProjectEditState extends State<ProjectEditData> {
                           alignment: Alignment.topCenter,
                           child: InkWell(
                             onTap: () {
+                              if (!save) {
+                                return;
+                              }
+                              if (widget.nameColumn == "Title" &&
+                                  textController.text.length < 3) {
+                                return;
+                              } else if (widget.nameColumn == "Description" &&
+                                  textController.text.length < 12) {
+                                return;
+                              }
                               updateData(widget.nameColumn);
                             },
                             child: Text(
@@ -149,9 +179,8 @@ class _ProjectEditState extends State<ProjectEditData> {
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: save
-                                    ? AppColors.tertiary
-                                    : AppColors.black.withOpacity(0.30),
+                                color: _getSaveButtonColor(widget.nameColumn,
+                                    textController.text.length),
                               ),
                               textAlign: TextAlign.center,
                             ),

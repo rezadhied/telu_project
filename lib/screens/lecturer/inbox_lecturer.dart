@@ -95,33 +95,37 @@ class _InboxLecturerState extends State<InboxLecturer> {
     final response = await http.get(Uri.parse('$url/requestMember/$userId'));
     if (response.statusCode == 200) {
       final List projectsJson = json.decode(response.body);
-      setState(() {
-        originalRequests = projectsJson.expand((projectJson) {
-          return (projectJson['Requests'] as List).map((requestJson) {
-            return Request.fromJson({...requestJson, 'project': projectJson});
-          });
-        }).toList();
-        filteredRequests = originalRequests;
-      });
+      if (mounted) {
+        setState(() {
+          originalRequests = projectsJson.expand((projectJson) {
+            return (projectJson['Requests'] as List).map((requestJson) {
+              return Request.fromJson({...requestJson, 'project': projectJson});
+            });
+          }).toList();
+          filteredRequests = originalRequests;
+        });
+      }
     } else {
       throw Exception('Failed to load requests');
     }
   }
 
   void filterRequest(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredRequests = originalRequests;
-      } else {
-        filteredRequests = originalRequests.where((request) {
-          final fullName =
-              '${request.firstName} ${request.lastName}'.toLowerCase();
-          final searchLower = query.toLowerCase();
-          return fullName.contains(searchLower) ||
-              request.message.toLowerCase().contains(searchLower);
-        }).toList();
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (query.isEmpty) {
+          filteredRequests = originalRequests;
+        } else {
+          filteredRequests = originalRequests.where((request) {
+            final fullName =
+                '${request.firstName} ${request.lastName}'.toLowerCase();
+            final searchLower = query.toLowerCase();
+            return fullName.contains(searchLower) ||
+                request.message.toLowerCase().contains(searchLower);
+          }).toList();
+        }
+      });
+    }
   }
 
   @override
@@ -190,9 +194,11 @@ class _InboxLecturerState extends State<InboxLecturer> {
                         border: InputBorder.none,
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          filterRequest(value);
-                        });
+                        if (mounted) {
+                          setState(() {
+                            filterRequest(value);
+                          });
+                        }
                       },
                     ),
                   ),
@@ -265,14 +271,16 @@ class _RequestItemState extends State<RequestItem> {
     final response = await http.get(Uri.parse('$url/requestMember/$userId'));
     if (response.statusCode == 200) {
       final List projectsJson = json.decode(response.body);
-      setState(() {
-        originalRequests = projectsJson.expand((projectJson) {
-          return (projectJson['Requests'] as List).map((requestJson) {
-            return Request.fromJson({...requestJson, 'project': projectJson});
-          });
-        }).toList();
-        filteredRequests = originalRequests;
-      });
+      if (mounted) {
+        setState(() {
+          originalRequests = projectsJson.expand((projectJson) {
+            return (projectJson['Requests'] as List).map((requestJson) {
+              return Request.fromJson({...requestJson, 'project': projectJson});
+            });
+          }).toList();
+          filteredRequests = originalRequests;
+        });
+      }
     } else {
       throw Exception('Failed to load requests');
     }
@@ -304,9 +312,11 @@ class _RequestItemState extends State<RequestItem> {
     );
 
     if (confirmed) {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
 
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
       final response = await http.patch(
@@ -316,19 +326,24 @@ class _RequestItemState extends State<RequestItem> {
       );
 
       if (response.statusCode == 200) {
-        setState(() {
-          originalRequests = originalRequests
-              .where((request) => request.requestID != requestID)
-              .toList();
-          filteredRequests = filteredRequests
-              .where((request) => request.requestID != requestID)
-              .toList();
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            originalRequests = originalRequests
+                .where((request) => request.requestID != requestID)
+                .toList();
+            filteredRequests = filteredRequests
+                .where((request) => request.requestID != requestID)
+                .toList();
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+
         throw Exception('Failed to decline request');
       }
     }
@@ -360,9 +375,11 @@ class _RequestItemState extends State<RequestItem> {
     );
 
     if (confirmed) {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
 
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
       final response = await http.patch(
@@ -372,20 +389,24 @@ class _RequestItemState extends State<RequestItem> {
       );
 
       if (response.statusCode == 200) {
-        setState(() {
-          originalRequests = originalRequests
-              .where((request) => request.requestID != requestID)
-              .toList();
-          filteredRequests = filteredRequests
-              .where((request) => request.requestID != requestID)
-              .toList();
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            originalRequests = originalRequests
+                .where((request) => request.requestID != requestID)
+                .toList();
+            filteredRequests = filteredRequests
+                .where((request) => request.requestID != requestID)
+                .toList();
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          isLoading = false;
-        });
-        throw Exception('Failed to approve request');
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+          throw Exception('Failed to approve request');
+        }
       }
     }
   }
