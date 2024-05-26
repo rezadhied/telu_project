@@ -11,8 +11,9 @@ class ButtonComponent extends StatelessWidget {
   final Widget targetPage;
   final bool isReplacementPush;
   final String action;
-  final dynamic data;
+  final dynamic? data;
   final Function(String)? callback;
+  final VoidCallback onPressed;
 
   const ButtonComponent({
     super.key,
@@ -20,9 +21,13 @@ class ButtonComponent extends StatelessWidget {
     required this.targetPage,
     this.isReplacementPush = false,
     this.action = "",
-    this.data = "",
+    this.data,
     this.callback,
-  });
+    VoidCallback? onPressed, // Removed the default value here
+  }) : onPressed = onPressed ?? _defaultOnPressed; // Assign a default value
+
+  // Named function for default onPressed
+  static void _defaultOnPressed() {}
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +48,43 @@ class ButtonComponent extends StatelessWidget {
           ),
           onPressed: () async {
             final apiUrlProvider =Provider.of<ApiUrlProvider>(context, listen: false);
+            
             bool berhasil = false;
+            String callbackValue = "";
+
+            // Action Logic Gate
             if (action == "signin") {
               berhasil = await AuthProvider().loginUser(data['email'], data['password'], apiUrlProvider.baseUrl);
+              callbackValue = "Email or password are incorrect";
               final prefs = await SharedPreferences.getInstance();
               await prefs.setString("isStudent", data['email'].contains("student") ? "true" : "");
+            } else if (action == "reg-1") {
+              if (data['username'].isNotEmpty && data['password'].isNotEmpty && data['confirmPassword'].isNotEmpty) {
+                if (data['password'] == data['confirmPassword']) {
+                  berhasil = true;
+                  callbackValue = "";
+                } else {
+                  callbackValue = "Missmatch confirm password value";
+                }
+              } else {
+                callbackValue = "Fill out all fields";
+              }
+            } else if (action == "reg-2") {
+              if (data?.values.every((value) => value != "") ?? false) {
+                berhasil = await AuthProvider().registerUser(data);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString("isStudent", data['isStudent'] == "true" ? "true" : "false");
+              } else {
+                callbackValue = "Fill out all fields";
+              }
+
             } else {
               berhasil = true;
             }
-            print(berhasil);
+
+
             if (berhasil) {
+              onPressed!.call();
               if (!isReplacementPush) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -65,9 +97,11 @@ class ButtonComponent extends StatelessWidget {
                   (route) => false,
                 );
               }
+              callback!(callbackValue);
             } else {
-              callback!("Login Gagal");
+              callback!(callbackValue);
             }
+            
           },
           child: Text(
             buttonText,
