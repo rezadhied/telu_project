@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/functions/formatter.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:telu_project/screens/lecturer/partials/myProject/invite_student.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/project_edit.dart';
-import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/member_profile.dart';
 
 class MyProjectDetail extends StatefulWidget {
   final int id;
@@ -32,11 +33,15 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
     }
   }
 
+  var update = false;
+
   @override
   void initState() {
     super.initState();
     getProjectById();
   }
+
+  Formatter formatter = Formatter();
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +73,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pop(
-                                context,
-                              );
+                              Navigator.pop(context, update);
                             },
                             borderRadius: BorderRadius.circular(14),
                             child: const Icon(
@@ -106,6 +109,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                 if (result != null && result == 'updated') {
                                   setState(() {
                                     getProjectById();
+                                    update = true;
                                   });
                                 }
                               },
@@ -132,6 +136,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                   return Center(child: Text('No project data found'));
                 } else {
                   var projectData = snapshot.data!;
+                  print(projectData);
                   return SafeArea(
                     child: SingleChildScrollView(
                       child: Column(
@@ -226,7 +231,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
-                                      '${projectData['startProject']} - ${projectData['endProject']}',
+                                      '${formatter.formatDate(projectData['startProject'])} - ${formatter.formatDate(projectData['endProject'])}',
                                       style: GoogleFonts.inter(
                                         fontSize: 14,
                                         color: AppColors.black,
@@ -238,7 +243,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                     children: [
                                       Text(
                                         'Project Member'
-                                        ' (${projectData['ProjectMembers'].length}/10)',
+                                        ' (${projectData['ProjectMembers'].length}/${projectData['totalMember']})',
                                         style: GoogleFonts.inter(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -253,6 +258,10 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                   InviteStudent(
                                                     projectTitle:
                                                         projectData['title'],
+                                                    projectID: projectData[
+                                                        'projectID'],
+                                                    projectRoles: projectData[
+                                                        'ProjectRoles'],
                                                   )),
                                             ),
                                           );
@@ -293,7 +302,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: ((context) =>
-                                                        UserProfile(
+                                                        MemberProfile(
                                                           userId: projectData[
                                                                   'ProjectMembers']
                                                               [index]['userID'],

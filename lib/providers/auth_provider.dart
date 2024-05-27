@@ -4,10 +4,76 @@ import 'package:telu_project/class/User.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:telu_project/providers/api_url_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
+
+  Future<bool> registerUser(dynamic data) async {
+    try {
+      
+      // HEADER
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // SPLITTING NAME INTO FIRST NAME AND LAST NAME
+      String? firstName;
+      String? lastName;
+
+      List<String> splittedString = data['name'].trim().split(' ');
+
+      if (splittedString.length > 1) {
+        lastName = splittedString.removeLast();
+        firstName = splittedString.join(" ");
+      } else {
+        firstName = splittedString[0];
+        lastName = splittedString[0];
+      }
+
+      
+      // BODY
+      final Map<String, String> body = {
+        'email': data['email'],
+        'password': data['password'],
+        'firstName' : firstName,
+        'lastName' : lastName,
+        'phoneNumber': data['phoneNumber'],
+        'gender': data['gender'],
+        'lectureCode': data['lectureCode'] ?? "",
+        'facultyCode': data['facultyCode'],
+        'majorCode': data['majorCode'] ?? "",
+        'kelas': data['class'] ?? "",
+        'role': data['isStudent'] ? "student" : "lecturer",
+      };
+
+      print(body);
+    
+      // POST API
+      final response = await http.post(
+          Uri.parse("${ApiUrlProvider().baseUrl}/signup"),
+          headers: headers,
+          body: jsonEncode(body));
+
+      print(response);
+
+      // CONDITIONAL STAMENT WETHER THE RESPONSE IS SUCCESS
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString("userId", responseData['user']['userID'].toString());
+      } else {
+        throw Exception('Failed to login: ${response.body}');
+      }
+      notifyListeners();
+      return true;
+    } catch (e) {
+      notifyListeners();
+      print(e);
+      return false;
+    }
+  }
 
   Future<bool> loginUser(String email, String password, String url) async {
     try {

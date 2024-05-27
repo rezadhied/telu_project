@@ -8,17 +8,33 @@ import 'package:telu_project/screens/login/signin.dart';
 import 'package:telu_project/screens/student/my_project_student.dart';
 
 class RegisterLecturer extends StatefulWidget {
-  const RegisterLecturer({super.key});
+
+  final String email;
+  final String password; 
+  final List<dynamic> dataFacultyMajor;
+
+  const RegisterLecturer({super.key, required this.email, required this.password, required this.dataFacultyMajor});
 
   @override
   State<RegisterLecturer> createState() => _RegisterLecturerState();
 }
 
 class _RegisterLecturerState extends State<RegisterLecturer> {
+
+  late List<dynamic> dataFacultyMajor;
+  List<dynamic> dataMajor = [];
+
+  @override
+  void initState() {
+    super.initState();
+    dataFacultyMajor = widget.dataFacultyMajor;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Container(
               margin: const EdgeInsets.fromLTRB(30, 20, 30, 50),

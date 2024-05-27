@@ -9,7 +9,7 @@ import 'package:telu_project/screens/student/home_student.dart';
 import 'package:telu_project/screens/student/inbox_student.dart';
 import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:telu_project/screens/student/profile_student.dart';
-import 'package:telu_project/screens/lecturer/partials/myProject/user_profile.dart';
+import 'package:telu_project/screens/lecturer/partials/myProject/member_profile.dart';
 
 
 class MainApp extends StatefulWidget {
