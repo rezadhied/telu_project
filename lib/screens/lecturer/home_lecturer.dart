@@ -304,6 +304,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                               final project = _newestProject[index];
                               return GestureDetector(
                                 onTap: () {
+                                  print(project);
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => HomeProjectDetail(

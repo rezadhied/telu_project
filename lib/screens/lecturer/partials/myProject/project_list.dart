@@ -18,6 +18,7 @@ class ListProject extends StatefulWidget {
 
 class _ListProjectState extends State<ListProject> {
   List<Map<String, dynamic>> displayedProjects = [];
+  List<dynamic> projects = [];
   bool isLoading = false;
   int currentPage = 1;
   final int projectsPerPage = 5;
@@ -51,12 +52,14 @@ class _ListProjectState extends State<ListProject> {
       if (mounted) {
         if (response.statusCode == 200) {
           await Future.delayed(Duration(seconds: 2));
-          final List<dynamic> projects = json.decode(response.body);
+          projects = json.decode(response.body);
           setState(() {
             if (page == 1) {
+              //projects = newProjects;
               displayedProjects =
                   projects.cast<Map<String, dynamic>>().take(5).toList();
             } else {
+              //projects.addAll(newProjects);
               displayedProjects.addAll(projects.cast<Map<String, dynamic>>());
             }
             isLoading = false;
@@ -176,7 +179,7 @@ class _ListProjectState extends State<ListProject> {
                 itemCount: displayedProjects.length + (isLoading ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index < displayedProjects.length) {
-                    return buildProjectItem(displayedProjects[index]);
+                    return buildProjectItem(index);
                   } else {
                     return buildLoadingIndicator();
                   }
@@ -189,7 +192,9 @@ class _ListProjectState extends State<ListProject> {
     );
   }
 
-  Widget buildProjectItem(Map<String, dynamic> project) {
+  Widget buildProjectItem(int index) {
+    final project = displayedProjects[index];
+    final projectDetails = projects[index];
     int totalMember = project['totalMember'] ?? 0;
     int projectMemberCount = project['projectMemberCount'] ?? 0;
     int availableSlots = totalMember - projectMemberCount;
@@ -198,7 +203,7 @@ class _ListProjectState extends State<ListProject> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => HomeProjectDetail(
-              projectData: project,
+              projectData: projectDetails,
               isStudent: true,
             ),
           ),
