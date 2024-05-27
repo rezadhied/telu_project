@@ -194,7 +194,6 @@ class _ListProjectState extends State<ListProject> {
 
   Widget buildProjectItem(int index) {
     final project = displayedProjects[index];
-    final projectDetails = projects[index];
     int totalMember = project['totalMember'] ?? 0;
     int projectMemberCount = project['projectMemberCount'] ?? 0;
     int availableSlots = totalMember - projectMemberCount;
@@ -203,7 +202,7 @@ class _ListProjectState extends State<ListProject> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => HomeProjectDetail(
-              projectData: projectDetails,
+              projectData: project,
               isStudent: true,
             ),
           ),
