@@ -14,6 +14,7 @@ import 'dart:convert';
 
 class HomeLecturer extends StatefulWidget {
   const HomeLecturer({super.key});
+
   @override
   State<HomeLecturer> createState() => _HomeLecturer();
 }
@@ -26,12 +27,18 @@ class _HomeLecturer extends State<HomeLecturer> {
 
   late User user;
 
+  @override
+  void initState() {
+    super.initState();
+    fetchNewestProjects();
+    fetchMyProjects();
+  }
+
   Future<void> fetchMyProjects() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
-    final response =
-        await http.get(Uri.parse('$url/lecturer/projects/$userId'));
+    final response = await http.get(Uri.parse('$url/lecturer/projects/$userId'));
 
     if (response.statusCode == 200) {
       final List projects = json.decode(response.body);
@@ -51,8 +58,7 @@ class _HomeLecturer extends State<HomeLecturer> {
     }
 
     try {
-      final apiUrlProvider =
-          Provider.of<ApiUrlProvider>(context, listen: false);
+      final apiUrlProvider = Provider.of<ApiUrlProvider>(context, listen: false);
       String apiUrl = apiUrlProvider.baseUrl;
 
       final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
@@ -64,7 +70,6 @@ class _HomeLecturer extends State<HomeLecturer> {
             _showNoNewestProjectMessage = true;
           }
         });
-        print('yey');
       } else {
         throw Exception('Failed to fetch newest projects');
       }
@@ -88,241 +93,186 @@ class _HomeLecturer extends State<HomeLecturer> {
     return input[0].toUpperCase() + input.substring(1).toLowerCase();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchNewestProjects();
-    fetchMyProjects();
+  Widget _buildLoadingSkeleton() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Container(
+            margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, index == 2 ? 20 : 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.grey, width: 1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(90),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: 150,
+                        height: 20,
+                        color: Colors.grey[400],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        childCount: 3,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Provider.of<AuthProvider>(context, listen: false).getUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error');
-          } else {
-            User? user = snapshot.data;
-            return Scaffold(
-              backgroundColor: AppColors.white,
-              body: RefreshIndicator(
-                onRefresh: fetchNewestProjects,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      title: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            'Welcome, ',
-                            style: GoogleFonts.inter(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.primary,
-                            ),
-                          )),
-                      backgroundColor: AppColors.white,
-                      floating: false,
-                      pinned: false,
-                      elevation: 0,
-                    ),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Container(
-                              padding: const EdgeInsets.all(12.0),
-                              width: 350,
-                              height: 200,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        AppColors.primary,
-                                        AppColors.quarternary
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: const Offset(0, 3),
-                                      )
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 10, 0, 0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 100,
-                                            child: Text(
-                                                user != null
-                                                    ? capitalize(user.role)
-                                                    : 'Loading...',
-                                                style: GoogleFonts.inter(
-                                                    color: AppColors.grey),
-                                                textAlign: TextAlign.start),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 10, 0, 0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              user != null
-                                                  ? '${user.firstName} ${user.lastName}'
-                                                  : 'Loading...',
-                                              style: GoogleFonts.inter(
-                                                color: AppColors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                              ),
-                                              textAlign: TextAlign.left,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 0, 10),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                                user != null
-                                                    ? addSpaces(user.userID)
-                                                    : 'Loading...',
-                                                style: GoogleFonts.inter(
-                                                    color: AppColors.grey,
-                                                    fontSize: 16),
-                                                textAlign: TextAlign.start),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 0, 10),
-                                      child: Row(
-                                        children: [
-                                          Text('Projects',
-                                              style: GoogleFonts.inter(
-                                                  color: AppColors.grey),
-                                              textAlign: TextAlign.left),
-                                          const SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            '$projectCount',
-                                            style: GoogleFonts.inter(
-                                                color: AppColors.white),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-                            child: Text(
-                              'Latest Projects',
-                              style: GoogleFonts.inter(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary),
-                            ),
-                          ),
-                        ],
+      future: Provider.of<AuthProvider>(context, listen: false).getUserData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error');
+        } else {
+          User? user = snapshot.data;
+          return Scaffold(
+            backgroundColor: AppColors.white,
+            body: RefreshIndicator(
+              onRefresh: fetchNewestProjects,
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    title: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Welcome, ',
+                        style: GoogleFonts.inter(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          final project = _newestProject[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => HomeProjectDetail(
-                                      projectData: project, isStudent: true)));
-                            },
+                    backgroundColor: AppColors.white,
+                    floating: false,
+                    pinned: false,
+                    elevation: 0,
+                  ),
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(12.0),
+                            width: 350,
+                            height: 200,
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  15, index == 0 ? 0 : 10, 15, 0),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
                               decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: AppColors.grey, width: 1),
-                                borderRadius: BorderRadius.circular(14),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    AppColors.white,
-                                    AppColors.secondaryAlternative
-                                        .withOpacity(0.1)
-                                  ],
+                                borderRadius: BorderRadius.circular(20),
+                                gradient: const LinearGradient(
+                                  colors: [AppColors.primary, AppColors.quarternary],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  stops: [0.0, 1.0],
-                                  tileMode: TileMode.clamp,
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3),
+                                  )
+                                ],
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: 15,
-                                    height: 15,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.secondary,
-                                      borderRadius: BorderRadius.circular(90),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          child: Text(
+                                            user != null ? capitalize(user.role) : 'Loading...',
+                                            style: GoogleFonts.inter(color: AppColors.grey),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(width: 15),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            user != null ? '${user.firstName} ${user.lastName}' : 'Loading...',
+                                            style: GoogleFonts.inter(
+                                              color: AppColors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            user != null ? addSpaces(user.userID) : 'Loading...',
+                                            style: GoogleFonts.inter(color: AppColors.grey, fontSize: 16),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
+                                    child: Row(
                                       children: [
                                         Text(
-                                          project['title'] ?? '',
-                                          style:
-                                              GoogleFonts.inter(fontSize: 16),
-                                          overflow: TextOverflow.ellipsis,
+                                          'Projects',
+                                          style: GoogleFonts.inter(color: AppColors.grey),
+                                          textAlign: TextAlign.left,
                                         ),
+                                        const SizedBox(width: 15),
                                         Text(
-                                          'Open Recruitment: ${project['totalMember'] - project['projectMemberCount']}/${project['totalMember'] ?? ''} left',
-                                          style: GoogleFonts.inter(
-                                              color: Colors.grey),
+                                          '$projectCount',
+                                          style: GoogleFonts.inter(color: AppColors.white),
+                                          textAlign: TextAlign.left,
                                         ),
                                       ],
                                     ),
@@ -330,63 +280,137 @@ class _HomeLecturer extends State<HomeLecturer> {
                                 ],
                               ),
                             ),
-                          );
-                        },
-                        childCount: _newestProject.length,
-                      ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+                          child: Text(
+                            'Latest Projects',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SliverToBoxAdapter(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppColors.primary,
-                                  side: const BorderSide(
-                                      color: AppColors.primary),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(6)),
-                                  ),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => ListProject()));
-                                },
-                                child: ShaderMask(
-                                  blendMode: BlendMode.srcIn,
-                                  shaderCallback: (Rect bounds) {
-                                    return LinearGradient(
-                                      colors: [
-                                        AppColors.primary,
-                                        AppColors.quarternary
-                                      ],
-                                    ).createShader(bounds);
-                                  },
-                                  child: const Text(
-                                    'Find More',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                  ),
+                  _isLoadingNewestProject
+                      ? _buildLoadingSkeleton()
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              final project = _newestProject[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeProjectDetail(
+                                        projectData: project,
+                                        isStudent: true,
+                                      ),
                                     ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(15, index == 0 ? 0 : 10, 15, 0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.grey, width: 1),
+                                    borderRadius: BorderRadius.circular(14),
+                                    gradient: LinearGradient(
+                                      colors: [AppColors.white, AppColors.secondaryAlternative.withOpacity(0.1)],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      stops: [0.0, 1.0],
+                                      tileMode: TileMode.clamp,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: 15,
+                                        height: 15,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.secondary,
+                                          borderRadius: BorderRadius.circular(90),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              project['title'] ?? '',
+                                              style: GoogleFonts.inter(fontSize: 16),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(
+                                              'Open Recruitment: ${project['totalMember'] - project['projectMemberCount']}/${project['totalMember'] ?? ''} left',
+                                              style: GoogleFonts.inter(color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            childCount: _newestProject.length,
+                          ),
+                        ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                side: const BorderSide(color: AppColors.primary),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                ),
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => ListProject()),
+                                );
+                              },
+                              child: ShaderMask(
+                                blendMode: BlendMode.srcIn,
+                                shaderCallback: (Rect bounds) {
+                                  return LinearGradient(
+                                    colors: [AppColors.primary, AppColors.quarternary],
+                                  ).createShader(bounds);
+                                },
+                                child: const Text(
+                                  'Find More',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
+      },
+    );
   }
 }
