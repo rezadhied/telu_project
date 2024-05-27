@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/connectivity.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/student/partials/home/home_project_detail.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/project_list.dart';
@@ -72,30 +75,52 @@ class _HomeLecturer extends State<HomeLecturer> {
         _isLoadingNewestProject = true;
       });
     }
+    if (await InternetConnection().hasInternetAccess) {
+      try {
+        final apiUrlProvider =
+            Provider.of<ApiUrlProvider>(context, listen: false);
+        String apiUrl = apiUrlProvider.baseUrl;
 
-    try {
-      final apiUrlProvider =
-          Provider.of<ApiUrlProvider>(context, listen: false);
-      String apiUrl = apiUrlProvider.baseUrl;
+        if (mounted) {
+          setState(() {
+            isConnectedInternet = true;
+          });
+        }
 
-      final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
+        final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
 
-      if (response.statusCode == 200) {
-        setState(() {
-          _newestProject = jsonDecode(response.body);
-          if (_newestProject.isEmpty) {
-            _showNoNewestProjectMessage = true;
-          }
-        });
-        print('yey');
-      } else {
-        throw Exception('Failed to fetch newest projects');
+        if (response.statusCode == 200) {
+          setState(() {
+            _newestProject = jsonDecode(response.body);
+            if (_newestProject.isEmpty) {
+              _showNoNewestProjectMessage = true;
+            }
+          });
+          print('yey');
+        } else {
+          throw Exception('Failed to fetch newest projects');
+        }
+      } catch (error) {
+        print("Failed to fetch newest projects: $error");
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoadingNewestProject = false;
+          });
+        }
       }
-    } catch (error) {
-      print("Failed to fetch newest projects: $error");
-    } finally {
+    } else {
+      Fluttertoast.showToast(
+          msg: "Cant load latest project, no internet connection",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.black,
+          textColor: AppColors.white,
+          fontSize: 16.0);
       if (mounted) {
         setState(() {
+          isConnectedInternet = false;
           _isLoadingNewestProject = false;
         });
       }
@@ -107,6 +132,8 @@ class _HomeLecturer extends State<HomeLecturer> {
     super.initState();
     fetchNewestProjects();
   }
+
+  bool isConnectedInternet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +354,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          'Open Recruitment: ${project['totalMember'] - project['projectMemberCount']}/${project['totalMember'] ?? ''} left',
+                                          'Open Recruitment: ${project['totalMember'] - project['projectMemberCount'] ?? ''}/${project['totalMember'] ?? ''} left',
                                           style: GoogleFonts.inter(
                                               color: Colors.grey),
                                         ),
