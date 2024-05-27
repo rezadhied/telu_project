@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
@@ -21,50 +22,26 @@ class _HomeLecturer extends State<HomeLecturer> {
   bool _isLoadingNewestProject = false;
   bool _showNoNewestProjectMessage = false;
   List<dynamic> _newestProject = [];
-  List<Map<String, String>> projectList = [
-    {
-      'title': 'Proyek Bandara Internasional Soekarno-Hatta',
-      'status': 'Open Request',
-      'capacity': '1/4',
-      'description':
-          'Proyek ini bertujuan untuk meningkatkan fasilitas dan pelayanan di Bandara Internasional Soekarno-Hatta.',
-      'lecturer': 'Dr. Ahmad',
-      'project_start': '2022-04-10',
-      'project_end': '2022-05-10'
-    },
-    {
-      'title': 'Proyek Tol Trans-Jawa',
-      'status': 'Open Request',
-      'capacity': '2/4',
-      'description':
-          'Proyek ini bertujuan untuk memperbaiki jalan tol Trans-Jawa yang sudah rusak.',
-      'lecturer': 'Prof. Budi',
-      'project_start': '2022-04-15',
-      'project_end': '2022-06-15'
-    },
-    {
-      'title': 'Proyek Jembatan Baltimore',
-      'status': 'Open Request',
-      'capacity': '3/69',
-      'description':
-          'Proyek ini bertujuan untuk membangun jembatan baru di kota Baltimore.',
-      'lecturer': 'Dr. Charlie',
-      'project_start': '2022-05-01',
-      'project_end': '2022-08-01'
-    },
-    {
-      'title': 'Proyek Jembatan Suramadu',
-      'status': 'Open Request',
-      'capacity': '3/4',
-      'description':
-          'Proyek ini bertujuan untuk meningkatkan keamanan dan efisiensi lalu lintas di Jembatan Suramadu.',
-      'lecturer': 'Prof. Dian',
-      'project_start': '2022-06-01',
-      'project_end': '2022-09-01'
-    },
-  ];
+  int projectCount = 0;
 
   late User user;
+
+  Future<void> fetchMyProjects() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String userId = pref.getString('userId') ?? '';
+    final response =
+        await http.get(Uri.parse('$url/lecturer/projects/$userId'));
+
+    if (response.statusCode == 200) {
+      final List projects = json.decode(response.body);
+      setState(() {
+        projectCount = projects.length;
+      });
+    } else {
+      throw Exception('Failed to load projects');
+    }
+  }
 
   Future<void> fetchNewestProjects() async {
     if (mounted) {
@@ -102,10 +79,20 @@ class _HomeLecturer extends State<HomeLecturer> {
     }
   }
 
+  String addSpaces(String input) {
+    return input.split('').join(' ');
+  }
+
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1).toLowerCase();
+  }
+
   @override
   void initState() {
     super.initState();
     fetchNewestProjects();
+    fetchMyProjects();
   }
 
   @override
@@ -186,7 +173,10 @@ class _HomeLecturer extends State<HomeLecturer> {
                                         children: [
                                           SizedBox(
                                             width: 100,
-                                            child: Text('Lecturer',
+                                            child: Text(
+                                                user != null
+                                                    ? capitalize(user.role)
+                                                    : 'Loading...',
                                                 style: GoogleFonts.inter(
                                                     color: AppColors.grey),
                                                 textAlign: TextAlign.start),
@@ -223,7 +213,10 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
-                                            child: Text('1 3 0 2 2 1 3 0 1 6',
+                                            child: Text(
+                                                user != null
+                                                    ? addSpaces(user.userID)
+                                                    : 'Loading...',
                                                 style: GoogleFonts.inter(
                                                     color: AppColors.grey,
                                                     fontSize: 16),
@@ -245,7 +238,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                                             width: 15,
                                           ),
                                           Text(
-                                            '12',
+                                            '$projectCount',
                                             style: GoogleFonts.inter(
                                                 color: AppColors.white),
                                             textAlign: TextAlign.left,
