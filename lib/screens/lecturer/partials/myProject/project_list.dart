@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 
 import 'package:telu_project/providers/api_url_provider.dart';
+import 'package:telu_project/screens/home_project_detail.dart';
 
 class ListProject extends StatefulWidget {
   const ListProject({Key? key}) : super(key: key);
@@ -102,50 +103,49 @@ class _ListProjectState extends State<ListProject> {
       home: Scaffold(
         backgroundColor: AppColors.white,
         appBar: PreferredSize(
-  preferredSize: const Size.fromHeight(kToolbarHeight),
-  child: AppBar(
-    surfaceTintColor: Colors.transparent,
-    backgroundColor: AppColors.white,
-    toolbarHeight: 200,
-    flexibleSpace: SafeArea(
-      child: Container(
-        margin: EdgeInsets.only(top: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                borderRadius: BorderRadius.circular(14),
-                child: const Icon(Icons.arrow_back),
-              ),
-            ),
-            Center(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: AppBar(
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: AppColors.white,
+            toolbarHeight: 200,
+            flexibleSpace: SafeArea(
               child: Container(
+                margin: EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  'Project List',
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        borderRadius: BorderRadius.circular(14),
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                    ),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          'Project List',
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-  ),
-),
-
         body: Column(
           children: [
             Container(
@@ -193,134 +193,146 @@ class _ListProjectState extends State<ListProject> {
     int totalMember = project['totalMember'] ?? 0;
     int projectMemberCount = project['projectMemberCount'] ?? 0;
     int availableSlots = totalMember - projectMemberCount;
-    return Container(
-      margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: AppColors.whiteAlternative,
-        border: Border.all(color: AppColors.grey),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => HomeProjectDetail(
+              projectData: project,
+              isStudent: true,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 15, left: 15, right: 15),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: AppColors.whiteAlternative,
+          border: Border.all(color: AppColors.grey),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                        project["title"] ?? '',
+                        style: GoogleFonts.inter(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(width: 30),
+                Container(
+                  child: Flexible(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "By: ${project['projectOwner']['firstName']} ${project['projectOwner']['lastName'][0]}.",
+                        overflow: TextOverflow.visible,
+                        maxLines: 2,
+                        style: GoogleFonts.inter(
+                            fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  child: Text(
+                    "Deskripsi",
+                    style: GoogleFonts.inter(
+                        color: AppColors.grey, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(width: 5),
+                Container(
+                  child: Flexible(
                     child: Text(
-                      project["title"] ?? '',
-                      style: GoogleFonts.inter(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                      project['description'] ?? '',
+                      style: GoogleFonts.inter(color: AppColors.black),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.black, width: 2.0),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(width: 30),
-              Container(
-                child: Flexible(
-                  child: Align(
-                    alignment: Alignment.bottomRight,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  child: Text(
+                    "Open Until",
+                    style: GoogleFonts.inter(
+                        color: AppColors.grey, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(width: 5),
+                Container(
+                  child: Flexible(
                     child: Text(
-                      "By: ${project['projectOwner']['firstName']} ${project['projectOwner']['lastName'][0]}.",
-                      overflow: TextOverflow.visible,
-                      maxLines: 2,
-                      style: GoogleFonts.inter(
-                          fontSize: 10, fontWeight: FontWeight.bold),
+                      DateFormat('d MMMM yyyy', 'id')
+                          .format(DateTime.parse(project['openUntil'])),
+                      style: GoogleFonts.inter(color: AppColors.black),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Text(
-                  "Deskripsi",
-                  style: GoogleFonts.inter(
-                      color: AppColors.grey, fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(width: 5),
-              Container(
-                child: Flexible(
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
                   child: Text(
-                    project['description'] ?? '',
-                    style: GoogleFonts.inter(color: AppColors.black),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                    "Open Recruitment",
+                    style: GoogleFonts.inter(
+                        color: AppColors.grey, fontWeight: FontWeight.w500),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Text(
-                  "Open Until",
-                  style: GoogleFonts.inter(
-                      color: AppColors.grey, fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(width: 5),
-              Container(
-                child: Flexible(
-                  child: Text(
-                    DateFormat('d MMMM yyyy', 'id')
-                        .format(DateTime.parse(project['openUntil'])),
-                    style: GoogleFonts.inter(color: AppColors.black),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                SizedBox(width: 5),
+                Container(
+                  child: Flexible(
+                    child: Text(
+                      "$availableSlots/${project['totalMember']} left",
+                      style: GoogleFonts.inter(color: AppColors.black),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Text(
-                  "Open Recruitment",
-                  style: GoogleFonts.inter(
-                      color: AppColors.grey, fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(width: 5),
-              Container(
-                child: Flexible(
-                  child: Text(
-                    "$availableSlots slots left",
-                    style: GoogleFonts.inter(color: AppColors.black),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
