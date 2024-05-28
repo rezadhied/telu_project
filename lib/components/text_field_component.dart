@@ -4,8 +4,9 @@ import 'package:telu_project/colors.dart';
 class TextFieldComponent extends StatelessWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
+  final TextEditingController? textEditingController;
 
-  const TextFieldComponent({super.key, required this.hintText, this.onChanged});
+  const TextFieldComponent({super.key, required this.hintText, this.onChanged, this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class TextFieldComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(15), // Add border radius
       ),
       child: TextField(
+          controller: textEditingController,
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none, // Remove default border

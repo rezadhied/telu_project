@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
@@ -82,35 +83,41 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         'roles': rolesData,
       };
 
-      try {
-        final apiUrlProvider =
-            Provider.of<ApiUrlProvider>(context, listen: false);
-        String apiUrl = apiUrlProvider.baseUrl;
-        final response = await http.post(
-          Uri.parse('$apiUrl/projects'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(projectData),
-        );
-
-        if (response.statusCode == 201) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainApp(
-                selectedIndex: 1,
-              ),
-            ),
+      if (await InternetConnection().hasInternetAccess) {
+        try {
+          final apiUrlProvider =
+              Provider.of<ApiUrlProvider>(context, listen: false);
+          String apiUrl = apiUrlProvider.baseUrl;
+          final response = await http.post(
+            Uri.parse('$apiUrl/projects'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(projectData),
           );
-        } else {
+
+          if (response.statusCode == 201) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainApp(
+                  selectedIndex: 1,
+                ),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to create project.')),
+            );
+          }
+        } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to create project.')),
+            SnackBar(content: Text('Error: $e')),
           );
         }
-      } catch (e) {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('No internet connection')),
         );
       }
     }

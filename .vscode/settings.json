@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "D:/Zaky/Kuliah/Semester 6/PEMROGRAMAN BERGERAK/Tubes/telu_project/linux",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic"
 }
