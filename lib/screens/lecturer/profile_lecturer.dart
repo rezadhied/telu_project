@@ -20,13 +20,14 @@ class ProfileLecturer extends StatefulWidget {
 
 class _ProfileLecturerState extends State<ProfileLecturer> {
   bool isEditing = false;
+  final _formKey = GlobalKey<FormState>();
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController nimController;
   late TextEditingController phoneController;
   late TextEditingController genderController;
   late TextEditingController facultyController;
-  late TextEditingController majorController;
+  late TextEditingController LecturerCodeController;
   String? imagePath = 'assets/images'; // Set default image path
 
   @override
@@ -38,7 +39,7 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
     phoneController = TextEditingController(text: '1234567890');
     genderController = TextEditingController(text: 'Male');
     facultyController = TextEditingController(text: 'Engineering');
-    majorController = TextEditingController(text: 'Computer Science');
+    LecturerCodeController = TextEditingController(text: 'Computer Science');
   }
 
   Future<void> _pickImage() async {
@@ -55,6 +56,7 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
   Future<Map<String, dynamic>> fetchUserData() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     String userId = pref.getString('userId') ?? '';
     print(userId);
     final response = await http.get(Uri.parse('$url/users/$userId'));
@@ -63,6 +65,39 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to Fetch User Data');
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    String userId = pref.getString('userId') ?? '';
+
+    final response = await http.put(
+      Uri.parse('$url/user/$userId'),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode({
+        'firstName': firstNameController.text,
+        'lastName': lastNameController.text,
+        'phoneNumber': phoneController.text,
+        'gender': genderController.text,
+        'facultyName': facultyController.text,
+        'lectureCode': LecturerCodeController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Profile updated successfully'),
+      ));
+      setState(() {
+        isEditing = false;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to update profile'),
+      ));
     }
   }
 
@@ -78,9 +113,17 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
               );
             } else {
               var userdata = snapshot.data!;
+
+              firstNameController.text = userdata['firstName'];
+              lastNameController.text = userdata['lastName'];
+              nimController.text = userdata['userID'];
+              phoneController.text = userdata['phoneNumber'];
+              genderController.text = userdata['gender'];
+              facultyController.text = userdata['facultyName'];
+              LecturerCodeController.text = userdata['lectureCode'];
               return Container(
                 color: AppColors.white,
-                padding: const EdgeInsets.only(top: 1.0),
+                padding: const EdgeInsets.only(top: 5.0),
                 child: Column(
                   children: [
                     Container(
@@ -169,9 +212,9 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() {
-                                          isEditing = false;
-                                        });
+                                        if (_formKey.currentState!.validate()) {
+                                          _updateProfile();
+                                        }
                                       },
                                       style: ElevatedButton.styleFrom(
                                         foregroundColor: Colors.white,
@@ -201,9 +244,11 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
                     ),
                     Expanded(
                       child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
                             const SizedBox(height: 24),
                             buildTextFormField(
                                 'First Name', firstNameController),
@@ -218,9 +263,11 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
                             const SizedBox(height: 16),
                             buildTextFormField('Faculty', facultyController),
                             const SizedBox(height: 16),
-                            buildTextFormField('Major', majorController),
+                            buildTextFormField(
+                                'Lecturer Code', LecturerCodeController),
                             const SizedBox(height: 16),
                           ],
+                          ),
                         ),
                       ),
                     ),
@@ -243,7 +290,7 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
     phoneController.dispose();
     genderController.dispose();
     facultyController.dispose();
-    majorController.dispose();
+    LecturerCodeController.dispose();
     super.dispose();
   }
 
