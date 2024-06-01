@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:telu_project/class/User.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
@@ -131,45 +132,48 @@ class _HomeLecturer extends State<HomeLecturer> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return Container(
-            margin: EdgeInsets.fromLTRB(
-                15, index == 0 ? 0 : 10, 15, index == 2 ? 20 : 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.grey, width: 1),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(90),
+          return Skeletonizer(
+            enabled: true,
+            child: Container(
+              margin: EdgeInsets.fromLTRB(
+                  15, index == 0 ? 0 : 10, 15, index == 9 ? 20 : 0),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.grey, width: 1),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(90),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 20,
-                        color: Colors.grey[400],
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        width: 150,
-                        height: 20,
-                        color: Colors.grey[400],
-                      ),
-                    ],
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 20,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          width: 150,
+                          height: 20,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
