@@ -37,10 +37,11 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
   bool isLoading = false;
 
   Future<void> fetchMyProjects() async {
-    setState(() {
-      isLoading = true;
-    });
-
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     final db = await DatabaseHelper().database;
 
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -411,9 +412,11 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
                                                     )));
 
                                         if (result == true) {
-                                          setState(() {
-                                            fetchMyProjects();
-                                          });
+                                          if (mounted) {
+                                            setState(() {
+                                              fetchMyProjects();
+                                            });
+                                          }
                                         }
                                       },
                                       child: Container(
@@ -595,18 +598,20 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
   }
 
   void filterProjects(String query) {
-    setState(() {
-      if (query.isNotEmpty || selectedStatus != null) {
-        filteredProjects = projectList.where((project) {
-          final titleMatches =
-              project['title']!.toLowerCase().contains(query.toLowerCase());
-          final statusMatches = selectedStatus == 'All' ||
-              project['projectStatus'] == selectedStatus;
-          return titleMatches && statusMatches;
-        }).toList();
-      } else {
-        filteredProjects = List.from(projectList);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (query.isNotEmpty || selectedStatus != null) {
+          filteredProjects = projectList.where((project) {
+            final titleMatches =
+                project['title']!.toLowerCase().contains(query.toLowerCase());
+            final statusMatches = selectedStatus == 'All' ||
+                project['projectStatus'] == selectedStatus;
+            return titleMatches && statusMatches;
+          }).toList();
+        } else {
+          filteredProjects = List.from(projectList);
+        }
+      });
+    }
   }
 }

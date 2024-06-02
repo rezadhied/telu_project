@@ -37,9 +37,11 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
   bool isLoading = false;
 
   Future<void> fetchMyProjects() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
 
     final db = await DatabaseHelper().database;
 
@@ -494,9 +496,11 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                                     )));
 
                                         if (result == true) {
-                                          setState(() {
-                                            fetchMyProjects();
-                                          });
+                                          if (mounted) {
+                                            setState(() {
+                                              fetchMyProjects();
+                                            });
+                                          }
                                         }
                                       },
                                       child: Container(
@@ -642,18 +646,20 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
   }
 
   void filterProjects(String query) {
-    setState(() {
-      if (query.isNotEmpty || selectedStatus != null) {
-        filteredProjects = projectList.where((project) {
-          final titleMatches =
-              project['title']!.toLowerCase().contains(query.toLowerCase());
-          final statusMatches = selectedStatus == 'All' ||
-              project['projectStatus'] == selectedStatus;
-          return titleMatches && statusMatches;
-        }).toList();
-      } else {
-        filteredProjects = List.from(projectList);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (query.isNotEmpty || selectedStatus != null) {
+          filteredProjects = projectList.where((project) {
+            final titleMatches =
+                project['title']!.toLowerCase().contains(query.toLowerCase());
+            final statusMatches = selectedStatus == 'All' ||
+                project['projectStatus'] == selectedStatus;
+            return titleMatches && statusMatches;
+          }).toList();
+        } else {
+          filteredProjects = List.from(projectList);
+        }
+      });
+    }
   }
 }
