@@ -64,6 +64,11 @@ class _HomeStudent extends State<HomeStudent> {
     },
   ];
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   late User user;
 
   Future<void> fetchNewestProjects() async {
@@ -79,22 +84,20 @@ class _HomeStudent extends State<HomeStudent> {
       final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
 
       if (response.statusCode == 200) {
-        setState(() {
-          _newestProject = jsonDecode(response.body);
-          if (_newestProject.isEmpty) {
-            _showNoNewestProjectMessage = true;
-          }
-        });
-        print('yey');
+        if (mounted) {
+          setState(() {
+            _newestProject = jsonDecode(response.body);
+            if (_newestProject.isEmpty) {
+              _showNoNewestProjectMessage = true;
+            }
+            _isLoadingNewestProject = false;
+          });
+        }
       } else {
         throw Exception('Failed to fetch newest projects');
       }
     } catch (error) {
       print("Failed to fetch newest projects: $error");
-    } finally {
-      setState(() {
-        _isLoadingNewestProject = false;
-      });
     }
   }
 
@@ -103,6 +106,8 @@ class _HomeStudent extends State<HomeStudent> {
     super.initState();
     fetchNewestProjects();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

@@ -13,6 +13,10 @@ class MyProjectStudent extends StatefulWidget {
 }
 
 class _MyProjectStudentState extends State<MyProjectStudent> {
+  void dispose(){
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Center(
