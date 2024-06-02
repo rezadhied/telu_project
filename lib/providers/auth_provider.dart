@@ -97,6 +97,8 @@ class AuthProvider extends ChangeNotifier {
       await storeUserData(user);
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString("userId", user.userID.toString());
+      pref.setString("userName", "${user.firstName} ${user.lastName}");
+      pref.setString("userRole", user.role);
 
       _errorMessage = '';
       notifyListeners();
