@@ -31,6 +31,11 @@ class _HomeLecturer extends State<HomeLecturer> {
   late User user;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _checkConnectivity();
@@ -40,15 +45,17 @@ class _HomeLecturer extends State<HomeLecturer> {
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      _showNoInternetSnackbar();
-      setState(() {
-        _isConnected = false;
-      });
-    } else {
-      setState(() {
-        _isConnected = true;
-      });
+    if (mounted) {
+      if (connectivityResult == ConnectivityResult.none) {
+        _showNoInternetSnackbar();
+        setState(() {
+          _isConnected = false;
+        });
+      } else {
+        setState(() {
+          _isConnected = true;
+        });
+      }
     }
   }
 
@@ -73,9 +80,11 @@ class _HomeLecturer extends State<HomeLecturer> {
 
     if (response.statusCode == 200) {
       final List projects = json.decode(response.body);
-      setState(() {
-        projectCount = projects.length;
-      });
+      if (mounted) {
+        setState(() {
+          projectCount = projects.length;
+        });
+      }
     } else {
       throw Exception('Failed to load projects');
     }
@@ -99,12 +108,14 @@ class _HomeLecturer extends State<HomeLecturer> {
       final response = await http.get(Uri.parse('$apiUrl/newestProjects'));
 
       if (response.statusCode == 200) {
-        setState(() {
-          _newestProject = jsonDecode(response.body);
-          if (_newestProject.isEmpty) {
-            _showNoNewestProjectMessage = true;
-          }
-        });
+        if (mounted) {
+          setState(() {
+            _newestProject = jsonDecode(response.body);
+            if (_newestProject.isEmpty) {
+              _showNoNewestProjectMessage = true;
+            }
+          });
+        }
       } else {
         throw Exception('Failed to fetch newest projects');
       }
@@ -328,12 +339,22 @@ class _HomeLecturer extends State<HomeLecturer> {
                                           textAlign: TextAlign.left,
                                         ),
                                         const SizedBox(width: 15),
-                                        Text(
-                                          '$projectCount',
-                                          style: GoogleFonts.inter(
-                                              color: AppColors.white),
-                                          textAlign: TextAlign.left,
-                                        ),
+                                        _isLoadingNewestProject
+                                            ? Container(
+                                                margin: const EdgeInsets.only(
+                                                    right: 10),
+                                                width: 10,
+                                                height: 10,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: AppColors.white,
+                                                ))
+                                            : Text(
+                                                '$projectCount',
+                                                style: GoogleFonts.inter(
+                                                    color: AppColors.white),
+                                                textAlign: TextAlign.left,
+                                              ),
                                       ],
                                     ),
                                   ),
@@ -361,8 +382,7 @@ class _HomeLecturer extends State<HomeLecturer> {
                       : _newestProject.isEmpty
                           ? SliverToBoxAdapter(
                               child: SizedBox(
-                                height: MediaQuery.of(context).size.height /
-                                    2, 
+                                height: MediaQuery.of(context).size.height / 2,
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

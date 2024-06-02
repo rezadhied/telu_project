@@ -106,13 +106,27 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
 
   var update = false;
 
+  void getRole() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    if (mounted) {
+      setState(() {
+        isStudent = pref.getString("isStudent") == "true";
+        print(isStudent);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getProjectById();
+    getRole();
   }
 
   Formatter formatter = Formatter();
+
+  bool isStudent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +138,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
             extendBody: true,
             backgroundColor: AppColors.white,
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
+              preferredSize: Size.fromHeight(kToolbarHeight),
               child: AppBar(
                 surfaceTintColor: Colors.transparent,
                 backgroundColor: AppColors.white,
@@ -195,7 +209,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                 }
                               },
                               child: Icon(
-                                Icons.settings,
+                                !isStudent ? Icons.settings : Icons.info,
                               ),
                             ),
                           )
@@ -330,44 +344,51 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.black),
                                       ),
-                                      InkWell(
-                                        onTap: () async {
-                                          if (await InternetConnection()
-                                              .hasInternetAccess) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    InviteStudent(
-                                                      projectTitle:
-                                                          projectData['title'],
-                                                      projectID: projectData[
-                                                          'projectID'],
-                                                      projectRoles: projectData[
-                                                          'ProjectRoles'],
-                                                    )),
+                                      !isStudent
+                                          ? InkWell(
+                                              onTap: () async {
+                                                if (await InternetConnection()
+                                                    .hasInternetAccess) {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: ((context) =>
+                                                          InviteStudent(
+                                                            projectTitle:
+                                                                projectData[
+                                                                    'title'],
+                                                            projectID:
+                                                                projectData[
+                                                                    'projectID'],
+                                                            projectRoles:
+                                                                projectData[
+                                                                    'ProjectRoles'],
+                                                          )),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          'You are offline, please check your internet connection'),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                child: const Icon(
+                                                  Icons.person_add,
+                                                  color: AppColors
+                                                      .quarternaryAlternative,
+                                                ),
                                               ),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'You are offline, please check your internet connection'),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        borderRadius: BorderRadius.circular(14),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          child: const Icon(
-                                            Icons.person_add,
-                                            color: AppColors
-                                                .quarternaryAlternative,
-                                          ),
-                                        ),
-                                      )
+                                            )
+                                          : SizedBox()
                                     ],
                                   ),
                                   const SizedBox(height: 10),

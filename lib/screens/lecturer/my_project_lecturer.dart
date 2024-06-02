@@ -219,6 +219,11 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     fetchMyProjects();
@@ -399,13 +404,21 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                   alignment: Alignment.centerLeft,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        "${filteredProjects.length} ",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w700),
-                                      ),
+                                      isLoading
+                                          ? Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 10),
+                                              width: 10,
+                                              height: 10,
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : Text(
+                                              "${filteredProjects.length} ",
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14,
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                       Text(
                                         'Projects',
                                         style: GoogleFonts.inter(
@@ -437,6 +450,36 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: AppColors.grey, width: 1),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          AppColors.white,
+                                          filteredProjects[index]
+                                                      ['projectStatus'] ==
+                                                  'Active'
+                                              ? AppColors.secondary
+                                                  .withOpacity(0.1)
+                                              : filteredProjects[index]
+                                                          ['projectStatus'] ==
+                                                      'Finished'
+                                                  ? AppColors.primary
+                                                      .withOpacity(0.1)
+                                                  : filteredProjects[index][
+                                                              'projectStatus'] ==
+                                                          'Open Request'
+                                                      ? Colors.yellow
+                                                          .withOpacity(0.1)
+                                                      : filteredProjects[index][
+                                                                  'projectStatus'] ==
+                                                              'Waiting to Start'
+                                                          ? AppColors.tertiary
+                                                              .withOpacity(0.1)
+                                                          : AppColors.grey,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        stops: [0.0, 1.0],
+                                        tileMode: TileMode.clamp,
+                                      ),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: GestureDetector(

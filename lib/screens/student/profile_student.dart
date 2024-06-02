@@ -115,8 +115,11 @@ class _ProfileStudentState extends State<ProfileStudent> {
         future: fetchUserData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return Container(
+              color: AppColors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           } else {
             var userdata = snapshot.data!;
@@ -204,10 +207,11 @@ class _ProfileStudentState extends State<ProfileStudent> {
                                       Provider.of<AuthProvider>(context,
                                               listen: false)
                                           .logoutUser();
-                                      Navigator.of(context).push(
+                                      Navigator.of(context).pushAndRemoveUntil(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  WelcomePage()));
+                                                  WelcomePage()),
+                                          (route) => false);
                                     },
                                     child: Text("Logout"),
                                   ),
