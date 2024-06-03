@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/functions/formatter.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
@@ -52,6 +53,8 @@ class _ProjectEditState extends State<ProjectEdit> {
     status = newStatus;
   }
 
+  bool isLoading = false;
+
   void handleSave() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     final response = await http.put(
@@ -79,6 +82,25 @@ class _ProjectEditState extends State<ProjectEdit> {
         fontSize: 16.0);
   }
 
+  void getRole() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    if (mounted) {
+      setState(() {
+        isStudent = pref.getString("isStudent") == "true";
+        print(isStudent);
+      });
+    }
+  }
+
+  void getStatus() async {
+    var projectData = await getProjectById();
+    status = projectData['projectStatus'];
+    firstStatus = projectData['projectStatus'];
+  }
+
+  bool isStudent = false;
+
   final Formatter formatter = Formatter();
 
   @override
@@ -87,12 +109,7 @@ class _ProjectEditState extends State<ProjectEdit> {
     super.initState();
     save = false;
     getStatus();
-  }
-
-  void getStatus() async {
-    var projectData = await getProjectById();
-    status = projectData['projectStatus'];
-    firstStatus = projectData['projectStatus'];
+    getRole();
   }
 
   bool save = false;
@@ -145,7 +162,9 @@ class _ProjectEditState extends State<ProjectEdit> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Text(
-                            'Edit Project Info',
+                            !isStudent
+                                ? 'Edit Project Info'
+                                : 'Project Information',
                             textAlign: TextAlign.center,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -171,17 +190,20 @@ class _ProjectEditState extends State<ProjectEdit> {
                                         _notifier.value = !_notifier.value;
                                       }
                                     },
-                                    child: Text(
-                                      'Save',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: save
-                                            ? AppColors.tertiary
-                                            : AppColors.black.withOpacity(0.30),
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    child: !isStudent
+                                        ? Text(
+                                            'Save',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: save
+                                                  ? AppColors.tertiary
+                                                  : AppColors.black
+                                                      .withOpacity(0.30),
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : SizedBox(),
                                   ),
                                 ),
                               );
@@ -204,7 +226,7 @@ class _ProjectEditState extends State<ProjectEdit> {
                   return Center(child: Text('No project data found'));
                 } else {
                   var projectData = snapshot.data!;
-                  print(status);
+                  status = projectData['projectStatus'];
                   return SafeArea(
                     child: SingleChildScrollView(
                       child: Container(
@@ -255,28 +277,31 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           ),
                                         );
                                       }),
-                                  InkWell(
-                                      onTap: () async {
-                                        String value = await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    ProjectEditData(
-                                                      nameColumn: "Title",
-                                                      projectId: projectData[
-                                                          'projectID'],
-                                                      data:
-                                                          projectData['title'],
-                                                    ))));
-                                        if (value != projectData['title'] &&
-                                            value != '') {
-                                          projectData['title'] = value;
-                                          _notifierTitle.value =
-                                              !_notifierTitle.value;
-                                          update = true;
-                                        }
-                                      },
-                                      child: Icon(Icons.arrow_right))
+                                  !isStudent
+                                      ? InkWell(
+                                          onTap: () async {
+                                            String value = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        ProjectEditData(
+                                                          nameColumn: "Title",
+                                                          projectId:
+                                                              projectData[
+                                                                  'projectID'],
+                                                          data: projectData[
+                                                              'title'],
+                                                        ))));
+                                            if (value != projectData['title'] &&
+                                                value != '') {
+                                              projectData['title'] = value;
+                                              _notifierTitle.value =
+                                                  !_notifierTitle.value;
+                                              update = true;
+                                            }
+                                          },
+                                          child: Icon(Icons.arrow_right))
+                                      : SizedBox()
                                 ],
                               )),
                           const SizedBox(height: 20),
@@ -420,7 +445,9 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           ),
                                         ],
                                       )),
-                                  Icon(Icons.arrow_right)
+                                  !isStudent
+                                      ? Icon(Icons.arrow_right)
+                                      : SizedBox()
                                 ],
                               )),
                           const SizedBox(height: 10),
@@ -468,7 +495,9 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           ),
                                         ],
                                       )),
-                                  Icon(Icons.arrow_right)
+                                  !isStudent
+                                      ? Icon(Icons.arrow_right)
+                                      : SizedBox()
                                 ],
                               )),
                           const SizedBox(height: 10),
@@ -516,7 +545,9 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           ),
                                         ],
                                       )),
-                                  Icon(Icons.arrow_right)
+                                  !isStudent
+                                      ? Icon(Icons.arrow_right)
+                                      : SizedBox()
                                 ],
                               )),
                           const SizedBox(height: 20),
@@ -583,7 +614,9 @@ class _ProjectEditState extends State<ProjectEdit> {
                                           update = true;
                                         }
                                       },
-                                      child: Icon(Icons.arrow_right))
+                                      child: !isStudent
+                                          ? Icon(Icons.arrow_right)
+                                          : SizedBox())
                                 ],
                               )),
                           const SizedBox(height: 20),
@@ -659,9 +692,11 @@ class _ProjectEditState extends State<ProjectEdit> {
       ),
       child: GestureDetector(
         onTap: () {
-          handleEditStatus(statusName);
-          save = firstStatus != status;
-          callback();
+          if (!isStudent) {
+            handleEditStatus(statusName);
+            save = firstStatus != status;
+            callback();
+          }
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

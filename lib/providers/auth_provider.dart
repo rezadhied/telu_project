@@ -56,8 +56,6 @@ class AuthProvider extends ChangeNotifier {
           headers: headers,
           body: jsonEncode(body));
 
-      print(response);
-
       // CONDITIONAL STAMENT WETHER THE RESPONSE IS SUCCESS
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);

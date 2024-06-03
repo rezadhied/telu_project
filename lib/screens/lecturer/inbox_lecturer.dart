@@ -92,7 +92,9 @@ class _InboxLecturerState extends State<InboxLecturer> {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
+    //String userId = '1307684006';
     final response = await http.get(Uri.parse('$url/requestMember/$userId'));
+    //final response = await http.get(Uri.parse('http://10.0.2.2:5000/requestMember/$userId'));
     if (response.statusCode == 200) {
       final List projectsJson = json.decode(response.body);
       if (mounted) {

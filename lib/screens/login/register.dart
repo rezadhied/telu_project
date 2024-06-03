@@ -23,7 +23,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController username =  TextEditingController();
+  TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   String loginErrorMessage = "";
@@ -31,13 +31,13 @@ class _RegisterState extends State<Register> {
   List<dynamic> dataFacultyMajor = [];
 
   Future<void> fetchFacultyMajor() async {
-    String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
-    final response = await http.get(Uri.parse('$url/faculty-major'));
-    if (response.statusCode == 200) {
+    try {
+      String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+      final response = await http.get(Uri.parse('$url/faculty-major'));
+      print(response.body);
       dataFacultyMajor = json.decode(response.body);
-      print(dataFacultyMajor);
-    } else {
-      throw Exception('Failed to load Faculty and Major');
+    } catch (e) {
+      print("Error :$e");
     }
   }
 
@@ -70,91 +70,95 @@ class _RegisterState extends State<Register> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                    Text(
-                      "Start the journey.",
-                      style: GoogleFonts.inter(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.blackAlternative),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Text("Let’s create an account",
-                          textAlign: TextAlign.left,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Start the journey.",
                           style: GoogleFonts.inter(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w300,
-                            color: AppColors.black,
-                          )),
-                    ),
-                    TextFieldComponent(
-                      hintText: "Username",
-                      textEditingController: username,
-                      onChanged: (value) {
-                        setState(() {
-                          username.text = value;
-                        });
-                      },
-                    ),
-                    TextFieldComponent(
-                      hintText: "Password",
-                      textEditingController: password,
-                      onChanged: (value) {
-                        setState(() {
-                          password.text = value;
-                        });
-                      },
-                    ),
-                    TextFieldComponent(
-                      hintText: "Confirm Password",
-                      textEditingController: confirmPassword,
-                      onChanged: (value) {
-                        setState(() {
-                          confirmPassword.text = value;
-                        });
-                      },
-                    ),
-                    loginErrorMessage.isNotEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              loginErrorMessage,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                    ButtonComponent(
-                      buttonText: 'Next',
-                      targetPage: RegisterDetail(
-                        email: username.text + (widget.isStudent ? "@student.telkomuniversity.ac.id" : "@telkomuniversity.ac.id"), 
-                        password: password.text,
-                        dataFacultyMajor: dataFacultyMajor,
-                        isStudent: widget.isStudent,
-                      ),
-                      data: {
-                        "username": username.text,
-                        "password": password.text,
-                        "confirmPassword": confirmPassword.text
-                      },
-                      action: "reg-1",
-                      callback: (value) {
-                        setState(() {
-                          loginErrorMessage = value;
-                          if (value == "") {
-                            loginErrorMessage = "";
-                            username.text = "";
-                            password.text = "";
-                            confirmPassword.text = "";
-                          }
-                        });
-                      },
-                    ),
-                  ]),
+                              fontSize: 32,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.blackAlternative),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: Text("Let’s create an account",
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.inter(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w300,
+                                color: AppColors.black,
+                              )),
+                        ),
+                        TextFieldComponent(
+                          hintText: "Username",
+                          textEditingController: username,
+                          onChanged: (value) {
+                            setState(() {
+                              username.text = value;
+                            });
+                          },
+                        ),
+                        TextFieldComponent(
+                          hintText: "Password",
+                          textEditingController: password,
+                          onChanged: (value) {
+                            setState(() {
+                              password.text = value;
+                            });
+                          },
+                        ),
+                        TextFieldComponent(
+                          hintText: "Confirm Password",
+                          textEditingController: confirmPassword,
+                          onChanged: (value) {
+                            setState(() {
+                              confirmPassword.text = value;
+                            });
+                          },
+                        ),
+                        loginErrorMessage.isNotEmpty
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  loginErrorMessage,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                        ButtonComponent(
+                          buttonText: 'Next',
+                          targetPage: RegisterDetail(
+                            email: username.text +
+                                (widget.isStudent
+                                    ? "@student.telkomuniversity.ac.id"
+                                    : "@telkomuniversity.ac.id"),
+                            password: password.text,
+                            dataFacultyMajor: dataFacultyMajor,
+                            isStudent: widget.isStudent,
+                          ),
+                          data: {
+                            "username": username.text,
+                            "password": password.text,
+                            "confirmPassword": confirmPassword.text
+                          },
+                          action: "reg-1",
+                          callback: (value) {
+                            setState(() {
+                              loginErrorMessage = value;
+                              if (value == "") {
+                                loginErrorMessage = "";
+                                username.text = "";
+                                password.text = "";
+                                confirmPassword.text = "";
+                              }
+                            });
+                          },
+                        ),
+                      ]),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
