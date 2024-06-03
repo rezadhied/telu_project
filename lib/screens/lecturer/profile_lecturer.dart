@@ -84,6 +84,11 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
     );
   }
 
+  Future<void> logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('userData');
+  }
+
   Future<Map<String, dynamic>> fetchUserData() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -148,6 +153,15 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
               ),
             );
           } else {
+            if (snapshot.data! == null) {
+              logoutUser();
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) {
+                  return WelcomePage();
+                },
+              ), (route) => false);
+            }
+
             var userdata = snapshot.data!;
 
             firstNameController.text = userdata['firstName'];
