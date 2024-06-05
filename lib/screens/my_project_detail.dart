@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/functions/formatter.dart';
 import 'package:telu_project/helper/database_helper.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -29,8 +30,6 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
       isLoading = true;
     });
 
-    final db = await DatabaseHelper().database;
-
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
 
@@ -38,67 +37,93 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
 
     if (isConnectToInternet) {
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
+
+      if (SharedPreferencesHelper().getString("myProjectUpdate") == "false") {
+        print("ambil dari local");
+        return await getProjectByIdFromSqlLite();
+      }
+
       final response = await http.get(Uri.parse('$url/project/${widget.id}'));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load project');
       } else {
-        print(json.decode(response.body));
         return json.decode(response.body);
       }
     } else {
-      final project = await db
-          .query('Project', where: 'projectID = ?', whereArgs: [widget.id]);
+      return await getProjectByIdFromSqlLite();
+    }
+  }
 
-      if (project.isNotEmpty) {
-        final projectMembers = await db.query('ProjectMember',
-            where: 'projectID = ?', whereArgs: [widget.id]);
+  Future<Map<String, dynamic>> getProjectByIdFromSqlLite() async {
+    final db = await DatabaseHelper().database;
+    final project = await db
+        .query('Project', where: 'projectID = ?', whereArgs: [widget.id]);
 
-        List<Map<String, dynamic>> fullProjectMembers = [];
+    if (project.isNotEmpty) {
+      final projectMembers = await db.query('ProjectMember',
+          where: 'projectID = ?', whereArgs: [widget.id]);
 
-        for (var member in projectMembers) {
-          print(member);
-          Map<String, dynamic> memberMap = member as Map<String, dynamic>;
-          String userID = memberMap['userID'];
-          var user =
-              await db.query('users', where: 'userID = ?', whereArgs: [userID]);
-          var role = await db.query('Role',
-              where: 'roleID = ?', whereArgs: [memberMap['roleID']]);
-          print(role);
-          fullProjectMembers.add({
-            'projectMemberID': memberMap['projectMemberID'],
-            'userID': memberMap['userID'],
-            'roleID': memberMap['roleID'],
-            'user': {
-              'firstName': user[0]['firstName'],
-              'lastName': user[0]['lastName'],
-              'email': user[0]['email'],
-              'photoProfileUrl': user[0]['photoProfileUrl'],
-            },
-            'Role': {
-              'name': role[0]['name'],
-            }
-          });
+      final projectRoles = await db
+          .query('ProjectRole', where: 'projectID = ?', whereArgs: [widget.id]);
 
-          print(fullProjectMembers);
-        }
+      List<Map<String, dynamic>> fullProjectMembers = [];
+      List<Map<String, dynamic>> fullProjectRoles = [];
 
-        return {
-          'projectID': project[0]['projectID'],
-          'title': project[0]['title'],
-          'description': project[0]['description'],
-          'startProject': project[0]['startProject'],
-          'endProject': project[0]['endProject'],
-          'openUntil': project[0]['openUntil'],
-          'totalMember': project[0]['totalMember'],
-          'groupLink': project[0]['groupLink'],
-          'projectStatus': project[0]['projectStatus'],
-          'createdAt': project[0]['createdAt'],
-          "ProjectMembers": fullProjectMembers,
-        };
-      } else {
-        throw Exception('Failed to load project');
+      for (var role in projectRoles) {
+        final roleName = await db
+            .query('Role', where: 'roleID = ?', whereArgs: [role['roleID']]);
+        fullProjectRoles.add({
+          'roleID': role['roleID'],
+          'quantity': role['quantity'],
+          'Role': {
+            'name': roleName[0]['name'],
+          }
+        });
       }
+
+      print(fullProjectRoles);
+
+      for (var member in projectMembers) {
+        Map<String, dynamic> memberMap = member as Map<String, dynamic>;
+        String userID = memberMap['userID'];
+        var user =
+            await db.query('users', where: 'userID = ?', whereArgs: [userID]);
+        var role = await db.query('Role',
+            where: 'roleID = ?', whereArgs: [memberMap['roleID']]);
+
+        fullProjectMembers.add({
+          'projectMemberID': memberMap['projectMemberID'],
+          'userID': memberMap['userID'],
+          'roleID': memberMap['roleID'],
+          'user': {
+            'firstName': user[0]['firstName'],
+            'lastName': user[0]['lastName'],
+            'email': user[0]['email'],
+            'photoProfileUrl': user[0]['photoProfileUrl'],
+          },
+          'Role': {
+            'name': role[0]['name'],
+          }
+        });
+      }
+
+      return {
+        'projectID': project[0]['projectID'],
+        'title': project[0]['title'],
+        'description': project[0]['description'],
+        'startProject': project[0]['startProject'],
+        'endProject': project[0]['endProject'],
+        'openUntil': project[0]['openUntil'],
+        'totalMember': project[0]['totalMember'],
+        'groupLink': project[0]['groupLink'],
+        'projectStatus': project[0]['projectStatus'],
+        'createdAt': project[0]['createdAt'],
+        "ProjectMembers": fullProjectMembers,
+        "ProjectRoles": fullProjectRoles,
+      };
+    } else {
+      throw Exception('Failed to load project');
     }
   }
 
@@ -112,7 +137,6 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
     if (mounted) {
       setState(() {
         isStudent = pref.getString("isStudent") == "true";
-        print(isStudent);
       });
     }
   }

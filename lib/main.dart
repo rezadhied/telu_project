@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/firebase_options.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:telu_project/screens/login/welcome_screen.dart';
@@ -28,6 +29,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferencesHelper().init();
+  await SharedPreferencesHelper().setString("myProjectUpdate", "true");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

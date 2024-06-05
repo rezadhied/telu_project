@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class _ProjectEditState extends State<ProjectEditData> {
   String firstData = '';
   bool save = false;
 
-  void updateData(String section) {
+  void updateData(String section) async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
 
     if (section == "Description") {
@@ -46,6 +47,8 @@ class _ProjectEditState extends State<ProjectEditData> {
     } else if (section == "Title") {
       updateTitle(url);
     }
+
+    await SharedPreferencesHelper().setString("myProjectUpdate", "true");
 
     setState(() {
       save = false;

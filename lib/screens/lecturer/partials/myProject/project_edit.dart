@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/functions/formatter.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/project_edit_data.dart';
 import 'package:provider/provider.dart';
@@ -70,8 +71,10 @@ class _ProjectEditState extends State<ProjectEdit> {
     if (response.statusCode != 200) {
       throw Exception('Failed to update project status');
     }
+
     update = true;
     firstStatus = status;
+    await SharedPreferencesHelper().setString("myProjectUpdate", "true");
     Fluttertoast.showToast(
         msg: "Status has been updated",
         toastLength: Toast.LENGTH_SHORT,
