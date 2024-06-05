@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:telu_project/screens/student/partials/inbox/inbox_detail.dart';
 
 class InboxStudent extends StatefulWidget {
@@ -26,7 +26,7 @@ class _InboxStudentState extends State<InboxStudent> {
 
   Future<void> fetchInvitation() async {
     setState(() {
-      isLoading = true;      
+      isLoading = true;
     });
     try {
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
@@ -99,7 +99,8 @@ class _InboxStudentState extends State<InboxStudent> {
 
   ButtonStyle getButtonStyle(String status) {
     return ElevatedButton.styleFrom(
-      foregroundColor: selectedFilter == status ? AppColors.white : AppColors.black,
+      foregroundColor:
+          selectedFilter == status ? AppColors.white : AppColors.black,
       backgroundColor:
           selectedFilter == status ? AppColors.primary : Colors.grey[50],
     );
@@ -181,65 +182,68 @@ class _InboxStudentState extends State<InboxStudent> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return isLoading ? Expanded(child : Center(child: CircularProgressIndicator())) : GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => InboxDetail(invitationData: filteredDataInvitation[index], 
-                                    date: formatDate(
-                                      filteredDataInvitation[index]["createdAt"]
-                                      ),
-                                    callback: fetchInvitation,
-                                    )
-                                  )
-                                );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: getBackgroundColor(
-                              filteredDataInvitation[index]["status"]),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.all(20),
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${filteredDataInvitation[index]["sender"]["firstName"]} ${filteredDataInvitation[index]["sender"]["lastName"]}',
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.black,
+                    return isLoading
+                        ? Expanded(
+                            child: Center(child: CircularProgressIndicator()))
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => InboxDetail(
+                                        invitationData:
+                                            filteredDataInvitation[index],
+                                        date: formatDate(
+                                            filteredDataInvitation[index]
+                                                ["createdAt"]),
+                                        callback: fetchInvitation,
+                                      )));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: getBackgroundColor(
+                                    filteredDataInvitation[index]["status"]),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.all(20),
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${filteredDataInvitation[index]["sender"]["firstName"]} ${filteredDataInvitation[index]["sender"]["lastName"]}',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    filteredDataInvitation[index]["message"],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    formatDate(filteredDataInvitation[index]
+                                        ["createdAt"]),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              filteredDataInvitation[index]["message"],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: AppColors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              formatDate(
-                                  filteredDataInvitation[index]["createdAt"]),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w200,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
+                          );
                   },
                   childCount: filteredDataInvitation.length,
                 ),
