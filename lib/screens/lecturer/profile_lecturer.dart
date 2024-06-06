@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -175,7 +177,7 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
 
             return Container(
               color: AppColors.white,
-              padding: const EdgeInsets.only(top: 5.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Column(
                 children: [
                   Container(
