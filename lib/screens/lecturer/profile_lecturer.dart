@@ -12,7 +12,6 @@ import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/resources/add_data.dart';
 import 'package:telu_project/screens/login/welcome_screen.dart';
 import 'package:telu_project/utils.dart';
-import 'package:telu_project/resources/add_data.dart';
 
 class ProfileLecturer extends StatefulWidget {
   const ProfileLecturer({super.key});
@@ -104,7 +103,6 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
         'lectureCode': LecturerCodeController.text,
         'userID': nimController.text,
         'role': roleController.text,
-
       }),
     );
 
@@ -185,14 +183,15 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
                                       backgroundImage: NetworkImage(
                                           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgVUEjaWnHvhNaEy1-Jl6Ljvi7ahounqegSQ&s'),
                                     ),
-                              Positioned(
-                                child: IconButton(
-                                  onPressed: selectImage,
-                                  icon: const Icon(Icons.add_a_photo),
-                                ),
-                                bottom: -10,
-                                left: 80,
-                              )
+                              if (isEditing) // Hanya tampilkan ikon saat sedang pengeditan
+                                Positioned(
+                                  child: IconButton(
+                                    onPressed: selectImage,
+                                    icon: const Icon(Icons.add_a_photo),
+                                  ),
+                                  bottom: -10,
+                                  left: 80,
+                                )
                             ],
                           ),
                         ),
