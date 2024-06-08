@@ -12,6 +12,7 @@ import 'package:telu_project/providers/auth_provider.dart';
 import 'package:telu_project/resources/add_data.dart';
 import 'package:telu_project/screens/login/welcome_screen.dart';
 import 'package:telu_project/utils.dart';
+import 'package:telu_project/resources/add_data.dart';
 
 class ProfileLecturer extends StatefulWidget {
   const ProfileLecturer({super.key});
@@ -102,7 +103,8 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
         'facultyName': facultyController.text,
         'lectureCode': LecturerCodeController.text,
         'userID': nimController.text,
-        'role': roleController.text
+        'role': roleController.text,
+
       }),
     );
 
