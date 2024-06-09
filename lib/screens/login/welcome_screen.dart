@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/screens/login/register_option.dart';
 import 'package:telu_project/screens/login/signin.dart';
 
@@ -13,6 +14,17 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    await SharedPreferencesHelper().setString("myProjectUpdate", "true");
+  }
+
   int _current = 0;
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/main_app.dart';
 import 'package:telu_project/components/text_field_component.dart';
@@ -45,15 +46,17 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   }
 
   void _checkInputCompletion() {
-    setState(() {
-      _isInputComplete = _projectTitleController.text.isNotEmpty &&
-          _projectTitleController.text.length > 2 &&
-          _groupChatLinkController.text.isNotEmpty &&
-          _groupChatLinkController.text.contains('.com') &&
-          _descriptionController.text.isNotEmpty &&
-          _descriptionController.text.length > 11 &&
-          _roles.isNotEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isInputComplete = _projectTitleController.text.isNotEmpty &&
+            _projectTitleController.text.length > 2 &&
+            _groupChatLinkController.text.isNotEmpty &&
+            _groupChatLinkController.text.contains('.com') &&
+            _descriptionController.text.isNotEmpty &&
+            _descriptionController.text.length > 11 &&
+            _roles.isNotEmpty;
+      });
+    }
   }
 
   Future<void> _handleSubmit() async {
@@ -97,6 +100,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
           );
 
           if (response.statusCode == 201) {
+            await SharedPreferencesHelper()
+                .setString("myProjectUpdate", "true");
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -127,38 +132,46 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
     String input = _skillController.text;
     List<String> newSkills = input.split(',').map((e) => e.trim()).toList();
 
-    setState(() {
-      _skills.clear();
-      for (String skill in newSkills) {
-        if (skill.isNotEmpty) {
-          _skills.add(skill);
+    if (mounted) {
+      setState(() {
+        _skills.clear();
+        for (String skill in newSkills) {
+          if (skill.isNotEmpty) {
+            _skills.add(skill);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   void _handleAddRole() {
     String roleName = _roleNameController.text;
     int roleQuantity = int.tryParse(_roleQuantityController.text) ?? 0;
     if (roleName.isNotEmpty && roleQuantity > 0) {
-      setState(() {
-        _roles.add({'name': roleName, 'quantity': roleQuantity});
-        _roleNameController.clear();
-        _roleQuantityController.clear();
-      });
+      if (mounted) {
+        setState(() {
+          _roles.add({'name': roleName, 'quantity': roleQuantity});
+          _roleNameController.clear();
+          _roleQuantityController.clear();
+        });
+      }
     }
   }
 
   void _handleSkillTagClick(int index) {
-    setState(() {
-      _skills.removeAt(index);
-    });
+    if (mounted) {
+      setState(() {
+        _skills.removeAt(index);
+      });
+    }
   }
 
   void _handleRoleTagClick(int index) {
-    setState(() {
-      _roles.removeAt(index);
-    });
+    if (mounted) {
+      setState(() {
+        _roles.removeAt(index);
+      });
+    }
   }
 
   @override
@@ -328,9 +341,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                 context,
                                 showTitleActions: true,
                                 onConfirm: (date) {
-                                  setState(() {
-                                    _startDate = date;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _startDate = date;
+                                    });
+                                  }
                                 },
                                 currentTime: _startDate,
                               );
@@ -361,9 +376,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                     context,
                                     showTitleActions: true,
                                     onConfirm: (date) {
-                                      setState(() {
-                                        _startDate = date;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          _startDate = date;
+                                        });
+                                      }
                                     },
                                     currentTime: _startDate,
                                   );
@@ -391,9 +408,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                 context,
                                 showTitleActions: true,
                                 onConfirm: (date) {
-                                  setState(() {
-                                    _endDate = date;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _endDate = date;
+                                    });
+                                  }
                                 },
                                 currentTime: _endDate,
                               );
@@ -424,9 +443,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                     context,
                                     showTitleActions: true,
                                     onConfirm: (date) {
-                                      setState(() {
-                                        _endDate = date;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          _endDate = date;
+                                        });
+                                      }
                                     },
                                     currentTime: _endDate,
                                   );
@@ -460,9 +481,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                 context,
                                 showTitleActions: true,
                                 onConfirm: (date) {
-                                  setState(() {
-                                    _opreqDate = date;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _opreqDate = date;
+                                    });
+                                  }
                                 },
                                 currentTime: _opreqDate,
                               );
@@ -493,9 +516,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                                     context,
                                     showTitleActions: true,
                                     onConfirm: (date) {
-                                      setState(() {
-                                        _opreqDate = date;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          _opreqDate = date;
+                                        });
+                                      }
                                     },
                                     currentTime: _opreqDate,
                                   );
