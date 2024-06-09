@@ -77,6 +77,7 @@ class _SigninState extends State<Signin> {
                         password = value;
                       });
                     },
+                    isPassword: true,
                   ),
                   loginErrorMessage.isNotEmpty
                       ? Padding(
