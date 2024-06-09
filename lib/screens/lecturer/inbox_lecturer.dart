@@ -92,7 +92,9 @@ class _InboxLecturerState extends State<InboxLecturer> {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
+    //String userId = '1307684006';
     final response = await http.get(Uri.parse('$url/requestMember/$userId'));
+    //final response = await http.get(Uri.parse('http://10.0.2.2:5000/requestMember/$userId'));
     if (response.statusCode == 200) {
       final List projectsJson = json.decode(response.body);
       if (mounted) {
@@ -227,26 +229,39 @@ class _InboxLecturerState extends State<InboxLecturer> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestDetail(
-                          request: filteredRequests[index],
-                        ),
+          filteredRequests.isEmpty
+              ? SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      'Belum ada Request',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w700,
                       ),
-                    );
-                  },
-                  child: RequestItem(request: filteredRequests[index]),
-                );
-              },
-              childCount: filteredRequests.length,
-            ),
-          ),
+                    ),
+                  ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RequestDetail(
+                                request: filteredRequests[index],
+                              ),
+                            ),
+                          );
+                        },
+                        child: RequestItem(request: filteredRequests[index]),
+                      );
+                    },
+                    childCount: filteredRequests.length,
+                  ),
+                ),
         ],
       ),
     );
@@ -265,6 +280,9 @@ class RequestItem extends StatefulWidget {
 class _RequestItemState extends State<RequestItem> {
   bool isLoading = false;
   Future<void> fetchRequests() async {
+    setState(() {
+      isLoading = true;
+    });
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
@@ -325,15 +343,11 @@ class _RequestItemState extends State<RequestItem> {
         body: jsonEncode({'status': 'rejected'}),
       );
 
+      await fetchRequests();
+
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            originalRequests = originalRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
-            filteredRequests = filteredRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
             isLoading = false;
           });
         }
@@ -388,15 +402,11 @@ class _RequestItemState extends State<RequestItem> {
         body: jsonEncode({'status': 'accepted'}),
       );
 
+      await fetchRequests();
+
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            originalRequests = originalRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
-            filteredRequests = filteredRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
             isLoading = false;
           });
         }
@@ -512,10 +522,7 @@ class _RequestItemState extends State<RequestItem> {
           if (isLoading)
             Positioned.fill(
               child: Container(
-                color: Colors.black54,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
             ),
         ],
