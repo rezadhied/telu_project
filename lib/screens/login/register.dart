@@ -106,6 +106,7 @@ class _RegisterState extends State<Register> {
                               password.text = value;
                             });
                           },
+                          isPassword: true,
                         ),
                         TextFieldComponent(
                           hintText: "Confirm Password",
@@ -115,6 +116,7 @@ class _RegisterState extends State<Register> {
                               confirmPassword.text = value;
                             });
                           },
+                          isPassword: true,
                         ),
                         loginErrorMessage.isNotEmpty
                             ? Padding(

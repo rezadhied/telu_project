@@ -13,6 +13,7 @@ class ButtonComponent extends StatelessWidget {
   final String action;
   final dynamic? data;
   final Function(String)? callback;
+  final Function(bool)? callbackLogin;
   final VoidCallback onPressed;
 
   const ButtonComponent({
@@ -23,6 +24,7 @@ class ButtonComponent extends StatelessWidget {
     this.action = "",
     this.data,
     this.callback,
+    this.callbackLogin,
     VoidCallback? onPressed, // Removed the default value here
   }) : onPressed = onPressed ?? _defaultOnPressed; // Assign a default value
 
@@ -54,8 +56,10 @@ class ButtonComponent extends StatelessWidget {
 
             // Action Logic Gate
             if (action == "signin") {
+              if (callbackLogin != null) callbackLogin!(true);
               berhasil = await AuthProvider().loginUser(data['email'], data['password'], apiUrlProvider.baseUrl);
-              callbackValue = "Email or password are incorrect";
+              if (callbackLogin != null) callbackLogin!(false);
+              if (!berhasil) callbackValue = "Email or password are incorrect";
               final prefs = await SharedPreferences.getInstance();
               await prefs.setString("isStudent", data['email'].contains("student") ? "true" : "");
             } else if (action == "reg-1") {
