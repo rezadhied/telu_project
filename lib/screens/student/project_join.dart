@@ -17,46 +17,83 @@ class _JoinProjectState extends State<JoinProject> {
   String? selectedRole;
   String? selectedFileName;
   TextEditingController nameController = TextEditingController();
-  TextEditingController reasonController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null && result.files.single.name != null) {
       setState(() {
+        selectedFile = result.files.single;
         selectedFileName = result.files.single.name;
       });
     } else {
       // User canceled the picker
       setState(() {
+        selectedFile = null;
         selectedFileName = null;
       });
     }
   }
 
   Future<void> submitForm() async {
-    const url = 'http://localhost:3000/submit';
-
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.fields['name'] = nameController.text;
-    request.fields['role'] = selectedRole ?? '';
-    request.fields['reason'] = reasonController.text;
-
-    if (selectedFileName != null) {
-      var file = await http.MultipartFile.fromPath('file', selectedFileName!);
-      request.files.add(file);
+    if (nameController.text.isEmpty ||
+        selectedRole == null ||
+        messageController.text.isEmpty ||
+        selectedFile == null) {
+      // Show an error message if any field is empty
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Please fill in all fields and select a file.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
     }
+
+    // Upload the file
+    String fileName = selectedFile!.name;
+    String url = '';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url))
+      ..fields['userID'] = '1'
+      ..fields['projectID'] = '1'
+      ..fields['roleID'] = selectedRole!
+      ..fields['message'] = messageController.text
+      ..files.add(await http.MultipartFile.fromPath('cv', selectedFile!.path!));
 
     var response = await request.send();
 
-    if (response.statusCode == 200) {
-      print('Form submitted successfully!');
+    if (response.statusCode == 201) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomeStudent()),
       );
     } else {
-      print('Failed to submit form');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to submit the form.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -204,7 +241,7 @@ class _JoinProjectState extends State<JoinProject> {
                 ),
                 SizedBox(height: 8),
                 TextField(
-                  controller: reasonController,
+                  controller: messageController,
                   maxLines: 8,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
