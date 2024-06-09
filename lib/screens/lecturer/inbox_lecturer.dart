@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/inbox/request_detail.dart';
 
@@ -440,6 +441,8 @@ class _RequestItemState extends State<RequestItem> {
           'roleID': widget.request.roleID
         }),
       );
+
+      await SharedPreferencesHelper().setString("myProjectUpdate", "true");
 
       if (!mounted) return;
 
