@@ -140,116 +140,136 @@ class _InboxLecturerState extends State<InboxLecturer> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            title: Container(
-              padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-              margin: EdgeInsets.only(bottom: 10),
-              child: Text(
-                'Requested',
-                style: GoogleFonts.inter(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primary,
+      body: RefreshIndicator(
+        onRefresh: fetchRequests,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              title: Container(
+                padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                margin: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'Requested',
+                  style: GoogleFonts.inter(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              backgroundColor: AppColors.white,
+              floating: true,
+              pinned: true,
+              elevation: 0,
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Find Request',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                            color: AppColors.black.withOpacity(0.30)),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: AppColors.black,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          if (mounted) {
+                            setState(() {
+                              filterRequest(value);
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text(
+                                "${filteredRequests.length} ",
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                'Request',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14, color: AppColors.black),
+                              ),
+                            ],
+                          )),
+                    )
+                  ],
                 ),
               ),
             ),
-            backgroundColor: AppColors.white,
-            floating: true,
-            pinned: true,
-            elevation: 0,
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Find Request',
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 5),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border:
-                          Border.all(color: AppColors.black.withOpacity(0.30)),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: GoogleFonts.inter(
+            filteredRequests.isEmpty
+                ? SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Belum ada Request',
+                        style: GoogleFonts.inter(
                           fontSize: 14,
                           color: AppColors.black,
+                          fontWeight: FontWeight.w700,
                         ),
-                        border: InputBorder.none,
                       ),
-                      onChanged: (value) {
-                        if (mounted) {
-                          setState(() {
-                            filterRequest(value);
-                          });
-                        }
+                    ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestDetail(
+                                  request: filteredRequests[index],
+                                ),
+                              ),
+                            );
+                          },
+                          child: RequestItem(
+                            request: filteredRequests[index],
+                            onRequestUpdated:
+                                fetchRequests, // Passing the update function
+                          ),
+                        );
                       },
+                      childCount: filteredRequests.length,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Text(
-                              "${filteredRequests.length} ",
-                              style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              'Request',
-                              style: GoogleFonts.inter(
-                                  fontSize: 14, color: AppColors.black),
-                            ),
-                          ],
-                        )),
-                  )
-                ],
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestDetail(
-                          request: filteredRequests[index],
-                        ),
-                      ),
-                    );
-                  },
-                  child: RequestItem(request: filteredRequests[index]),
-                );
-              },
-              childCount: filteredRequests.length,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -257,8 +277,10 @@ class _InboxLecturerState extends State<InboxLecturer> {
 
 class RequestItem extends StatefulWidget {
   final Request request;
+  final Future<void> Function() onRequestUpdated; // Function to update requests
 
-  const RequestItem({super.key, required this.request});
+  const RequestItem(
+      {super.key, required this.request, required this.onRequestUpdated});
 
   @override
   State<RequestItem> createState() => _RequestItemState();
@@ -266,7 +288,11 @@ class RequestItem extends StatefulWidget {
 
 class _RequestItemState extends State<RequestItem> {
   bool isLoading = false;
+
   Future<void> fetchRequests() async {
+    setState(() {
+      isLoading = true;
+    });
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
     String userId = pref.getString('userId') ?? '';
@@ -281,6 +307,8 @@ class _RequestItemState extends State<RequestItem> {
             });
           }).toList();
           filteredRequests = originalRequests;
+
+          isLoading = false;
         });
       }
     } else {
@@ -327,15 +355,11 @@ class _RequestItemState extends State<RequestItem> {
         body: jsonEncode({'status': 'rejected'}),
       );
 
+      await widget.onRequestUpdated(); // Call the update function
+
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            originalRequests = originalRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
-            filteredRequests = filteredRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
             isLoading = false;
           });
         }
@@ -390,15 +414,11 @@ class _RequestItemState extends State<RequestItem> {
         body: jsonEncode({'status': 'accepted'}),
       );
 
+      await widget.onRequestUpdated(); // Call the update function
+
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            originalRequests = originalRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
-            filteredRequests = filteredRequests
-                .where((request) => request.requestID != requestID)
-                .toList();
             isLoading = false;
           });
         }
@@ -514,10 +534,7 @@ class _RequestItemState extends State<RequestItem> {
           if (isLoading)
             Positioned.fill(
               child: Container(
-                color: Colors.black54,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
             ),
         ],
