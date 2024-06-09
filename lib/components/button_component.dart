@@ -49,21 +49,28 @@ class ButtonComponent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           ),
           onPressed: () async {
-            final apiUrlProvider =Provider.of<ApiUrlProvider>(context, listen: false);
-            
+            final apiUrlProvider =
+                Provider.of<ApiUrlProvider>(context, listen: false);
+
             bool berhasil = false;
             String callbackValue = "";
+
+            FocusManager.instance.primaryFocus?.unfocus();
 
             // Action Logic Gate
             if (action == "signin") {
               if (callbackLogin != null) callbackLogin!(true);
-              berhasil = await AuthProvider().loginUser(data['email'], data['password'], apiUrlProvider.baseUrl);
+              berhasil = await AuthProvider().loginUser(
+                  data['email'], data['password'], apiUrlProvider.baseUrl);
               if (callbackLogin != null) callbackLogin!(false);
               if (!berhasil) callbackValue = "Email or password are incorrect";
               final prefs = await SharedPreferences.getInstance();
-              await prefs.setString("isStudent", data['email'].contains("student") ? "true" : "");
+              await prefs.setString(
+                  "isStudent", data['email'].contains("student") ? "true" : "");
             } else if (action == "reg-1") {
-              if (data['username'].isNotEmpty && data['password'].isNotEmpty && data['confirmPassword'].isNotEmpty) {
+              if (data['username'].isNotEmpty &&
+                  data['password'].isNotEmpty &&
+                  data['confirmPassword'].isNotEmpty) {
                 if (data['password'] == data['confirmPassword']) {
                   berhasil = true;
                   callbackValue = "";
@@ -77,15 +84,14 @@ class ButtonComponent extends StatelessWidget {
               if (data?.values.every((value) => value != "") ?? false) {
                 berhasil = await AuthProvider().registerUser(data);
                 final prefs = await SharedPreferences.getInstance();
-                await prefs.setString("isStudent", data['isStudent'] == "true" ? "true" : "false");
+                await prefs.setString("isStudent",
+                    data['isStudent'] == "true" ? "true" : "false");
               } else {
                 callbackValue = "Fill out all fields";
               }
-
             } else {
               berhasil = true;
             }
-
 
             if (berhasil) {
               onPressed!.call();
@@ -105,7 +111,6 @@ class ButtonComponent extends StatelessWidget {
             } else {
               callback!(callbackValue);
             }
-            
           },
           child: Text(
             buttonText,
