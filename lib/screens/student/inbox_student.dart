@@ -25,39 +25,47 @@ class _InboxStudentState extends State<InboxStudent> {
   bool isLoading = false;
 
   Future<void> fetchInvitation() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     try {
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
       prefs = await SharedPreferences.getInstance();
       if (mounted) {
         final response = await http
             .get(Uri.parse('$url/invitation/${prefs.getString("userId")}'));
-        setState(() {
-          dataInvitation = json.decode(response.body);
-          filteredDataInvitation = dataInvitation;
-        });
+        if (mounted) {
+          setState(() {
+            dataInvitation = json.decode(response.body);
+            filteredDataInvitation = dataInvitation;
+          });
+        }
       }
     } catch (e) {
       print("Error :$e");
     }
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void filterData(String status) {
-    setState(() {
-      selectedFilter = status;
-      if (status == 'All') {
-        filteredDataInvitation = dataInvitation;
-      } else {
-        filteredDataInvitation = dataInvitation
-            .where((invitation) => invitation["status"] == status)
-            .toList();
-      }
-    });
+    if (mounted) {
+      setState(() {
+        selectedFilter = status;
+        if (status == 'All') {
+          filteredDataInvitation = dataInvitation;
+        } else {
+          filteredDataInvitation = dataInvitation
+              .where((invitation) => invitation["status"] == status)
+              .toList();
+        }
+      });
+    }
   }
 
   Color getBackgroundColor(String status) {
@@ -120,136 +128,138 @@ class _InboxStudentState extends State<InboxStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
-        body: Container(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                expandedHeight: 150.0, // Adjust this height as needed
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.only(left: 20, bottom: 40),
-                  title: Text(
-                    'Inbox',
-                    style: GoogleFonts.inter(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                backgroundColor: AppColors.white,
-                floating: true,
-                pinned: true,
-                elevation: 0,
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => filterData('All'),
-                          child: Text('All'),
-                          style: getButtonStyle('All'),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () => filterData('waiting'),
-                          child: Text('Waiting'),
-                          style: getButtonStyle('waiting'),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () => filterData('accepted'),
-                          child: Text('Accepted'),
-                          style: getButtonStyle('accepted'),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () => filterData('rejected'),
-                          child: Text('Rejected'),
-                          style: getButtonStyle('rejected'),
-                        ),
-                      ],
-                    ),
+      backgroundColor: AppColors.white,
+      body: Container(
+        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              expandedHeight: 110.0, // Adjust this height as needed
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.only(left: 20, bottom: 40),
+                title: Text(
+                  'Inbox',
+                  style: GoogleFonts.inter(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
                   ),
                 ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return isLoading
-                        ? Expanded(
-                            child: Center(child: CircularProgressIndicator()))
-                        : GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => InboxDetail(
-                                        invitationData:
-                                            filteredDataInvitation[index],
-                                        date: formatDate(
-                                            filteredDataInvitation[index]
-                                                ["createdAt"]),
-                                        callback: fetchInvitation,
-                                      )));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: getBackgroundColor(
-                                    filteredDataInvitation[index]["status"]),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: EdgeInsets.all(20),
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${filteredDataInvitation[index]["sender"]["firstName"]} ${filteredDataInvitation[index]["sender"]["lastName"]}',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.black,
-                                    ),
-                                  ),
-                                  Text(
-                                    filteredDataInvitation[index]["message"],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                      color: AppColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 6,
-                                  ),
-                                  Text(
-                                    formatDate(filteredDataInvitation[index]
-                                        ["createdAt"]),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                ],
-                              ),
+              backgroundColor: AppColors.white,
+              floating: true,
+              pinned: true,
+              elevation: 0,
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => filterData('All'),
+                        child: Text('All'),
+                        style: getButtonStyle('All'),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () => filterData('waiting'),
+                        child: Text('Waiting'),
+                        style: getButtonStyle('waiting'),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () => filterData('accepted'),
+                        child: Text('Accepted'),
+                        style: getButtonStyle('accepted'),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () => filterData('rejected'),
+                        child: Text('Rejected'),
+                        style: getButtonStyle('rejected'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            isLoading
+                ? SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => InboxDetail(
+                                      invitationData:
+                                          filteredDataInvitation[index],
+                                      date: formatDate(
+                                          filteredDataInvitation[index]
+                                              ["createdAt"]),
+                                      callback: fetchInvitation,
+                                    )));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: getBackgroundColor(
+                                  filteredDataInvitation[index]["status"]),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          );
-                  },
-                  childCount: filteredDataInvitation.length,
-                ),
-              )
-            ],
-          ),
-        ));
+                            padding: EdgeInsets.all(20),
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${filteredDataInvitation[index]["sender"]["firstName"]} ${filteredDataInvitation[index]["sender"]["lastName"]}',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                                Text(
+                                  filteredDataInvitation[index]["message"],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 6,
+                                ),
+                                Text(
+                                  formatDate(filteredDataInvitation[index]
+                                      ["createdAt"]),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: filteredDataInvitation.length,
+                    ),
+                  )
+          ],
+        ),
+      ),
+    );
   }
 }

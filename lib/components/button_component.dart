@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,8 @@ class ButtonComponent extends StatelessWidget {
               final prefs = await SharedPreferences.getInstance();
               await prefs.setString(
                   "isStudent", data['email'].contains("student") ? "true" : "");
+              await SharedPreferencesHelper()
+                  .setString("myProjectUpdate", "true");
             } else if (action == "reg-1") {
               if (data['username'].isNotEmpty &&
                   data['password'].isNotEmpty &&

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/helper/database_helper.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/create_project_screen.dart';
 import 'package:telu_project/screens/my_project_detail.dart';
@@ -54,16 +55,26 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
       SyncService syncData = SyncService(baseUrl: url, userId: userId);
 
+      if (SharedPreferencesHelper().getString('myProjectUpdate') == "false") {
+        print("no project update");
+        await loadProjectsFromSQLite();
+        return;
+      }
+
       final response =
           await http.get(Uri.parse('$url/student/projects/$userId'));
       if (response.statusCode == 200) {
         final List projects = json.decode(response.body);
 
         if (mounted) {
+          if (SharedPreferencesHelper().getString('myProjectUpdate') ==
+              "true") {
+            await syncData.syncDataMyProjects(projects);
+            await SharedPreferencesHelper()
+                .setString("myProjectUpdate", "false");
+          }
           setState(() {
             projectList = projects;
-
-            syncData.syncDataMyProjects(projectList);
 
             filteredProjects = selectedStatus == 'All'
                 ? projectList
@@ -77,139 +88,150 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
         throw Exception('Failed to load projects');
       }
     } else {
-      print('no inet ambil dari sqflite');
-      List<Map<String, dynamic>> rawProjects = await db.rawQuery('''
+      await loadProjectsFromSQLite();
+    }
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> loadProjectsFromSQLite() async {
+    final db = await DatabaseHelper().database;
+    List<Map<String, dynamic>> rawProjects = await db.rawQuery('''
+    SELECT 
+      p.*, 
+      u.firstName AS ownerFirstName, 
+      u.lastName AS ownerLastName, 
+      u.email AS ownerEmail,
+    u.photoProfileUrl AS ownerPhotoProfileUrl
+    FROM 
+      Project p
+    JOIN 
+      users u ON p.projectOwnerID = u.userID
+    ORDER BY
+      p.projectID DESC
+  ''');
+
+    List<Map<String, dynamic>> projects = [];
+
+    for (var rawProject in rawProjects) {
+      int projectId = rawProject['projectID'];
+
+      List<Map<String, dynamic>> projectRoles = await db.rawQuery('''
       SELECT 
-        p.*, 
-        u.firstName AS ownerFirstName, 
-        u.lastName AS ownerLastName, 
-        u.email AS ownerEmail,
-        u.photoProfileUrl AS ownerPhotoProfileUrl
+        pr.roleID, 
+        pr.quantity, 
+        r.name AS roleName
       FROM 
-        Project p
+        ProjectRole pr
       JOIN 
-        users u ON p.projectOwnerID = u.userID
-    ''');
+        Role r ON pr.roleID = r.roleID
+      WHERE 
+        pr.projectID = ?
+    ''', [projectId]);
 
-      List<Map<String, dynamic>> projects = [];
+      List<Map<String, dynamic>> projectSkills = await db.rawQuery('''
+      SELECT 
+        ps.skillID, 
+        s.name AS skillName
+      FROM 
+        ProjectSkill ps
+      JOIN 
+        Skill s ON ps.skillID = s.skillID
+      WHERE 
+        ps.projectID = ?
+    ''', [projectId]);
 
-      for (var rawProject in rawProjects) {
-        int projectId = rawProject['projectID'];
+      List<Map<String, dynamic>> projectMembers = await db.rawQuery('''
+      SELECT 
+        pm.projectMemberID, 
+        pm.userID, 
+        pm.roleID, 
+        u.firstName, 
+        u.lastName, 
+        u.email, 
+        u.photoProfileUrl, 
+        r.name AS roleName
+      FROM 
+        ProjectMember pm
+      JOIN 
+        users u ON pm.userID = u.userID
+      JOIN 
+        Role r ON pm.roleID = r.roleID
+      WHERE 
+        pm.projectID = ?
+    ''', [projectId]);
 
-        List<Map<String, dynamic>> projectRoles = await db.rawQuery('''
-        SELECT 
-          pr.roleID, 
-          pr.quantity, 
-          r.name AS roleName
-        FROM 
-          ProjectRole pr
-        JOIN 
-          Role r ON pr.roleID = r.roleID
-        WHERE 
-          pr.projectID = ?
-      ''', [projectId]);
+      projects.add({
+        "projectID": rawProject['projectID'],
+        "title": rawProject['title'],
+        "projectOwnerID": rawProject['projectOwnerID'],
+        "description": rawProject['description'],
+        "startProject": rawProject['startProject'],
+        "endProject": rawProject['endProject'],
+        "openUntil": rawProject['openUntil'],
+        "totalMember": rawProject['totalMember'],
+        "groupLink": rawProject['groupLink'],
+        "projectStatus": rawProject['projectStatus'],
+        "createdAt": rawProject['createdAt'],
+        "projectMemberCount": projectMembers.length,
+        "projectOwner": {
+          "userID": rawProject['projectOwnerID'],
+          "firstName": rawProject['ownerFirstName'],
+          "lastName": rawProject['ownerLastName'],
+          "email": rawProject['ownerEmail'],
+          "photoProfileUrl": rawProject['ownerPhotoProfileUrl'],
+        },
+        "ProjectRoles": projectRoles
+            .map((role) => {
+                  "roleID": role['roleID'],
+                  "quantity": role['quantity'],
+                  "Role": {
+                    "name": role['roleName'],
+                  }
+                })
+            .toList(),
+        "ProjectSkills": projectSkills
+            .map((skill) => {
+                  "skillID": skill['skillID'],
+                  "Skill": {
+                    "name": skill['skillName'],
+                  }
+                })
+            .toList(),
+        "ProjectMembers": projectMembers
+            .map((member) => {
+                  "projectMemberID": member['projectMemberID'],
+                  "userID": member['userID'],
+                  "roleID": member['roleID'],
+                  "user": {
+                    "firstName": member['firstName'],
+                    "lastName": member['lastName'],
+                    "email": member['email'],
+                    "photoProfileUrl": member['photoProfileUrl'],
+                  },
+                  "Role": {
+                    "name": member['roleName'],
+                  }
+                })
+            .toList(),
+      });
 
-        List<Map<String, dynamic>> projectSkills = await db.rawQuery('''
-        SELECT 
-          ps.skillID, 
-          s.name AS skillName
-        FROM 
-          ProjectSkill ps
-        JOIN 
-          Skill s ON ps.skillID = s.skillID
-        WHERE 
-          ps.projectID = ?
-      ''', [projectId]);
+      // print(projects);
+    }
 
-        List<Map<String, dynamic>> projectMembers = await db.rawQuery('''
-        SELECT 
-          pm.projectMemberID, 
-          pm.userID, 
-          pm.roleID, 
-          u.firstName, 
-          u.lastName, 
-          u.email, 
-          u.photoProfileUrl, 
-          r.name AS roleName
-        FROM 
-          ProjectMember pm
-        JOIN 
-          users u ON pm.userID = u.userID
-        JOIN 
-          Role r ON pm.roleID = r.roleID
-        WHERE 
-          pm.projectID = ?
-      ''', [projectId]);
-
-        projects.add({
-          "projectID": rawProject['projectID'],
-          "title": rawProject['title'],
-          "projectOwnerID": rawProject['projectOwnerID'],
-          "description": rawProject['description'],
-          "startProject": rawProject['startProject'],
-          "endProject": rawProject['endProject'],
-          "openUntil": rawProject['openUntil'],
-          "totalMember": rawProject['totalMember'],
-          "groupLink": rawProject['groupLink'],
-          "projectStatus": rawProject['projectStatus'],
-          "createdAt": rawProject['createdAt'],
-          "projectMemberCount": projectMembers.length,
-          "projectOwner": {
-            "userID": rawProject['projectOwnerID'],
-            "firstName": rawProject['ownerFirstName'],
-            "lastName": rawProject['ownerLastName'],
-            "email": rawProject['ownerEmail'],
-            "photoProfileUrl": rawProject['ownerPhotoProfileUrl'],
-          },
-          "ProjectRoles": projectRoles
-              .map((role) => {
-                    "roleID": role['roleID'],
-                    "quantity": role['quantity'],
-                    "Role": {
-                      "name": role['roleName'],
-                    }
-                  })
-              .toList(),
-          "ProjectSkills": projectSkills
-              .map((skill) => {
-                    "skillID": skill['skillID'],
-                    "Skill": {
-                      "name": skill['skillName'],
-                    }
-                  })
-              .toList(),
-          "ProjectMembers": projectMembers
-              .map((member) => {
-                    "projectMemberID": member['projectMemberID'],
-                    "userID": member['userID'],
-                    "roleID": member['roleID'],
-                    "user": {
-                      "firstName": member['firstName'],
-                      "lastName": member['lastName'],
-                      "email": member['email'],
-                      "photoProfileUrl": member['photoProfileUrl'],
-                    },
-                    "Role": {
-                      "name": member['roleName'],
-                    }
-                  })
-              .toList(),
-        });
-
-        print(projects);
-      }
-
-      if (mounted) {
-        setState(() {
-          projectList = projects;
-          filteredProjects = selectedStatus == 'All'
-              ? projectList
-              : projectList
-                  .where(
-                      (project) => project['projectStatus'] == selectedStatus)
-                  .toList();
-        });
-      }
+    if (mounted) {
+      setState(() {
+        projectList = projects;
+        filteredProjects = selectedStatus == 'All'
+            ? projectList
+            : projectList
+                .where((project) => project['projectStatus'] == selectedStatus)
+                .toList();
+      });
     }
 
     if (mounted) {
@@ -360,13 +382,21 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
                                   alignment: Alignment.centerLeft,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        "${filteredProjects.length} ",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w700),
-                                      ),
+                                      isLoading
+                                          ? Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 10),
+                                              width: 10,
+                                              height: 10,
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : Text(
+                                              "${filteredProjects.length} ",
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14,
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                       Text(
                                         'Projects',
                                         style: GoogleFonts.inter(

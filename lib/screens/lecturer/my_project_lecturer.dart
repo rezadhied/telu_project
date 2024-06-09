@@ -108,6 +108,8 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
       Project p
     JOIN 
       users u ON p.projectOwnerID = u.userID
+    ORDER BY
+      p.projectID DESC
   ''');
 
     List<Map<String, dynamic>> projects = [];
