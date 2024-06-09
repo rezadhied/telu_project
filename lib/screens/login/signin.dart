@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,7 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   String email = "";
   String password = "";
+  bool isLoading = false;
 
   String loginErrorMessage = "";
 
@@ -40,7 +43,9 @@ class _SigninState extends State<Signin> {
       backgroundColor: AppColors.white,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Container(
+          child: Stack(
+        children: [
+          Container(
               margin: const EdgeInsets.fromLTRB(30, 20, 30, 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +82,7 @@ class _SigninState extends State<Signin> {
                         password = value;
                       });
                     },
+                    isPassword: true,
                   ),
                   loginErrorMessage.isNotEmpty
                       ? Padding(
@@ -99,6 +105,12 @@ class _SigninState extends State<Signin> {
                     callback: (value) {
                       setState(() {
                         loginErrorMessage = value;
+                      });
+                    },
+                    callbackLogin: (value) {
+                      setState(() {
+                        loginErrorMessage = "";
+                        isLoading = value;
                       });
                     },
                   ),
@@ -132,7 +144,29 @@ class _SigninState extends State<Signin> {
                     ],
                   ),
                 ],
-              ))),
+              )),
+          isLoading
+              ? Stack(
+                  children: [
+                    // BackdropFilter for the blur effect
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        color: Colors.black
+                            .withOpacity(0.1), // Semi-transparent color
+                      ),
+                    ),
+                    // Centered CircularProgressIndicator
+                    Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                  ],
+                )
+              : SizedBox(),
+        ],
+      )),
     );
   }
 }

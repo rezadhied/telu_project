@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -245,11 +246,6 @@ class _InviteStudentState extends State<InviteStudent> {
                   ),
                 ),
               ),
-              if (isLoadingInvitation)
-                const Opacity(
-                  opacity: 0.8,
-                  child: ModalBarrier(dismissible: false, color: Colors.black),
-                ),
             ],
           ),
         ),
@@ -660,13 +656,19 @@ class _InviteStudentState extends State<InviteStudent> {
               ),
             ),
             if (isLoadingInvitation)
-              const Opacity(
-                opacity: 0.8,
-                child: ModalBarrier(dismissible: false, color: Colors.black),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  color:
+                      Colors.black.withOpacity(0.1), // Semi-transparent color
+                ),
               ),
+            // Centered CircularProgressIndicator
             if (isLoadingInvitation)
               Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
               ),
           ],
         ),

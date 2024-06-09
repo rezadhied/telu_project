@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
+import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class ButtonComponent extends StatelessWidget {
   final String action;
   final dynamic? data;
   final Function(String)? callback;
+  final Function(bool)? callbackLogin;
   final VoidCallback onPressed;
 
   const ButtonComponent({
@@ -23,6 +25,7 @@ class ButtonComponent extends StatelessWidget {
     this.action = "",
     this.data,
     this.callback,
+    this.callbackLogin,
     VoidCallback? onPressed, // Removed the default value here
   }) : onPressed = onPressed ?? _defaultOnPressed; // Assign a default value
 
@@ -47,19 +50,30 @@ class ButtonComponent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           ),
           onPressed: () async {
-            final apiUrlProvider =Provider.of<ApiUrlProvider>(context, listen: false);
-            
+            final apiUrlProvider =
+                Provider.of<ApiUrlProvider>(context, listen: false);
+
             bool berhasil = false;
             String callbackValue = "";
 
+            FocusManager.instance.primaryFocus?.unfocus();
+
             // Action Logic Gate
             if (action == "signin") {
-              berhasil = await AuthProvider().loginUser(data['email'], data['password'], apiUrlProvider.baseUrl);
-              callbackValue = "Email or password are incorrect";
+              if (callbackLogin != null) callbackLogin!(true);
+              berhasil = await AuthProvider().loginUser(
+                  data['email'], data['password'], apiUrlProvider.baseUrl);
+              if (callbackLogin != null) callbackLogin!(false);
+              if (!berhasil) callbackValue = "Email or password are incorrect";
               final prefs = await SharedPreferences.getInstance();
-              await prefs.setString("isStudent", data['email'].contains("student") ? "true" : "");
+              await prefs.setString(
+                  "isStudent", data['email'].contains("student") ? "true" : "");
+              await SharedPreferencesHelper()
+                  .setString("myProjectUpdate", "true");
             } else if (action == "reg-1") {
-              if (data['username'].isNotEmpty && data['password'].isNotEmpty && data['confirmPassword'].isNotEmpty) {
+              if (data['username'].isNotEmpty &&
+                  data['password'].isNotEmpty &&
+                  data['confirmPassword'].isNotEmpty) {
                 if (data['password'] == data['confirmPassword']) {
                   berhasil = true;
                   callbackValue = "";
@@ -73,15 +87,14 @@ class ButtonComponent extends StatelessWidget {
               if (data?.values.every((value) => value != "") ?? false) {
                 berhasil = await AuthProvider().registerUser(data);
                 final prefs = await SharedPreferences.getInstance();
-                await prefs.setString("isStudent", data['isStudent'] == "true" ? "true" : "false");
+                await prefs.setString("isStudent",
+                    data['isStudent'] == "true" ? "true" : "false");
               } else {
                 callbackValue = "Fill out all fields";
               }
-
             } else {
               berhasil = true;
             }
-
 
             if (berhasil) {
               onPressed!.call();
@@ -101,7 +114,6 @@ class ButtonComponent extends StatelessWidget {
             } else {
               callback!(callbackValue);
             }
-            
           },
           child: Text(
             buttonText,
