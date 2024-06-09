@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -246,9 +247,12 @@ class _InviteStudentState extends State<InviteStudent> {
                 ),
               ),
               if (isLoadingInvitation)
-                const Opacity(
-                  opacity: 0.8,
-                  child: ModalBarrier(dismissible: false, color: Colors.black),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    color:
+                        Colors.black.withOpacity(0.1), // Semi-transparent color
+                  ),
                 ),
             ],
           ),
@@ -509,10 +513,27 @@ class _InviteStudentState extends State<InviteStudent> {
                                   )),
                             ),
                           isLoading
-                              ? const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
-                                  child: Center(
-                                      child: CircularProgressIndicator()))
+                              ? Stack(
+                                  children: [
+                                    // BackdropFilter for the blur effect
+                                    BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 5, sigmaY: 5),
+                                      child: Container(
+                                        color: Colors.black.withOpacity(
+                                            0.1), // Semi-transparent color
+                                      ),
+                                    ),
+                                    // Centered CircularProgressIndicator
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               : const SizedBox(),
                         ],
                       ),
