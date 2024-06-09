@@ -74,7 +74,6 @@ class _MyProjectLecturerState extends State<MyProjectLecturer> {
           }
           setState(() {
             projectList = projects;
-
             filteredProjects = selectedStatus == 'All'
                 ? projectList
                 : projectList
