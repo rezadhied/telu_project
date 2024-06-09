@@ -246,6 +246,14 @@ class _InviteStudentState extends State<InviteStudent> {
                   ),
                 ),
               ),
+              if (isLoadingInvitation)
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    color:
+                        Colors.black.withOpacity(0.1), // Semi-transparent color
+                  ),
+                ),
             ],
           ),
         ),
