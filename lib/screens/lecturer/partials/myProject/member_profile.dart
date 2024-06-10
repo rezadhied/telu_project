@@ -68,9 +68,7 @@ class MemberProfile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Icon(
-                        Icons.delete,
-                      ),
+                      const SizedBox(width: 30),
                     ],
                   ),
                 ),
@@ -111,12 +109,19 @@ class MemberProfile extends StatelessWidget {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child: Image.asset(
-                                        'assets/images/stiv.png',
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.fill,
-                                      ),
+                                      child: userData['photoProfileUrl'] == null
+                                          ? Image.asset(
+                                              'assets/images/defaultProfile.png',
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.network(
+                                              userData['photoProfileUrl'],
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.fill,
+                                            ),
                                     ),
                                   ),
                                 ),
