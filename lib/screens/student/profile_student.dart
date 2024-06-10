@@ -303,7 +303,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
                             const SizedBox(height: 16),
                             buildTextFormField('Class', classController, false),
                             const SizedBox(height: 16),
-                          ],
+                          ],   
                         ),
                       ),
                     ),
