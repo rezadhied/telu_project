@@ -4,6 +4,7 @@ import 'package:telu_project/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:telu_project/screens/main_app.dart';
 import 'package:telu_project/screens/student/home_student.dart';
 
 class JoinProject extends StatefulWidget {
@@ -63,10 +64,10 @@ class _JoinProjectState extends State<JoinProject> {
 
     // Upload the file
     String fileName = selectedFile!.name;
-    String url = '';
+    String url = '/'; //
 
     var request = http.MultipartRequest('POST', Uri.parse(url))
-      ..fields['userID'] = '1'
+      ..fields['userID'] = '1'  // user id nya mana
       ..fields['projectID'] = '1'
       ..fields['roleID'] = selectedRole!
       ..fields['message'] = messageController.text
@@ -74,11 +75,13 @@ class _JoinProjectState extends State<JoinProject> {
 
     var response = await request.send();
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomeStudent()),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+          builder: (context) => const MainApp(
+                selectedIndex: 1,
+              )),
+      (route) => false,
     );
-
     if (response.statusCode != 201) {
       showDialog(
         context: context,
