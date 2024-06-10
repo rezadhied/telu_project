@@ -12,7 +12,6 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> registerUser(dynamic data) async {
     try {
-      
       // HEADER
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -32,13 +31,12 @@ class AuthProvider extends ChangeNotifier {
         lastName = splittedString[0];
       }
 
-      
       // BODY
       final Map<String, String> body = {
         'email': data['email'],
         'password': data['password'],
-        'firstName' : firstName,
-        'lastName' : lastName,
+        'firstName': firstName,
+        'lastName': lastName,
         'phoneNumber': data['phoneNumber'],
         'gender': data['gender'],
         'lectureCode': data['lectureCode'] ?? "",
@@ -49,7 +47,7 @@ class AuthProvider extends ChangeNotifier {
       };
 
       print(body);
-    
+
       // POST API
       final response = await http.post(
           Uri.parse("${ApiUrlProvider().baseUrl}/signup"),
@@ -60,7 +58,18 @@ class AuthProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString("userId", responseData['user']['userID'].toString());
+        await pref.setString(
+            "userId", responseData['user']['userID'].toString());
+        await pref.setString("userName",
+            "${responseData['user']['firstName']} ${responseData['user']['lastName']}");
+        await pref.setString("userRole", responseData['user']['role']);
+        if (data['isStudent']) {
+          await pref.setString("isStudent", "true");
+        } else {
+          await pref.setString("isStudent", "false");
+        }
+        await pref.setString("isStudent",
+            responseData['user']['email'].contains("student") ? "true" : "");
       } else {
         throw Exception('Failed to login: ${response.body}');
       }
@@ -153,5 +162,6 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');
+    prefs.clear();
   }
 }
