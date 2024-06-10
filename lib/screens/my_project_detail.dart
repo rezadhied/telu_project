@@ -476,21 +476,39 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                       width: 50,
                                                       height: 50,
                                                       decoration: BoxDecoration(
-                                                        shape: BoxShape
-                                                            .circle, // Mengatur bentuk container menjadi lingkaran
+                                                        shape: BoxShape.circle,
                                                         border: Border.all(
-                                                          color: Colors
-                                                              .black, // Opsional: Tambahkan border jika diperlukan
+                                                          color: Colors.black,
                                                           width: 2,
                                                         ),
                                                       ),
                                                       child: ClipOval(
-                                                        child: Image.asset(
-                                                          'assets/images/stiv.png',
-                                                          width: 50,
-                                                          height: 50,
-                                                          fit: BoxFit.fill,
-                                                        ),
+                                                        child: projectData['ProjectMembers']
+                                                                            [
+                                                                            index]
+                                                                        ['user']
+                                                                    [
+                                                                    'photoProfileUrl'] ==
+                                                                null
+                                                            ? Image.asset(
+                                                                'assets/images/defaultProfile.png',
+                                                                width: 50,
+                                                                height: 50,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                              )
+                                                            : Image.network(
+                                                                projectData['ProjectMembers']
+                                                                            [
+                                                                            index]
+                                                                        ['user']
+                                                                    [
+                                                                    'photoProfileUrl'],
+                                                                width: 50,
+                                                                height: 50,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                              ),
                                                       ),
                                                     ),
                                                     const SizedBox(width: 15),
