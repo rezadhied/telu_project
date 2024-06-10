@@ -60,16 +60,15 @@ class AuthProvider extends ChangeNotifier {
         SharedPreferences pref = await SharedPreferences.getInstance();
         await pref.setString(
             "userId", responseData['user']['userID'].toString());
-        await pref.setString("userName",
-            "${responseData['user']['firstName']} ${responseData['user']['lastName']}");
-        await pref.setString("userRole", responseData['user']['role']);
-        if (data['isStudent']) {
+
+        var role =
+            await pref.setString("userRole", responseData['user']['role']);
+
+        if (role == "student") {
           await pref.setString("isStudent", "true");
         } else {
           await pref.setString("isStudent", "false");
         }
-        await pref.setString("isStudent",
-            responseData['user']['email'].contains("student") ? "true" : "");
       } else {
         throw Exception('Failed to login: ${response.body}');
       }

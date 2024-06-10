@@ -10,6 +10,7 @@ class SyncService {
   SyncService({required this.baseUrl, required this.userId});
 
   Future<void> syncDataMyProjects(List<dynamic> projects) async {
+    print(projects);
     if (true) {
       final db = await DatabaseHelper().database;
 

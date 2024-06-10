@@ -8,8 +8,6 @@ class HomeProjectDetail extends StatefulWidget {
   final Map<String, dynamic> projectData;
   final bool isStudent;
 
-  
-
   const HomeProjectDetail(
       {Key? key,
       this.projectData = const {
@@ -29,16 +27,17 @@ class HomeProjectDetail extends StatefulWidget {
 }
 
 class _HomeProjectDetailState extends State<HomeProjectDetail> {
-
   String formatDateString(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString); // Parse the date string into DateTime
-    return DateFormat('dd MMMM yyyy', 'en_US').format(dateTime); // Format the date
+    DateTime dateTime =
+        DateTime.parse(dateString); // Parse the date string into DateTime
+    return DateFormat('dd MMMM yyyy', 'en_US')
+        .format(dateTime); // Format the date
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Container(
           color: AppColors.white,
@@ -50,7 +49,7 @@ class _HomeProjectDetailState extends State<HomeProjectDetail> {
                 margin: EdgeInsets.only(bottom: 10, top: 30),
                 child: Text(
                   widget.projectData['title'],
-                  style:  GoogleFonts.inter(
+                  style: GoogleFonts.inter(
                       color: AppColors.primary,
                       fontSize: 32,
                       fontWeight: FontWeight.w600),
@@ -79,7 +78,7 @@ class _HomeProjectDetailState extends State<HomeProjectDetail> {
                   )),
               Container(
                   margin: EdgeInsets.only(bottom: 2),
-                  child:  Text(
+                  child: Text(
                     "Project Duration",
                     style: GoogleFonts.inter(
                         color: AppColors.grey,
@@ -105,8 +104,7 @@ class _HomeProjectDetailState extends State<HomeProjectDetail> {
                       },
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8), // Adjust the border radius as needed
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.white),
@@ -121,7 +119,9 @@ class _HomeProjectDetailState extends State<HomeProjectDetail> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => JoinProject()),
+                                    builder: (context) => JoinProject(
+                                          projectData: widget.projectData,
+                                        )),
                               );
                             },
                             style: ElevatedButton.styleFrom(

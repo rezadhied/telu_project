@@ -81,8 +81,11 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
           }
         });
       }
-
+      print("projectMembers $projectMembers");
       print(fullProjectRoles);
+
+      var role = await db.query('Role');
+      print(role);
 
       for (var member in projectMembers) {
         Map<String, dynamic> memberMap = member as Map<String, dynamic>;
@@ -92,6 +95,7 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
         var role = await db.query('Role',
             where: 'roleID = ?', whereArgs: [memberMap['roleID']]);
 
+        print(role);
         fullProjectMembers.add({
           'projectMemberID': memberMap['projectMemberID'],
           'userID': memberMap['userID'],
