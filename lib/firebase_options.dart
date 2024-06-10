@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'telu-project.appspot.com',
     measurementId: 'G-5XN0KR31E7',
   );
+
 }

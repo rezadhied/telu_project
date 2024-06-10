@@ -111,7 +111,6 @@ class _InviteStudentState extends State<InviteStudent> {
           'projectID': widget.projectID,
           'message': _messageController.text,
         }));
-
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
           msg:
@@ -139,7 +138,6 @@ class _InviteStudentState extends State<InviteStudent> {
     } else {
       print(json.decode(response.body)['error']);
     }
-
     if (mounted) {
       setState(() {
         isLoadingInvitation = false;
