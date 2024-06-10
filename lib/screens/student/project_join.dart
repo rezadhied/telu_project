@@ -16,6 +16,7 @@ class JoinProject extends StatefulWidget {
 class _JoinProjectState extends State<JoinProject> {
   String? selectedRole;
   String? selectedFileName;
+  var selectedFile;
   TextEditingController nameController = TextEditingController();
   TextEditingController messageController = TextEditingController();
 
