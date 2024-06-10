@@ -16,6 +16,7 @@ class JoinProject extends StatefulWidget {
 class _JoinProjectState extends State<JoinProject> {
   String? selectedRole;
   String? selectedFileName;
+  PlatformFile? selectedFile;
   TextEditingController nameController = TextEditingController();
   TextEditingController messageController = TextEditingController();
 
@@ -73,12 +74,12 @@ class _JoinProjectState extends State<JoinProject> {
 
     var response = await request.send();
 
-    if (response.statusCode == 201) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeStudent()),
-      );
-    } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeStudent()),
+    );
+
+    if (response.statusCode != 201) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
