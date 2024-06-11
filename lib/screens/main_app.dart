@@ -11,12 +11,10 @@ import 'package:telu_project/screens/student/my_project_student.dart';
 import 'package:telu_project/screens/student/profile_student.dart';
 import 'package:telu_project/screens/lecturer/partials/myProject/member_profile.dart';
 
-
 class MainApp extends StatefulWidget {
   final int selectedIndex;
 
-  const MainApp(
-      {super.key, this.selectedIndex = 0});
+  const MainApp({super.key, this.selectedIndex = 0});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -30,7 +28,7 @@ class _MainAppState extends State<MainApp> {
   bool _isLoading = true;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _selectedIndex = widget.selectedIndex;
     _loadPreferences();
@@ -41,13 +39,15 @@ class _MainAppState extends State<MainApp> {
     setState(() {
       _isStudent = prefs.getString("isStudent") == "true";
       _widgetOptions = _isStudent
-          ? <Widget>[ // Student
+          ? <Widget>[
+              // Student
               HomeStudent(),
               MyProjectStudent(),
               InboxStudent(),
               ProfileStudent(),
             ]
-          : <Widget>[ // Lecturer
+          : <Widget>[
+              // Lecturer
               HomeLecturer(),
               MyProjectLecturer(),
               InboxLecturer(),
@@ -58,7 +58,6 @@ class _MainAppState extends State<MainApp> {
   }
 
   late BuildContext scaffoldContext;
-
 
   void _onItemTapped(int index) {
     setState(() {

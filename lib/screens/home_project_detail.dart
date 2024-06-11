@@ -105,7 +105,9 @@ class HomeProjectDetail extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => JoinProject()),
+                                    builder: (context) => JoinProject(
+                                          projectData: projectData,
+                                        )),
                               );
                             },
                             style: ElevatedButton.styleFrom(
