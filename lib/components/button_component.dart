@@ -6,6 +6,7 @@ import 'package:telu_project/helper/sharedPreferences.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:telu_project/screens/main_app.dart';
 
 class ButtonComponent extends StatelessWidget {
   final String buttonText;
@@ -85,7 +86,9 @@ class ButtonComponent extends StatelessWidget {
               }
             } else if (action == "reg-2") {
               if (data?.values.every((value) => value != "") ?? false) {
+                print("masuk");
                 berhasil = await AuthProvider().registerUser(data);
+                print("masuk bawah");
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setString("isStudent",
                     data['isStudent'] == "true" ? "true" : "false");

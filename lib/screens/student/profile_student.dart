@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telu_project/colors.dart';
 import 'package:telu_project/providers/api_url_provider.dart';
 import 'package:telu_project/providers/auth_provider.dart';
+import 'package:telu_project/resources/add_data.dart';
 import 'package:telu_project/screens/login/welcome_screen.dart';
+import 'package:telu_project/utils.dart';
 
 class ProfileStudent extends StatefulWidget {
   const ProfileStudent({super.key});
@@ -19,6 +21,7 @@ class ProfileStudent extends StatefulWidget {
 }
 
 class _ProfileStudentState extends State<ProfileStudent> {
+  Uint8List? _image;
   bool isEditing = false;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController firstNameController;
@@ -27,9 +30,9 @@ class _ProfileStudentState extends State<ProfileStudent> {
   late TextEditingController phoneController;
   late TextEditingController genderController;
   late TextEditingController facultyController;
-  late TextEditingController LecturerCodeController;
   late TextEditingController roleController;
   late TextEditingController classController;
+  late TextEditingController majorController;
   String? imagePath = 'assets/images'; // Set default image path
 
   @override
@@ -41,20 +44,14 @@ class _ProfileStudentState extends State<ProfileStudent> {
     phoneController = TextEditingController();
     genderController = TextEditingController();
     facultyController = TextEditingController();
-    LecturerCodeController = TextEditingController();
     roleController = TextEditingController();
     classController = TextEditingController();
+    majorController = TextEditingController();
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      setState(() {
-        imagePath = pickedImage.path;
-      });
-    }
+  Future<void> logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('userData');
   }
 
   Future<Map<String, dynamic>> fetchUserData() async {
@@ -72,11 +69,27 @@ class _ProfileStudentState extends State<ProfileStudent> {
     }
   }
 
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  Future<void> SaveProfile() async {
+    String resp = await StoreData().saveData(file: _image!);
+  }
+
   Future<void> _updateProfile() async {
     String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     String userId = pref.getString('userId') ?? '';
+
+    // Save the profile image first
+    if (_image != null) {
+      await SaveProfile();
+    }
 
     final response = await http.put(
       Uri.parse('$url/user/$userId'),
@@ -87,10 +100,10 @@ class _ProfileStudentState extends State<ProfileStudent> {
         'phoneNumber': phoneController.text,
         'gender': genderController.text,
         'facultyName': facultyController.text,
-        'lectureCode': LecturerCodeController.text,
         'userID': nimController.text,
         'role': roleController.text,
-        'kelas': classController.text
+        'kelas': classController.text,
+        'majorCode': majorController.text
       }),
     );
 
@@ -132,10 +145,11 @@ class _ProfileStudentState extends State<ProfileStudent> {
             facultyController.text = userdata['facultyName'];
             roleController.text = userdata['role'];
             classController.text = userdata['kelas'];
+            majorController.text = userdata['majorCode'];
 
             return Container(
               color: AppColors.white,
-              padding: const EdgeInsets.only(top: 5.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Column(
                 children: [
                   Container(
@@ -148,26 +162,29 @@ class _ProfileStudentState extends State<ProfileStudent> {
                     child: Column(
                       children: [
                         GestureDetector(
-                          onTap: isEditing ? _pickImage : null,
+                          onTap: isEditing ? selectImage : null,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: isEditing
-                                      ? Border.all(
-                                          color: Colors.red, width: 2.0)
-                                      : null,
-                                ),
-                                child: CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.grey,
-                                  backgroundImage: imagePath != null
-                                      ? FileImage(File(imagePath!))
-                                      : AssetImage(imagePath!) as ImageProvider,
-                                ),
-                              ),
+                              _image != null
+                                  ? CircleAvatar(
+                                      radius: 64,
+                                      backgroundImage: MemoryImage(_image!),
+                                    )
+                                  : const CircleAvatar(
+                                      radius: 64,
+                                      backgroundImage: NetworkImage(
+                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgVUEjaWnHvhNaEy1-Jl6Ljvi7ahounqegSQ&s'),
+                                    ),
+                              if (isEditing) // Hanya tampilkan ikon saat sedang pengeditan
+                                Positioned(
+                                  child: IconButton(
+                                    onPressed: selectImage,
+                                    icon: const Icon(Icons.add_a_photo),
+                                  ),
+                                  bottom: -10,
+                                  left: 80,
+                                )
                             ],
                           ),
                         ),
@@ -282,6 +299,8 @@ class _ProfileStudentState extends State<ProfileStudent> {
                             buildTextFormField(
                                 'Faculty', facultyController, false),
                             const SizedBox(height: 16),
+                            buildTextFormField('Major', majorController, false),
+                            const SizedBox(height: 16),
                             buildTextFormField('Class', classController, false),
                             const SizedBox(height: 16),
                           ],
@@ -308,6 +327,7 @@ class _ProfileStudentState extends State<ProfileStudent> {
     facultyController.dispose();
     roleController.dispose();
     classController.dispose();
+    majorController.dispose();
     super.dispose();
   }
 

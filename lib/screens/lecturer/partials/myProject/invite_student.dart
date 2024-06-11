@@ -111,7 +111,6 @@ class _InviteStudentState extends State<InviteStudent> {
           'projectID': widget.projectID,
           'message': _messageController.text,
         }));
-
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
           msg:
@@ -139,7 +138,6 @@ class _InviteStudentState extends State<InviteStudent> {
     } else {
       print(json.decode(response.body)['error']);
     }
-
     if (mounted) {
       setState(() {
         isLoadingInvitation = false;
@@ -431,15 +429,24 @@ class _InviteStudentState extends State<InviteStudent> {
                                                     width: 2,
                                                   ),
                                                 ),
-                                                child: const ClipOval(
-                                                    // child: Image.asset(
-                                                    //   selectedStudent!['profilePath']
-                                                    //       .toString(),
-                                                    //   width: 50,
-                                                    //   height: 50,
-                                                    //   fit: BoxFit.fill,
-                                                    // ),
-                                                    ),
+                                                child: ClipOval(
+                                                  child: selectedStudent?[
+                                                              'photoProfileUrl'] ==
+                                                          null
+                                                      ? Image.asset(
+                                                          'assets/images/defaultProfile.png',
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.fill,
+                                                        )
+                                                      : Image.network(
+                                                          selectedStudent?[
+                                                              'photoProfileUrl'],
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.fill,
+                                                        ),
+                                                ),
                                               ),
                                               const SizedBox(width: 15),
                                               Container(
@@ -624,15 +631,24 @@ class _InviteStudentState extends State<InviteStudent> {
                                                 width: 2,
                                               ),
                                             ),
-                                            child: const ClipOval(
-                                                // child: Image.asset(
-                                                //   searchedStudents[index]
-                                                //       ['profilePath'],
-                                                //   width: 50,
-                                                //   height: 50,
-                                                //   fit: BoxFit.fill,
-                                                // ),
-                                                ),
+                                            child: ClipOval(
+                                              child: searchedStudents[index]
+                                                          ['photoProfileUrl'] ==
+                                                      null
+                                                  ? Image.asset(
+                                                      'assets/images/defaultProfile.png',
+                                                      width: 50,
+                                                      height: 50,
+                                                      fit: BoxFit.fill,
+                                                    )
+                                                  : Image.network(
+                                                      searchedStudents[index]
+                                                          ['photoProfileUrl'],
+                                                      width: 50,
+                                                      height: 50,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                            ),
                                           ),
                                           const SizedBox(width: 15),
                                           Expanded(

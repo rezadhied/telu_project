@@ -135,7 +135,7 @@ class _InboxStudentState extends State<InboxStudent> {
           slivers: [
             SliverAppBar(
               automaticallyImplyLeading: false,
-              expandedHeight: 110.0, // Adjust this height as needed
+              expandedHeight: 150.0, // Adjust this height as needed
               flexibleSpace: FlexibleSpaceBar(
                 titlePadding: EdgeInsets.only(left: 20, bottom: 40),
                 title: Text(

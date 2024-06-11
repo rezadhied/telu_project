@@ -82,30 +82,40 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
         });
       }
 
-      print(fullProjectRoles);
+      var role = await db.query('Role');
+      print("all role : $role");
 
       for (var member in projectMembers) {
         Map<String, dynamic> memberMap = member as Map<String, dynamic>;
         String userID = memberMap['userID'];
+
         var user =
             await db.query('users', where: 'userID = ?', whereArgs: [userID]);
+        print("member roleID ${memberMap['roleID']}");
+
         var role = await db.query('Role',
             where: 'roleID = ?', whereArgs: [memberMap['roleID']]);
+        print("role : $role");
 
-        fullProjectMembers.add({
-          'projectMemberID': memberMap['projectMemberID'],
-          'userID': memberMap['userID'],
-          'roleID': memberMap['roleID'],
-          'user': {
-            'firstName': user[0]['firstName'],
-            'lastName': user[0]['lastName'],
-            'email': user[0]['email'],
-            'photoProfileUrl': user[0]['photoProfileUrl'],
-          },
-          'Role': {
-            'name': role[0]['name'],
-          }
-        });
+        if (user.isNotEmpty && role.isNotEmpty) {
+          fullProjectMembers.add({
+            'projectMemberID': memberMap['projectMemberID'],
+            'userID': memberMap['userID'],
+            'roleID': memberMap['roleID'],
+            'user': {
+              'firstName': user[0]['firstName'],
+              'lastName': user[0]['lastName'],
+              'email': user[0]['email'],
+              'photoProfileUrl': user[0]['photoProfileUrl'],
+            },
+            'Role': {
+              'name': role[0]['name'] ?? 'defaultRoleName',
+            }
+          });
+        } else {
+          print(
+              "User or Role not found for member with userID: $userID and roleID: ${memberMap['roleID']}");
+        }
       }
 
       return {
@@ -476,21 +486,54 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                       width: 50,
                                                       height: 50,
                                                       decoration: BoxDecoration(
-                                                        shape: BoxShape
-                                                            .circle, // Mengatur bentuk container menjadi lingkaran
+                                                        shape: BoxShape.circle,
                                                         border: Border.all(
-                                                          color: Colors
-                                                              .black, // Opsional: Tambahkan border jika diperlukan
+                                                          color: Colors.black,
                                                           width: 2,
                                                         ),
                                                       ),
                                                       child: ClipOval(
-                                                        child: Image.asset(
-                                                          'assets/images/stiv.png',
-                                                          width: 50,
-                                                          height: 50,
-                                                          fit: BoxFit.fill,
-                                                        ),
+                                                        child: projectData['ProjectMembers']
+                                                                            [
+                                                                            index]
+                                                                        ['user']
+                                                                    [
+                                                                    'photoProfileUrl'] ==
+                                                                null
+                                                            ? Image.asset(
+                                                                'assets/images/defaultProfile.png',
+                                                                width: 50,
+                                                                height: 50,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                              )
+                                                            : Image.network(
+                                                                projectData['ProjectMembers']
+                                                                            [
+                                                                            index]
+                                                                        ['user']
+                                                                    [
+                                                                    'photoProfileUrl'],
+                                                                width: 50,
+                                                                height: 50,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                errorBuilder: (BuildContext
+                                                                        context,
+                                                                    Object
+                                                                        exception,
+                                                                    StackTrace?
+                                                                        stackTrace) {
+                                                                  return Image
+                                                                      .asset(
+                                                                    'assets/images/defaultProfile.png',
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  );
+                                                                },
+                                                              ),
                                                       ),
                                                     ),
                                                     const SizedBox(width: 15),
