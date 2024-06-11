@@ -58,17 +58,7 @@ class AuthProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString(
-            "userId", responseData['user']['userID'].toString());
-
-        var role =
-            await pref.setString("userRole", responseData['user']['role']);
-
-        if (role == "student") {
-          await pref.setString("isStudent", "true");
-        } else {
-          await pref.setString("isStudent", "false");
-        }
+        pref.setString("userId", responseData['user']['userID'].toString());
       } else {
         throw Exception('Failed to login: ${response.body}');
       }
@@ -104,6 +94,7 @@ class AuthProvider extends ChangeNotifier {
       );
       await storeUserData(user);
       SharedPreferences pref = await SharedPreferences.getInstance();
+
       pref.setString("userId", user.userID.toString());
       pref.setString("userName", "${user.firstName} ${user.lastName}");
       pref.setString("userRole", user.role);

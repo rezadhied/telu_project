@@ -11,52 +11,61 @@ class SyncService {
 
   Future<void> syncDataMyProjects(List<dynamic> projects) async {
     print(projects);
-    if (true) {
-      final db = await DatabaseHelper().database;
 
-      await db.delete('Project');
-      await db.delete('ProjectMember');
-      await db.delete('ProjectRole');
-      await db.delete('ProjectSkill');
-      await db.delete('Role');
-      await db.delete('Skill');
-      await db.delete('Users');
+    final db = await DatabaseHelper().database;
 
-      for (var project in projects) {
-        await db.insert(
-            'users',
-            {
-              'userID': project['projectOwnerID'],
-              'firstName': project['projectOwner']['firstName'],
-              'lastName': project['projectOwner']['lastName'],
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.transaction((txn) async {
+      await txn.delete('Project');
+      await txn.delete('ProjectMember');
+      await txn.delete('ProjectRole');
+      await txn.delete('ProjectSkill');
+      await txn.delete('Role');
+      await txn.delete('Skill');
+      await txn.delete('Users');
+    });
 
-        await db.insert(
-            'Project',
-            {
-              'projectID': project['projectID'],
-              'title': project['title'],
-              'projectOwnerID': project['projectOwnerID'],
-              'description': project['description'],
-              'startProject': project['startProject'],
-              'endProject': project['endProject'],
-              'openUntil': project['openUntil'],
-              'totalMember': project['totalMember'],
-              'groupLink': project['groupLink'],
-              'projectStatus': project['projectStatus'],
-              'createdAt': project['createdAt']
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace);
+    final client = http.Client();
 
-        final projectResponse = await http
-            .get(Uri.parse('$baseUrl/project/${project['projectID']}'));
+    for (var project in projects) {
+      await db.transaction((txn) async {
+        await txn.insert(
+          'users',
+          {
+            'userID': project['projectOwnerID'],
+            'firstName': project['projectOwner']['firstName'],
+            'lastName': project['projectOwner']['lastName'],
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
 
-        if (projectResponse.statusCode == 200) {
-          Map<String, dynamic> project = json.decode(projectResponse.body);
+        await txn.insert(
+          'Project',
+          {
+            'projectID': project['projectID'],
+            'title': project['title'],
+            'projectOwnerID': project['projectOwnerID'],
+            'description': project['description'],
+            'startProject': project['startProject'],
+            'endProject': project['endProject'],
+            'openUntil': project['openUntil'],
+            'totalMember': project['totalMember'],
+            'groupLink': project['groupLink'],
+            'projectStatus': project['projectStatus'],
+            'createdAt': project['createdAt']
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      });
 
-          for (var role in project['ProjectRoles']) {
-            await db.insert(
+      final projectResponse = await client
+          .get(Uri.parse('$baseUrl/project/${project['projectID']}'));
+
+      if (projectResponse.statusCode == 200) {
+        Map<String, dynamic> projectData = json.decode(projectResponse.body);
+
+        await db.transaction((txn) async {
+          for (var role in projectData['ProjectRoles']) {
+            await txn.insert(
               'Role',
               {
                 'roleID': role['roleID'],
@@ -65,18 +74,19 @@ class SyncService {
               conflictAlgorithm: ConflictAlgorithm.replace,
             );
 
-            await db.insert(
-                'ProjectRole',
-                {
-                  'roleID': role['roleID'],
-                  'projectID': project['projectID'],
-                  'quantity': role['quantity'],
-                },
-                conflictAlgorithm: ConflictAlgorithm.replace);
+            await txn.insert(
+              'ProjectRole',
+              {
+                'roleID': role['roleID'],
+                'projectID': projectData['projectID'],
+                'quantity': role['quantity'],
+              },
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
           }
 
-          for (var skill in project['ProjectSkills']) {
-            await db.insert(
+          for (var skill in projectData['ProjectSkills']) {
+            await txn.insert(
               'Skill',
               {
                 'skillID': skill['skillID'],
@@ -85,32 +95,37 @@ class SyncService {
               conflictAlgorithm: ConflictAlgorithm.replace,
             );
 
-            await db.insert(
-                'ProjectSkill',
-                {
-                  'skillID': skill['skillID'],
-                  'projectID': project['projectID'],
-                },
-                conflictAlgorithm: ConflictAlgorithm.replace);
+            await txn.insert(
+              'ProjectSkill',
+              {
+                'skillID': skill['skillID'],
+                'projectID': projectData['projectID'],
+              },
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
           }
-        }
+        });
 
-        for (var member in project['ProjectMembers']) {
-          await db.insert(
+        for (var member in projectData['ProjectMembers']) {
+          await db.transaction((txn) async {
+            await txn.insert(
               'ProjectMember',
               {
                 'projectMemberID': member['projectMemberID'],
                 'userID': member['userID'],
                 'roleID': member['roleID'],
-                'projectID': project['projectID'],
+                'projectID': projectData['projectID'],
               },
-              conflictAlgorithm: ConflictAlgorithm.replace);
+              conflictAlgorithm: ConflictAlgorithm.replace,
+            );
+          });
 
           final userResponse =
-              await http.get(Uri.parse('$baseUrl/users/${member['userID']}'));
+              await client.get(Uri.parse('$baseUrl/users/${member['userID']}'));
           if (userResponse.statusCode == 200) {
             Map<String, dynamic> user = json.decode(userResponse.body);
-            await db.insert(
+            await db.transaction((txn) async {
+              await txn.insert(
                 'users',
                 {
                   'userID': user['userID'],
@@ -124,10 +139,13 @@ class SyncService {
                   'photoProfileImage': user['photoProfileImage'],
                   'photoProfileUrl': user['photoProfileUrl'],
                 },
-                conflictAlgorithm: ConflictAlgorithm.replace);
+                conflictAlgorithm: ConflictAlgorithm.replace,
+              );
+            });
           }
         }
       }
     }
+    client.close();
   }
 }

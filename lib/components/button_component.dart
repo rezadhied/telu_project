@@ -85,7 +85,9 @@ class ButtonComponent extends StatelessWidget {
               }
             } else if (action == "reg-2") {
               if (data?.values.every((value) => value != "") ?? false) {
+                print("masuk");
                 berhasil = await AuthProvider().registerUser(data);
+                print("masuk bawah");
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setString("isStudent",
                     data['isStudent'] == "true" ? "true" : "false");
