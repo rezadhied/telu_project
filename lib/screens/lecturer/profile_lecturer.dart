@@ -134,7 +134,7 @@ class _ProfileLecturerState extends State<ProfileLecturer> {
               ),
             );
           } else {
-            if (snapshot.data! == null) {
+            if (snapshot.data == null) {
               logoutUser();
               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                 builder: (context) {

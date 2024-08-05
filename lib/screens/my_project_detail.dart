@@ -81,35 +81,41 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
           }
         });
       }
-      print("projectMembers $projectMembers");
-      print(fullProjectRoles);
 
       var role = await db.query('Role');
-      print(role);
+      print("all role : $role");
 
       for (var member in projectMembers) {
         Map<String, dynamic> memberMap = member as Map<String, dynamic>;
         String userID = memberMap['userID'];
+
         var user =
             await db.query('users', where: 'userID = ?', whereArgs: [userID]);
+        print("member roleID ${memberMap['roleID']}");
+
         var role = await db.query('Role',
             where: 'roleID = ?', whereArgs: [memberMap['roleID']]);
+        print("role : $role");
 
-        print(role);
-        fullProjectMembers.add({
-          'projectMemberID': memberMap['projectMemberID'],
-          'userID': memberMap['userID'],
-          'roleID': memberMap['roleID'],
-          'user': {
-            'firstName': user[0]['firstName'],
-            'lastName': user[0]['lastName'],
-            'email': user[0]['email'],
-            'photoProfileUrl': user[0]['photoProfileUrl'],
-          },
-          'Role': {
-            'name': role[0]['name'],
-          }
-        });
+        if (user.isNotEmpty && role.isNotEmpty) {
+          fullProjectMembers.add({
+            'projectMemberID': memberMap['projectMemberID'],
+            'userID': memberMap['userID'],
+            'roleID': memberMap['roleID'],
+            'user': {
+              'firstName': user[0]['firstName'],
+              'lastName': user[0]['lastName'],
+              'email': user[0]['email'],
+              'photoProfileUrl': user[0]['photoProfileUrl'],
+            },
+            'Role': {
+              'name': role[0]['name'] ?? 'defaultRoleName',
+            }
+          });
+        } else {
+          print(
+              "User or Role not found for member with userID: $userID and roleID: ${memberMap['roleID']}");
+        }
       }
 
       return {
@@ -512,6 +518,21 @@ class _MyProjectDetailState extends State<MyProjectDetail> {
                                                                 height: 50,
                                                                 fit:
                                                                     BoxFit.fill,
+                                                                errorBuilder: (BuildContext
+                                                                        context,
+                                                                    Object
+                                                                        exception,
+                                                                    StackTrace?
+                                                                        stackTrace) {
+                                                                  return Image
+                                                                      .asset(
+                                                                    'assets/images/defaultProfile.png',
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  );
+                                                                },
                                                               ),
                                                       ),
                                                     ),

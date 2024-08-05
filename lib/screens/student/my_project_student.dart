@@ -55,7 +55,7 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
       String url = Provider.of<ApiUrlProvider>(context, listen: false).baseUrl;
       SyncService syncData = SyncService(baseUrl: url, userId: userId);
 
-      if (SharedPreferencesHelper().getString('myProjectUpdate') == "false") {
+      if (SharedPreferencesHelper().getString('myProjectUpdate') == "true") {
         print("no project update");
         await loadProjectsFromSQLite();
         return;
@@ -68,7 +68,7 @@ class _MyProjectStudentState extends State<MyProjectStudent> {
 
         if (mounted) {
           if (SharedPreferencesHelper().getString('myProjectUpdate') ==
-              "true") {
+              "false") {
             await syncData.syncDataMyProjects(projects);
             await SharedPreferencesHelper()
                 .setString("myProjectUpdate", "false");

@@ -121,6 +121,17 @@ class MemberProfile extends StatelessWidget {
                                               width: 50,
                                               height: 50,
                                               fit: BoxFit.fill,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                return Image.asset(
+                                                  'assets/images/defaultProfile.png',
+                                                  width: 50,
+                                                  height: 50,
+                                                  fit: BoxFit.fill,
+                                                );
+                                              },
                                             ),
                                     ),
                                   ),

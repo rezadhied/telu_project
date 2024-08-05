@@ -30,7 +30,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesHelper().init();
-  await SharedPreferencesHelper().setString("myProjectUpdate", "true");
+  // await SharedPreferencesHelper().setString("myProjectUpdate", "true");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
